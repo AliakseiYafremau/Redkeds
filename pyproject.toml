@@ -15,3 +15,14 @@ app = "app:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+lint = [
+    "mypy>=1.16.0",
+]
+
+[tool.mypy]
+exclude = [
+	# Игнорировать папку "tests" и все её подпапки
+	"^tests/",
+]
