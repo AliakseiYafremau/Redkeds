@@ -18,7 +18,14 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 lint = [
+    "mypy>=1.16.0",
     "ruff>=0.11.13",
+]
+
+[tool.mypy]
+exclude = [
+	# Игнорировать папку "tests" и все её подпапки
+	"^tests/",
 ]
 
 [tool.ruff.lint]
