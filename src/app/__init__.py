@@ -1,2 +1,2 @@
 def main() -> None:
-    print("Hello from app!")
+    """Команда main для проверки работы приложения."""
