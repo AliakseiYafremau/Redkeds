@@ -26,7 +26,6 @@ pytest:
   stage: test
   image: python:3.11
   before_script:
-    - pip install -r requirements.txt
     - pip install pytest
   script:
     - pytest --maxfail=1 --disable-warnings -q
