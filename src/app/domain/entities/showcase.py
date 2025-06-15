@@ -17,7 +17,7 @@ class Showcase:
     """
 
     id: ShowcaseId | None
-    onwer_id: UserId
+    owner_id: UserId
 
 
 @dataclass

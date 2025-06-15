@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 from typing import NewType
 
 from .user_id import UserId
@@ -24,4 +25,4 @@ class ChatMessage:
     chat_id: ChatId
     sender_id: UserId
     text: str
-    timestamp: str
+    timestamp: datetime
