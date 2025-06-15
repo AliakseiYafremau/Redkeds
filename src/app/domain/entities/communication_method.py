@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import NewType
+from uuid import UUID
 
-CommunicationMethodId = NewType("CommunicationMethodId", int)
+CommunicationMethodId = NewType("CommunicationMethodId", UUID)
 
 
 @dataclass

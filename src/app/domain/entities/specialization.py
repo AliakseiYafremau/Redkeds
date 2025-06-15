@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import NewType
+from uuid import UUID
 
-SpecializationId = NewType("SpecializationId", int)
+SpecializationId = NewType("SpecializationId", UUID)
 
 
 @dataclass

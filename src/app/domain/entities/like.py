@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from typing import NewType
+from uuid import UUID
 
 from .showcase import ShowcaseId
 from .user_id import UserId
 
-LikeId = NewType("LikeId", int)
+LikeId = NewType("LikeId", UUID)
 
 
 @dataclass

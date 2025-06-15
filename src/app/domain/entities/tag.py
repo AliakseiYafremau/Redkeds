@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import NewType
+from uuid import UUID
 
-TagId = NewType("TagId", int)
+TagId = NewType("TagId", UUID)
 
 
 @dataclass
