@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import NewType
 
-from .user_id import UserId
 from .showcase import ShowcaseId
+from .user_id import UserId
 
 LikeId = NewType("LikeId", int)
 
