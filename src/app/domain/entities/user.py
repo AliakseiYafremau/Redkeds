@@ -20,5 +20,5 @@ class User:
     description: str
     tags: list[TagId]
     connection_method: CommunicationMethodId
-    status: str | None # Состояние пользователя
+    status: str | None  # Состояние пользователя
     showcase: ShowcaseId | None
