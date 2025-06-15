@@ -13,12 +13,13 @@ class NewUserDTO:
 
     username: str
     password: str
-    photo: str | None = None
     specialization: list[SpecializationId]
-    city: str | None = None
     description: str
     tags: list[TagId]
     communication_method: CommunicationMethodId
+
+    photo: str | None = None
+    city: str | None = None
     status: str | None = None
     showcase: ShowcaseId | None = None
 
