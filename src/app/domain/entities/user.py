@@ -13,11 +13,12 @@ class User:
 
     id: UserId | None
     username: str
-    photo: str
+    password: str
+    photo: str | None
     specialization: list[SpecializationId]
-    city: str
+    city: str | None
     description: str
     tags: list[TagId]
     connection_method: CommunicationMethodId
-    status: str  # Состояние пользователя
+    status: str | None  # Состояние пользователя
     showcase: ShowcaseId | None

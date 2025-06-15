@@ -1,11 +1,12 @@
 from dataclasses import dataclass
 from typing import NewType
+from uuid import UUID
 
 from .user_id import UserId
 
-ShowcaseId = NewType("ShowcaseId", int)
-WorkId = NewType("WorkId", int)
-WorkFileId = NewType("WorkFileId", int)
+ShowcaseId = NewType("ShowcaseId", UUID)
+WorkId = NewType("WorkId", UUID)
+WorkFileId = NewType("WorkFileId", UUID)
 
 
 @dataclass

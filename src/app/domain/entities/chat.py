@@ -1,11 +1,12 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import NewType
+from uuid import UUID
 
 from .user_id import UserId
 
-ChatId = NewType("ChatId", int)
-ChatMessageId = NewType("ChatMessageId", int)
+ChatId = NewType("ChatId", UUID)
+ChatMessageId = NewType("ChatMessageId", UUID)
 
 
 @dataclass
