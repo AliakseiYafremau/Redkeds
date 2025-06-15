@@ -9,5 +9,3 @@ class UserSaver(Protocol):
     def save_user(self, user: User) -> None:
         """Сохраняет обьект пользователя."""
         ...
-
-
