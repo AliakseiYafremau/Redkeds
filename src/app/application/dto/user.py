@@ -36,7 +36,6 @@ class LoginUserDTO:
 class PasswordChangeDTO:
     """DTO для смены пароля пользователя."""
 
-    user_id: UserId
     old_password: str
     new_password: str
 
@@ -45,7 +44,6 @@ class PasswordChangeDTO:
 class UserDTO:
     """DTO для чтения пользователя."""
 
-    id: UserId
     username: str
     photo: str | None = None
     specialization: list[str] | None = None
@@ -70,10 +68,3 @@ class UpdateUserDTO:
     communication_method: CommunicationMethodId | None = None
     status: str | None = None
     showcase: ShowcaseId | None = None
-
-
-@dataclass
-class DeleteUserDTO:
-    """DTO для удаления пользователя."""
-
-    id: UserId
