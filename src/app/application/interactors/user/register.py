@@ -1,6 +1,6 @@
 from app.application.dto.user import NewUserDTO
 from app.application.interfaces.common.transaction import TransactionManager
-from app.application.interfaces.common.uuid_provider import UUIDGenerator
+from app.application.interfaces.common.uuid_generator import UUIDGenerator
 from app.application.interfaces.user.password_manager import PasswordHasher
 from app.application.interfaces.user.user_gateway import UserSaver
 from app.domain.entities.user import User
@@ -18,14 +18,18 @@ class RegisterUserInteractor:
         password_hasher: PasswordHasher,
         transaction_manager: TransactionManager,
     ) -> None:
-        """Инициализация зависимостей интерактора регистрации пользователя."""
         self._user_gateway = user_gateway
         self._uuid_generator = uuid_generator
         self._password_hasher = password_hasher
         self._transaction_manager = transaction_manager
 
     def __call__(self, data: NewUserDTO) -> UserId:
-        """Создаёт и сохраняет нового пользователя."""
+        """Создаёт и сохраняет нового пользователя.
+
+        Args:
+            data (NewUserDTO): Данные для регистрации нового пользователя.
+
+        """
         validate_password(data.password)
         user_id = UserId(self._uuid_generator())
         hashed_password = self._password_hasher.hash_password(data.password)
