@@ -5,6 +5,7 @@ from app.application.interfaces.user.password_manager import PasswordHasher
 from app.application.interfaces.user.user_gateway import UserSaver
 from app.domain.entities.user import User
 from app.domain.entities.user_id import UserId
+from app.domain.services.password import validate_password
 
 
 class RegisterUserInteractor:
@@ -25,6 +26,7 @@ class RegisterUserInteractor:
 
     def __call__(self, data: NewUserDTO) -> UserId:
         """Создаёт и сохраняет нового пользователя."""
+        validate_password(data.password)
         user_id = UserId(self._uuid_generator())
         hashed_password = self._password_hasher.hash_password(data.password)
         user = User(
