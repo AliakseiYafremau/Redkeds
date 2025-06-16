@@ -45,13 +45,13 @@ class UserDTO:
 
     username: str
     photo: str | None = None
-    specialization: list[str] | None = None
+    specialization: list[SpecializationId] | None = None
     city: str | None = None
     description: str | None = None
     tags: list[TagId] | None = None
     communication_method: CommunicationMethodId | None = None
     status: str | None = None
-    showcase: str | None = None
+    showcase: ShowcaseId | None = None
 
 
 @dataclass

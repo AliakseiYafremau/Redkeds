@@ -19,6 +19,6 @@ class User:
     city: str | None
     description: str
     tags: list[TagId]
-    connection_method: CommunicationMethodId
+    communication_method: CommunicationMethodId
     status: str | None  # Состояние пользователя
     showcase: ShowcaseId | None

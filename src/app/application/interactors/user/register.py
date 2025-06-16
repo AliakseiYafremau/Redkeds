@@ -42,7 +42,7 @@ class RegisterUserInteractor:
             city=data.city,
             description=data.description,
             tags=data.tags,
-            connection_method=data.communication_method,
+            communication_method=data.communication_method,
             status=data.status,
             showcase=data.showcase,
         )
