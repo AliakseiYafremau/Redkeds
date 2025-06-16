@@ -11,7 +11,7 @@ from .user_id import UserId
 class User:
     """Сущность пользователя."""
 
-    id: UserId | None
+    id: UserId
     username: str
     password: str
     photo: str | None
