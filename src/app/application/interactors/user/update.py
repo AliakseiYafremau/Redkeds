@@ -55,7 +55,7 @@ class UpdateUserInteractor:
         if new_data.tags is not None:
             user.tags = new_data.tags
         if new_data.communication_method is not None:
-            user.connection_method = new_data.communication_method
+            user.communication_method = new_data.communication_method
         if new_data.status is not None:
             user.status = new_data.status
         if new_data.showcase is not None:
