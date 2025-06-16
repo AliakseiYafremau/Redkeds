@@ -1,0 +1,11 @@
+from typing import Protocol
+
+from app.domain.entities.tag import Tag
+
+
+class TagReader(Protocol):
+    """Интерфейс для чтения тегов."""
+
+    def get_tags(self) -> list[Tag]:
+        """Получает информацию о всех тегах."""
+        ...
