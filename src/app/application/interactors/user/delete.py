@@ -1,4 +1,4 @@
-from app.application.interfaces.common.id_provider import IdProvider
+from app.application.interfaces.user.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.user.user_gateway import UserDeleter
 
