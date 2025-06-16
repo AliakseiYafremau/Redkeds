@@ -22,7 +22,12 @@ class UpdateUserInteractor:
         self._transaction_manager = transaction_manager
 
     def __call__(self, data: UpdateUserDTO) -> UserId:
-        """Обновляет данные пользователя."""
+        """Обновляет данные пользователя.
+
+        Args:
+            data (UpdateUserDTO): Данные для обновления пользователя.
+
+        """
         user_id = self._id_provider()
         user = self._user_reader_gateway.get_user_by_id(user_id)
         self.update_user(user, data)
