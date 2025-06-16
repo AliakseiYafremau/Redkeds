@@ -12,5 +12,5 @@ class Specialization:
     Специализация определяет профессиональную область пользователя.
     """
 
-    id: SpecializationId | None
+    id: SpecializationId
     name: str
