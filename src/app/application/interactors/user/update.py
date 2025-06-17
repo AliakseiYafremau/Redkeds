@@ -1,3 +1,5 @@
+from typing import Protocol
+
 from app.application.dto.user import UpdateUserDTO
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
@@ -6,18 +8,20 @@ from app.domain.entities.user import User
 from app.domain.entities.user_id import UserId
 
 
+class UserGateway(UserReader, UserUpdater, Protocol):
+    """Протокол, включающий в себя интерфейсы обновления и чтения пользователя."""
+
+
 class UpdateUserInteractor:
     """Интерактор для обновления пользователя."""
 
     def __init__(
         self,
-        user_reader_gateway: UserReader,
-        user_updater_gateway: UserUpdater,
+        user_gateway: UserGateway,
         id_provider: IdProvider,
         transaction_manager: TransactionManager,
     ) -> None:
-        self._user_reader_gateway = user_reader_gateway
-        self._user_updater_gateway = user_updater_gateway
+        self._user_gateway = user_gateway
         self._id_provider = id_provider
         self._transaction_manager = transaction_manager
 
@@ -29,9 +33,9 @@ class UpdateUserInteractor:
 
         """
         user_id = self._id_provider()
-        user = self._user_reader_gateway.get_user_by_id(user_id)
+        user = self._user_gateway.get_user_by_id(user_id)
         self.update_user(user, data)
-        self._user_updater_gateway.update_user(user)
+        self._user_gateway.update_user(user)
         self._transaction_manager.commit()
 
         return user.id
