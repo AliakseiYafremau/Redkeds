@@ -16,8 +16,8 @@ class DeleteUserInteractor:
         self._id_provider = id_provider
         self._transaction_manager = transaction_manager
 
-    def __call__(self) -> None:
+    async def __call__(self) -> None:
         """Удаляет пользователя."""
         user_id = self._id_provider()
-        self._user_gateway.delete_user(user_id)
-        self._transaction_manager.commit()
+        await self._user_gateway.delete_user(user_id)
+        await self._transaction_manager.commit()

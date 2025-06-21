@@ -23,7 +23,7 @@ class RegisterUserInteractor:
         self._password_hasher = password_hasher
         self._transaction_manager = transaction_manager
 
-    def __call__(self, data: NewUserDTO) -> UserId:
+    async def __call__(self, data: NewUserDTO) -> UserId:
         """Создаёт и сохраняет нового пользователя.
 
         Args:
@@ -46,6 +46,6 @@ class RegisterUserInteractor:
             status=data.status,
             showcase=data.showcase,
         )
-        self._user_gateway.save_user(user)
-        self._transaction_manager.commit()
+        await self._user_gateway.save_user(user)
+        await self._transaction_manager.commit()
         return user_id
