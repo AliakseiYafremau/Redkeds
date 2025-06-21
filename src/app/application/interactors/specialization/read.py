@@ -13,9 +13,9 @@ class ReadSpecializationsInteractor:
     ) -> None:
         self._specialization_gateway = specialization_gateway
 
-    def __call__(self) -> list[SpecializationDTO]:
+    async def __call__(self) -> list[SpecializationDTO]:
         """Возвращает данные о специализациях."""
-        specializations = self._specialization_gateway.get_specializations()
+        specializations = await self._specialization_gateway.get_specializations()
         return [
             SpecializationDTO(
                 id=entity.id,

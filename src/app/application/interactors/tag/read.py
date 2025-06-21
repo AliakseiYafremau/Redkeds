@@ -11,9 +11,9 @@ class ReadTagsInteractor:
     ) -> None:
         self._tag_gateway = tag_gateway
 
-    def __call__(self) -> list[TagDTO]:
+    async def __call__(self) -> list[TagDTO]:
         """Возвращает данные о тегах."""
-        tags = self._tag_gateway.get_tags()
+        tags = await self._tag_gateway.get_tags()
         return [
             TagDTO(
                 id=entity.id,

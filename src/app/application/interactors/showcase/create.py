@@ -24,16 +24,16 @@ class CreateShowcaseInteractor:
         self._uuid_generator = uuid_generator
         self._transaction_manager = transaction_manager
 
-    def __call__(self) -> ShowcaseId:
+    async def __call__(self) -> ShowcaseId:
         """Создает и сохраняет новую витрину."""
         showcase_id = ShowcaseId(self._uuid_generator())
         user_id = self._id_provider()
-        user = self._user_gateway.get_user_by_id(user_id)
+        user = await self._user_gateway.get_user_by_id(user_id)
         ensure_can_create_showcase(user)
         showcase = Showcase(
             id=showcase_id,
             owner_id=user_id,
         )
-        self._showcase_gateway.save_showcase(showcase)
-        self._transaction_manager.commit()
+        await self._showcase_gateway.save_showcase(showcase)
+        await self._transaction_manager.commit()
         return showcase_id

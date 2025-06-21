@@ -25,7 +25,7 @@ class UpdateUserInteractor:
         self._id_provider = id_provider
         self._transaction_manager = transaction_manager
 
-    def __call__(self, data: UpdateUserDTO) -> UserId:
+    async def __call__(self, data: UpdateUserDTO) -> UserId:
         """Обновляет данные пользователя.
 
         Args:
@@ -33,10 +33,10 @@ class UpdateUserInteractor:
 
         """
         user_id = self._id_provider()
-        user = self._user_gateway.get_user_by_id(user_id)
+        user = await self._user_gateway.get_user_by_id(user_id)
         self.update_user(user, data)
-        self._user_gateway.update_user(user)
-        self._transaction_manager.commit()
+        await self._user_gateway.update_user(user)
+        await self._transaction_manager.commit()
 
         return user.id
 

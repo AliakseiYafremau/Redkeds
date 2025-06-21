@@ -14,7 +14,7 @@ class DeleteShowcaseInteractor:
         self._showcase_gateway = showcase_gateway
         self._transactoin_manager = transaction_manager
 
-    def __call__(self, showcase_id: ShowcaseId) -> None:
+    async def __call__(self, showcase_id: ShowcaseId) -> None:
         """Удаляет витрину."""
-        self._showcase_gateway.delete_showcase(showcase_id)
-        self._transactoin_manager.commit()
+        await self._showcase_gateway.delete_showcase(showcase_id)
+        await self._transactoin_manager.commit()

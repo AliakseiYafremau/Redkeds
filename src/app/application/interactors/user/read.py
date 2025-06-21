@@ -14,10 +14,10 @@ class ReadUserInteractor:
         self._user_gateway = user_gateway
         self._id_provider = id_provider
 
-    def __call__(self) -> UserDTO:
+    async def __call__(self) -> UserDTO:
         """Возвращает данные пользователя."""
         user_id = self._id_provider()
-        user = self._user_gateway.get_user_by_id(user_id)
+        user = await self._user_gateway.get_user_by_id(user_id)
         return UserDTO(
             username=user.username,
             photo=user.photo,

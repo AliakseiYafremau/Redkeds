@@ -15,14 +15,14 @@ class AuthUserInteractor:
         self._user_gateway = user_gateway
         self._password_hasher = password_hasher
 
-    def __call__(self, data: LoginUserDTO) -> UserId:
+    async def __call__(self, data: LoginUserDTO) -> UserId:
         """Атуентификация пользователя.
 
         Args:
             data (LoginUserDTO): Данные для аутентификации пользователя.
 
         """
-        user = self._user_gateway.get_user_by_username(data.username)
+        user = await self._user_gateway.get_user_by_username(data.username)
         self._password_hasher.verify_password(
             data.password,
             user.password,
