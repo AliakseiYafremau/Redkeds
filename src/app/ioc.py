@@ -7,9 +7,11 @@ from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
 from app.adapters.gateways.user import UserGateway
 from app.adapters.id_provider import FakeIdProvider
+from app.adapters.password import FakePasswordHasher
 from app.adapters.transaction import FakeSQLTransactionManager
 from app.application.interactors.showcase.create import CreateShowcaseInteractor
 from app.application.interactors.showcase.delete import DeleteShowcaseInteractor
+from app.application.interactors.user.update import UserGateway as UserGatewayWithReaderAndDeleter
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
 )
@@ -22,6 +24,7 @@ from app.application.interactors.user.update import UpdateUserInteractor
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
+from app.domain.entities.user_id import UserId
 from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseDeleter,
     ShowcaseSaver,
@@ -30,6 +33,7 @@ from app.application.interfaces.specialization.specialization_gateway import (
     SpecializationReader,
 )
 from app.application.interfaces.tag.tag_gateway import TagReader
+from app.application.interfaces.user.password_manager import PasswordHasher
 from app.application.interfaces.user.user_gateway import (
     UserDeleter,
     UserReader,
@@ -44,15 +48,25 @@ class AppProvider(Provider):
     Организуем и управляет фабриками для создания зависимостей.
     """
 
-    @provide
+    @provide(scope=Scope.REQUEST)
     def get_uuid_generator(self) -> UUIDGenerator:
         """Возвращает генератор UUID."""
         return uuid4
+
+    @provide(scope=Scope.REQUEST)
+    def get_id_provider(self) -> IdProvider:
+        """Возвращает провайдер идентификаторов."""
+        return FakeIdProvider
 
     user_gateway = provide(
         UserGateway,
         scope=Scope.REQUEST,
         provides=AnyOf[UserSaver, UserReader, UserDeleter, UserUpdater],
+    )
+    user_gateway_with_reader_and_deleter = provide(
+        UserGateway,
+        scope=Scope.REQUEST,
+        provides=UserGatewayWithReaderAndDeleter,
     )
     tag_gateway = provide(
         TagGateway,
@@ -105,13 +119,13 @@ class AppProvider(Provider):
         ReadSpecializationsInteractor,
         scope=Scope.REQUEST,
     )
-    id_provider = provide(
-        FakeIdProvider,
-        scope=Scope.REQUEST,
-        provides=IdProvider,
-    )
     transaction_manager = provide(
         FakeSQLTransactionManager,
         scope=Scope.REQUEST,
         provides=TransactionManager,
+    )
+    password_hasher = provide(
+        FakePasswordHasher,
+        scope=Scope.REQUEST,
+        provides=PasswordHasher,
     )
