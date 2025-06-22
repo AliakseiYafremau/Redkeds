@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from dishka import AnyOf, Provider, Scope, provide
+from fastapi import Request
 
 from app.adapters.gateways.showcase import ShowcaseGateway
 from app.adapters.gateways.specialization import SpecializationGateway
@@ -11,7 +12,6 @@ from app.adapters.password import FakePasswordHasher
 from app.adapters.transaction import FakeSQLTransactionManager
 from app.application.interactors.showcase.create import CreateShowcaseInteractor
 from app.application.interactors.showcase.delete import DeleteShowcaseInteractor
-from app.application.interactors.user.update import UserGateway as UserGatewayWithReaderAndDeleter
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
 )
@@ -21,10 +21,12 @@ from app.application.interactors.user.delete import DeleteUserInteractor
 from app.application.interactors.user.read import ReadUserInteractor
 from app.application.interactors.user.register import RegisterUserInteractor
 from app.application.interactors.user.update import UpdateUserInteractor
+from app.application.interactors.user.update import (
+    UserGateway as UserGatewayWithReaderAndDeleter,
+)
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
-from app.domain.entities.user_id import UserId
 from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseDeleter,
     ShowcaseSaver,
@@ -54,9 +56,9 @@ class AppProvider(Provider):
         return uuid4
 
     @provide(scope=Scope.REQUEST)
-    def get_id_provider(self) -> IdProvider:
+    def get_id_provider(self, request: Request) -> IdProvider:
         """Возвращает провайдер идентификаторов."""
-        return FakeIdProvider
+        return FakeIdProvider(request)  # it's just an example
 
     user_gateway = provide(
         UserGateway,

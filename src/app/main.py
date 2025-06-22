@@ -1,24 +1,21 @@
 import uvicorn
 from dishka import make_async_container
-from dishka.integrations.fastapi import FromDishka, inject, setup_dishka
+from dishka.integrations.fastapi import FastapiProvider, setup_dishka
 from fastapi import FastAPI
 
-from app.application.dto.tag import TagDTO
-from app.application.interactors.tag.read import ReadTagsInteractor
 from app.ioc import AppProvider
-
-app = FastAPI()
-
-
-@app.get("/")
-@inject
-async def tags(interactor: FromDishka[ReadTagsInteractor]) -> list[TagDTO]:
-    """Получает список тегов."""
-    return await interactor()
+from app.presentation.routers.tag import tag_router
 
 
-if __name__ == "__main__":
-    container = make_async_container(AppProvider())
+def get_app() -> FastAPI:
+    """Создает и настраивает приложение FastAPI."""
+    container = make_async_container(AppProvider(), FastapiProvider())
+    app = FastAPI(title="Dishka Example App")
+    app.include_router(tag_router)
     setup_dishka(container, app)
+    return app
 
-    uvicorn.run(app)
+
+def run() -> None:
+    """Запускает приложение."""
+    uvicorn.run(get_app())
