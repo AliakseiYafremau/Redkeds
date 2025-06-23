@@ -3,14 +3,15 @@ stages:
 
 
 uv:
+  stage: check
   variables:
     PYTHON_VERSION: "3.11"
     UV_LINK_MODE: copy
     UV_CACHE_DIR: .uv-cache
   cache:
     - key:
-      files:
-        - uv.lock
+        files:
+          - uv.lock
       paths:
         - $UV_CACHE_DIR
   image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
