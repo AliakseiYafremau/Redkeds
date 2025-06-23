@@ -1,36 +1,43 @@
 stages:
-  - lint
-  - test
+  - check
 
-ruff:
-  stage: lint
-  image: python:3.11
-  before_script:
-    - pip install ruff
+
+uv:
+  variables:
+    PYTHON_VERSION: "3.11"
+    UV_LINK_MODE: copy
+    UV_CACHE_DIR: .uv-cache
+  cache:
+    - key:
+      files:
+        - uv.lock
+      paths:
+        - $UV_CACHE_DIR
+  image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
+  script:
+    - uv sync --only-group lint --only-group test
+    - uv cache prune --ci
+
+lint:
+  stage: check
+  image: ghcr.io/astral-sh/uv:latest
   script:
     - ruff check .
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
-mypy:
-  stage: lint
-  image: python:3.11
-  before_script:
-    - pip install dishka
-    - pip install fastapi
-    - pip install uvicorn
-    - pip install mypy
+type-check:
+  stage: check
+  image: ghcr.io/astral-sh/uv:latest
   script:
     - mypy .
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
-pytest:
-  stage: test
-  image: python:3.11
-  before_script:
-    - pip install pytest
+tests:
+  stage: check
+  image: ghcr.io/astral-sh/uv:latest
   script:
-    - pytest --maxfail=1 --disable-warnings -q
+    - pytest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'

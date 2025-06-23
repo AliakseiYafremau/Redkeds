@@ -11,7 +11,6 @@ dependencies = [
     "dishka>=1.6.0",
     "fastapi>=0.115.13",
     "sqlalchemy>=2.0.41",
-    "uvicorn>=0.34.3",
 ]
 
 [project.scripts]
@@ -26,8 +25,11 @@ test = [
     "pytest-asyncio>=1.0.0",
 ]
 lint = [
+    "dishka>=1.6.0",
+    "fastapi>=0.115.13",
     "mypy>=1.16.0",
     "ruff>=0.11.13",
+    "uvicorn>=0.34.3",
 ]
 
 
