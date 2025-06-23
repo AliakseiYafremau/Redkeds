@@ -16,6 +16,7 @@ mypy:
   stage: lint
   image: python:3.11
   before_script:
+    - pip install dishka
     - pip install mypy
   script:
     - mypy .
