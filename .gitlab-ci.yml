@@ -1,11 +1,12 @@
 stages:
   - check
 
+variables
+  PYTHON_VERSION: "3.11"
 
 uv:
   stage: check
   variables:
-    PYTHON_VERSION: "3.11"
     UV_LINK_MODE: copy
     UV_CACHE_DIR: .uv-cache
   cache:
@@ -21,7 +22,7 @@ uv:
 
 lint:
   stage: check
-  image: alpine:latest
+  image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
   script:
     - ruff check .
   rules:
@@ -29,7 +30,7 @@ lint:
 
 type-check:
   stage: check
-  image: alpine:latest
+  image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
   script:
     - mypy .
   rules:
@@ -37,7 +38,7 @@ type-check:
 
 tests:
   stage: check
-  image: alpine:latest
+  image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
   script:
     - pytest
   rules:
