@@ -21,7 +21,7 @@ uv:
 
 lint:
   stage: check
-  image: ghcr.io/astral-sh/uv:latest
+  image: alpine:latest
   script:
     - ruff check .
   rules:
@@ -29,7 +29,7 @@ lint:
 
 type-check:
   stage: check
-  image: ghcr.io/astral-sh/uv:latest
+  image: alpine:latest
   script:
     - mypy .
   rules:
@@ -37,7 +37,7 @@ type-check:
 
 tests:
   stage: check
-  image: ghcr.io/astral-sh/uv:latest
+  image: alpine:latest
   script:
     - pytest
   rules:
