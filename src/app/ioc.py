@@ -7,7 +7,7 @@ from app.adapters.gateways.showcase import ShowcaseGateway
 from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
 from app.adapters.gateways.user import UserGateway
-from app.adapters.id_provider import FakeIdProvider
+from app.adapters.id_provider import FakeIdProvider, FakeTokenManager, TokenManager
 from app.adapters.password import FakePasswordHasher
 from app.adapters.transaction import FakeSQLTransactionManager
 from app.application.interactors.showcase.create import CreateShowcaseInteractor
@@ -56,9 +56,9 @@ class AppProvider(Provider):
         return uuid4
 
     @provide(scope=Scope.REQUEST)
-    def get_id_provider(self, request: Request) -> IdProvider:
+    def get_id_provider(self, manager: TokenManager, request: Request) -> IdProvider:
         """Возвращает провайдер идентификаторов."""
-        return FakeIdProvider(request)  # it's just an example
+        return FakeIdProvider(manager, request)
 
     user_gateway = provide(
         UserGateway,
@@ -130,4 +130,9 @@ class AppProvider(Provider):
         FakePasswordHasher,
         scope=Scope.REQUEST,
         provides=PasswordHasher,
+    )
+    token_manager = provide(
+        FakeTokenManager,
+        scope=Scope.REQUEST,
+        provides=TokenManager,
     )
