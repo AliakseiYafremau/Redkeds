@@ -15,6 +15,11 @@ lint:
           - uv.lock
       paths:
         - $UV_CACHE_DIR
+    - key:
+        files:
+          - pyproject.toml
+      paths:
+        - .ruff_cache
   script:
     - uv venv
     - source .venv/bin/activate
@@ -33,6 +38,11 @@ type-check:
           - uv.lock
       paths:
         - $UV_CACHE_DIR
+    - key:
+        files:
+          - pyproject.toml
+      paths:
+        - .mypy_cache
   script:
     - uv venv
     - source .venv/bin/activate
@@ -51,6 +61,11 @@ tests:
           - uv.lock
       paths:
         - $UV_CACHE_DIR
+    - key:
+        files:
+          - pyproject.toml
+      paths:
+        - .pytest_cache
   script:
     - uv venv
     - source .venv/bin/activate
