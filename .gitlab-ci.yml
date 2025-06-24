@@ -19,6 +19,8 @@ lint:
       paths:
         - $UV_CACHE_DIR
   script:
+    - uv venv
+    - source .venv/bin/activate
     - uv sync --only-group lint
     - ruff check .
     - uv cache prune --ci
@@ -35,6 +37,8 @@ type-check:
       paths:
         - $UV_CACHE_DIR
   script:
+    - uv venv
+    - source .venv/bin/activate
     - uv sync --only-group type-check
     - mypy .
     - uv cache prune --ci
@@ -51,6 +55,8 @@ tests:
       paths:
         - $UV_CACHE_DIR
   script:
+    - uv venv
+    - source .venv/bin/activate
     - uv sync --frozen --only-group test
     - pytest
     - uv cache prune --ci
