@@ -18,7 +18,7 @@ lint:
   script:
     - uv venv
     - source .venv/bin/activate
-    - uv sync --only-group lint
+    - uv sync --frozen --only-group lint
     - ruff check .
     - uv cache prune --ci
   rules:
@@ -36,7 +36,7 @@ type-check:
   script:
     - uv venv
     - source .venv/bin/activate
-    - uv sync --only-group type-check
+    - uv sync --frozen --only-group type-check
     - mypy .
     - uv cache prune --ci
   rules:
