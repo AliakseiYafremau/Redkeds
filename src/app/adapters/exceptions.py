@@ -4,3 +4,23 @@ class AdapterError(Exception):
 
 class AuthenticationError(AdapterError):
     """Ошибка аутентификации."""
+
+
+class InvalidPasswordError(AuthenticationError):
+    """Неправильный пароль."""
+
+
+class UserAlreadyExistsError(AdapterError):
+    """Ошибка при попытке создания уже существующего пользователя."""
+
+
+class TagDoesNotExistError(AdapterError):
+    """Ошибка при обращении к несуществуещему тегу."""
+
+
+class SpecializationDoesNotExistError(AdapterError):
+    """Ошибка при обращении к несуществующей специальности."""
+
+
+class CommunicationMethodDoesNotExistError(AdapterError):
+    """Ошибка при обращении к несуществющему методу связи."""
