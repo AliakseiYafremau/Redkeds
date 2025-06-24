@@ -6,9 +6,6 @@ variables:
   UV_LINK_MODE: copy
   UV_CACHE_DIR: .uv-cache
 
-before_script:
-  - source .venv/bin/activate
-
 lint:
   stage: check
   image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
