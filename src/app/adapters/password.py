@@ -14,4 +14,3 @@ class FakePasswordHasher(PasswordHasher):
         if password == hashed_password:
             return True
         raise InvalidPasswordError
-
