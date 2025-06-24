@@ -20,9 +20,6 @@ from app.application.interactors.user.auth import AuthUserInteractor
 from app.application.interactors.user.delete import DeleteUserInteractor
 from app.application.interactors.user.read import ReadUserInteractor
 from app.application.interactors.user.register import RegisterUserInteractor
-from app.application.interactors.user.register import (
-    UserGateway as UserGatewayWithSaverAndReader,
-)
 from app.application.interactors.user.update import UpdateUserInteractor
 from app.application.interactors.user.update import (
     UserGateway as UserGatewayWithReaderAndDeleter,
@@ -72,7 +69,6 @@ class AppProvider(Provider):
             UserDeleter,
             UserUpdater,
             UserGatewayWithReaderAndDeleter,
-            UserGatewayWithSaverAndReader,
         ],
     )
     tag_gateway = provide(
