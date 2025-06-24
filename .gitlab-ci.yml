@@ -3,46 +3,56 @@ stages:
 
 variables:
   PYTHON_VERSION: "3.11"
+  UV_LINK_MODE: copy
+  UV_CACHE_DIR: .uv-cache
 
 before_script:
   - source .venv/bin/activate
 
-uv:
+lint:
   stage: check
-  variables:
-    UV_LINK_MODE: copy
-    UV_CACHE_DIR: .uv-cache
+  image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
   cache:
     - key:
         files:
           - uv.lock
       paths:
         - $UV_CACHE_DIR
-  image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
   script:
-    - uv sync --only-group lint --only-group test
-    - uv cache prune --ci
-
-lint:
-  stage: check
-  image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
-  script:
+    - uv sync --only-group lint
     - ruff check .
+    - uv cache prune --ci
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 type-check:
   stage: check
   image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
+  cache:
+    - key:
+        files:
+          - uv.lock
+      paths:
+        - $UV_CACHE_DIR
   script:
+    - uv sync --only-group type-check
     - mypy .
+  - uv cache prune --ci
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 tests:
   stage: check
   image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
+  cache:
+    - key:
+        files:
+          - uv.lock
+      paths:
+        - $UV_CACHE_DIR
   script:
+    - uv sync --frozen --only-group test
     - pytest
+    - uv cache prune --ci
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
