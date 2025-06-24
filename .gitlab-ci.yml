@@ -37,7 +37,7 @@ type-check:
   script:
     - uv sync --only-group type-check
     - mypy .
-  - uv cache prune --ci
+    - uv cache prune --ci
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
