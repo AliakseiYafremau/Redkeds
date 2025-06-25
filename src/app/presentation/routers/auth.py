@@ -9,15 +9,14 @@ from app.adapters.exceptions import (
     UserAlreadyExistsError,
 )
 from app.adapters.id_provider import TokenManager
-from app.application.dto.user import LoginUserDTO, NewUserDTO, UserDTO
+from app.application.dto.user import LoginUserDTO, NewUserDTO
 from app.application.interactors.user.auth import AuthUserInteractor
-from app.application.interactors.user.read import ReadUserInteractor
 from app.application.interactors.user.register import RegisterUserInteractor
 from app.domain.exceptions import WeakPasswordError
 
 auth_router = APIRouter(
     prefix="/auth",
-    tags=["auth"],
+    tags=["Аутентификация и Регистрация"],
 )
 
 
@@ -28,7 +27,7 @@ async def register(
     token_manager: FromDishka[TokenManager],
     interactor: FromDishka[RegisterUserInteractor],
 ) -> str:
-    """Эндпоинт для регистрации нового пользователя."""
+    """Регистрация нового пользователя."""
     try:
         user_id = await interactor(user_data)
     except UserAlreadyExistsError:
@@ -70,7 +69,7 @@ async def login(
     token_manager: FromDishka[TokenManager],
     interactor: FromDishka[AuthUserInteractor],
 ) -> str:
-    """Эндпоинт для входа пользователя."""
+    """Вход пользователя."""
     try:
         user_id = await interactor(user_data)
     except AuthenticationError:
@@ -79,12 +78,3 @@ async def login(
             detail=("Неправильные входные данные."),
         )
     return token_manager.create_token(user_id)
-
-
-@auth_router.get("/me")
-@inject
-async def me(
-    interactor: FromDishka[ReadUserInteractor],
-) -> UserDTO:
-    """Эндпоинт для получения информации о текущем пользователе."""
-    return await interactor()

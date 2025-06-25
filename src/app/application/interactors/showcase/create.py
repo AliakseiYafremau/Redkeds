@@ -26,10 +26,10 @@ class CreateShowcaseInteractor:
 
     async def __call__(self) -> ShowcaseId:
         """Создает и сохраняет новую витрину."""
-        showcase_id = ShowcaseId(self._uuid_generator())
         user_id = self._id_provider()
         user = await self._user_gateway.get_user_by_id(user_id)
         ensure_can_create_showcase(user)
+        showcase_id = ShowcaseId(self._uuid_generator())
         showcase = Showcase(
             id=showcase_id,
             owner_id=user_id,

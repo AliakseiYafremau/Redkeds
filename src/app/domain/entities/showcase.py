@@ -17,7 +17,7 @@ class Showcase:
     другим пользователям.
     """
 
-    id: ShowcaseId | None
+    id: ShowcaseId
     owner_id: UserId
 
 
