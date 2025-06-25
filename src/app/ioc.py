@@ -2,7 +2,9 @@ from uuid import uuid4
 
 from dishka import AnyOf, Provider, Scope, provide
 from fastapi import Request
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from app.adapters.database import new_session_maker
 from app.adapters.gateways.showcase import ShowcaseGateway
 from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
@@ -53,10 +55,15 @@ class AppProvider(Provider):
     Организуем и управляет фабриками для создания зависимостей.
     """
 
-    @provide(scope=Scope.REQUEST)
+    @provide(scope=Scope.APP)
     def get_uuid_generator(self) -> UUIDGenerator:
         """Возвращает генератор UUID."""
         return uuid4
+
+    @provide(scope=Scope.APP)
+    def get_session_maker(self) -> async_sessionmaker[AsyncSession]:
+        """Возвращает фабрику сессий для работы с базой данных."""
+        return new_session_maker()
 
     @provide(scope=Scope.REQUEST)
     def get_id_provider(self, manager: TokenManager, request: Request) -> IdProvider:
