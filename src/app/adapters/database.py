@@ -3,12 +3,14 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 
 def new_session_maker() -> async_sessionmaker[AsyncSession]:
     """Create a new async session maker for connecting to the PostgreSQL database."""
-    database_url = "postgresql+psycopg://{login}:{password}@{host}:{port}/{database}".format(
-        login="postgres",
-        password="1234",
-        host="localhost",
-        port=5432,
-        database="postgres",
+    database_url = (
+        "postgresql+psycopg://{login}:{password}@{host}:{port}/{database}".format(
+            login="postgres",
+            password="1234",
+            host="localhost",
+            port=5432,
+            database="postgres",
+        )
     )
 
     engine = create_async_engine(
@@ -20,8 +22,5 @@ def new_session_maker() -> async_sessionmaker[AsyncSession]:
         },
     )
     return async_sessionmaker(
-        engine,
-        class_=AsyncSession,
-        autoflush=False,
-        expire_on_commit=False
+        engine, class_=AsyncSession, autoflush=False, expire_on_commit=False
     )
