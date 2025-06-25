@@ -7,7 +7,7 @@ def ensure_can_create_showcase(user: User) -> bool:
 
     Пользователь может иметь только одну витрину.
     """
-    if user.specialization is not None:
+    if user.showcase is not None:
         raise CannotCreateShowcaseError
 
     return True

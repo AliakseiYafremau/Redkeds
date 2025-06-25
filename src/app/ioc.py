@@ -12,6 +12,9 @@ from app.adapters.password import FakePasswordHasher
 from app.adapters.transaction import FakeSQLTransactionManager
 from app.application.interactors.showcase.create import CreateShowcaseInteractor
 from app.application.interactors.showcase.delete import DeleteShowcaseInteractor
+from app.application.interactors.showcase.delete import (
+    ShowcaseGateway as ShowcaseGatewayForDelete,
+)
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
 )
@@ -63,12 +66,13 @@ class AppProvider(Provider):
     user_gateway = provide(
         UserGateway,
         scope=Scope.REQUEST,
-        provides=AnyOf[UserSaver, UserReader, UserDeleter, UserUpdater],
-    )
-    user_gateway_with_reader_and_deleter = provide(
-        UserGateway,
-        scope=Scope.REQUEST,
-        provides=UserGatewayWithReaderAndDeleter,
+        provides=AnyOf[
+            UserSaver,
+            UserReader,
+            UserDeleter,
+            UserUpdater,
+            UserGatewayWithReaderAndDeleter,
+        ],
     )
     tag_gateway = provide(
         TagGateway,
@@ -83,7 +87,7 @@ class AppProvider(Provider):
     showcase_gateway = provide(
         ShowcaseGateway,
         scope=Scope.REQUEST,
-        provides=AnyOf[ShowcaseSaver, ShowcaseDeleter],
+        provides=AnyOf[ShowcaseSaver, ShowcaseDeleter, ShowcaseGatewayForDelete],
     )
     register_user_interactor = provide(
         RegisterUserInteractor,

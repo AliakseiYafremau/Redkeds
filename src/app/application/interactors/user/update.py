@@ -5,7 +5,6 @@ from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.user.user_gateway import UserReader, UserUpdater
 from app.domain.entities.user import User
-from app.domain.entities.user_id import UserId
 
 
 class UserGateway(UserReader, UserUpdater, Protocol):
@@ -25,7 +24,7 @@ class UpdateUserInteractor:
         self._id_provider = id_provider
         self._transaction_manager = transaction_manager
 
-    async def __call__(self, data: UpdateUserDTO) -> UserId:
+    async def __call__(self, data: UpdateUserDTO) -> None:
         """Обновляет данные пользователя.
 
         Args:
@@ -37,8 +36,6 @@ class UpdateUserInteractor:
         self.update_user(user, data)
         await self._user_gateway.update_user(user)
         await self._transaction_manager.commit()
-
-        return user.id
 
     def update_user(
         self,

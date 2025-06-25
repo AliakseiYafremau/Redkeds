@@ -1,3 +1,4 @@
+from app.adapters.exceptions import InvalidPasswordError
 from app.application.interfaces.user.password_manager import PasswordHasher
 
 
@@ -10,4 +11,6 @@ class FakePasswordHasher(PasswordHasher):
 
     def verify_password(self, password: str, hashed_password: str) -> bool:
         """Проверяет пароль."""
-        return password == hashed_password
+        if password == hashed_password:
+            return True
+        raise InvalidPasswordError
