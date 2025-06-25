@@ -1,5 +1,5 @@
 from dishka.integrations.fastapi import FromDishka, inject
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, HTTPException
 
 from app.adapters.exceptions import (
     AuthenticationError,
@@ -11,9 +11,8 @@ from app.adapters.exceptions import (
 from app.adapters.id_provider import TokenManager
 from app.application.dto.user import LoginUserDTO, NewUserDTO, UserDTO
 from app.application.interactors.user.auth import AuthUserInteractor
-from app.application.interactors.user.register import RegisterUserInteractor
 from app.application.interactors.user.read import ReadUserInteractor
-from app.application.interfaces.common.id_provider import IdProvider
+from app.application.interactors.user.register import RegisterUserInteractor
 from app.domain.exceptions import WeakPasswordError
 
 auth_router = APIRouter(
@@ -87,4 +86,5 @@ async def login(
 async def me(
     interactor: FromDishka[ReadUserInteractor],
 ) -> UserDTO:
+    """Эндпоинт для получения информации о текущем пользователе."""
     return await interactor()

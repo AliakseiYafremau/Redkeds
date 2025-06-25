@@ -1,15 +1,13 @@
 import uvicorn
 from dishka import make_async_container
 from dishka.integrations.fastapi import FastapiProvider, setup_dishka
-from fastapi import Depends, FastAPI, Header
+from fastapi import Depends, FastAPI
+from fastapi.security import APIKeyHeader
 
 from app.ioc import AppProvider
 from app.presentation.routers.auth import auth_router
 from app.presentation.routers.tag import tag_router
 
-
-def common_headers(token: str = Header(None)):
-    return token
 
 def get_app() -> FastAPI:
     """Создает и настраивает приложение FastAPI."""
@@ -17,7 +15,7 @@ def get_app() -> FastAPI:
     app = FastAPI(
         title="Redkeds",
         dependencies=[
-            Depends(common_headers)
+            Depends(APIKeyHeader(name="token", auto_error=False)),
         ],
     )
     app.include_router(tag_router)
