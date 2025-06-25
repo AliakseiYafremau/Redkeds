@@ -12,10 +12,12 @@ from app.adapters.password import FakePasswordHasher
 from app.adapters.transaction import FakeSQLTransactionManager
 from app.application.interactors.showcase.create import CreateShowcaseInteractor
 from app.application.interactors.showcase.delete import DeleteShowcaseInteractor
+from app.application.interactors.showcase.delete import (
+    ShowcaseGateway as ShowcaseGatewayForDelete,
+)
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
 )
-
 from app.application.interactors.tag.read import ReadTagsInteractor
 from app.application.interactors.user.auth import AuthUserInteractor
 from app.application.interactors.user.delete import DeleteUserInteractor
@@ -37,7 +39,6 @@ from app.application.interfaces.specialization.specialization_gateway import (
 )
 from app.application.interfaces.tag.tag_gateway import TagReader
 from app.application.interfaces.user.password_manager import PasswordHasher
-from app.application.interactors.showcase.delete import ShowcaseGateway as ShowcaseGatewayForDelete
 from app.application.interfaces.user.user_gateway import (
     UserDeleter,
     UserReader,

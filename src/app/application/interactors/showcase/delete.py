@@ -1,9 +1,12 @@
+from typing import Protocol
+
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
-from app.application.interfaces.showcase.showcase_gateway import ShowcaseDeleter, ShowcaseReader
+from app.application.interfaces.showcase.showcase_gateway import (
+    ShowcaseDeleter,
+    ShowcaseReader,
+)
 from app.application.interfaces.user.user_gateway import UserReader
-from app.domain.entities.showcase import ShowcaseId
-from typing import Protocol
 
 
 class ShowcaseGateway(ShowcaseDeleter, ShowcaseReader, Protocol):

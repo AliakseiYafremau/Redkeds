@@ -1,4 +1,5 @@
 from uuid import uuid4
+
 from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseDeleter,
     ShowcaseReader,
@@ -18,7 +19,7 @@ class ShowcaseGateway(
     async def get_showcase_by_user_id(self, user_id: UserId) -> Showcase:
         """Получает информацию о витрине по ID пользователя."""
         return Showcase(
-            id=uuid4(),
+            id=ShowcaseId(uuid4()),
             owner_id=user_id,
         )
 
