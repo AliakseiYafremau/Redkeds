@@ -17,6 +17,11 @@ source .venv/bin/activate # для Linux/macOS
 .\venv\Scripts\activate # для Windows
 ```
 
+Загрузите переменные окружения
+```bash
+source ./scripts/set_environment.sh
+```
+
 Включите режим разработки
 ```bash
 uv pip install -e .

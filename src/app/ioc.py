@@ -47,6 +47,7 @@ from app.application.interfaces.user.user_gateway import (
     UserSaver,
     UserUpdater,
 )
+from app.config import PostgresConfig, load_postgres_config
 
 
 class AppProvider(Provider):
@@ -61,9 +62,22 @@ class AppProvider(Provider):
         return uuid4
 
     @provide(scope=Scope.APP)
-    def get_session_maker(self) -> async_sessionmaker[AsyncSession]:
+    def get_session_maker(
+        self, config: PostgresConfig
+    ) -> async_sessionmaker[AsyncSession]:
         """Возвращает фабрику сессий для работы с базой данных."""
-        return new_session_maker()
+        return new_session_maker(
+            login=config.login,
+            password=config.password,
+            host=config.host,
+            port=config.port,
+            database=config.name,
+        )
+
+    @provide(scope=Scope.APP)
+    def get_postgres_config(self) -> PostgresConfig:
+        """Возвращает конфигурацию подключения к PostgreSQL."""
+        return load_postgres_config()
 
     @provide(scope=Scope.REQUEST)
     def get_id_provider(self, manager: TokenManager, request: Request) -> IdProvider:
