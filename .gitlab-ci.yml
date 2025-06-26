@@ -20,6 +20,7 @@ lint:
           - pyproject.toml
       paths:
         - .ruff_cache
+        - .venv
   script:
     - uv venv
     - source .venv/bin/activate
@@ -43,6 +44,7 @@ type-check:
           - pyproject.toml
       paths:
         - .mypy_cache
+        - .venv
   script:
     - uv venv
     - source .venv/bin/activate
@@ -66,6 +68,7 @@ tests:
           - pyproject.toml
       paths:
         - .pytest_cache
+        - .venv
   script:
     - uv venv
     - source .venv/bin/activate
