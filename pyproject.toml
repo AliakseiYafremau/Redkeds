@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.11"
 dependencies = [
+    "alembic>=1.16.2",
     "dishka>=1.6.0",
     "fastapi>=0.115.13",
     "sqlalchemy>=2.0.41",
@@ -68,3 +69,39 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["D103"] # Для тестов необязательно прописывать docstrings 
+
+[tool.alembic]
+script_location = "%(here)s/src/app/adapters/migrations"
+
+# шаблон для генерации имен файлов миграций
+# file_template = "%%(year)d_%%(month).2d_%%(day).2d_%%(hour).2d%%(minute).2d-%%(rev)s_%%(slug)s"
+
+# дополнительные пути для sys.path
+prepend_sys_path = [
+    "."
+]
+
+# спецификация местоположения версий (по умолчанию: <script_location>/versions)
+version_locations = [
+    "%(here)s/src/app/adapters/migrations/versions"
+]
+
+# кодировка вывода, используемая при записи файлов миграций из script.py.mako
+output_encoding = "utf-8"
+
+# установите 'true', чтобы запустить среду во время команды 'revision', независимо от автогенерации
+# revision_environment = false
+
+# установите 'true', чтобы разрешить файлы .pyc и .pyo без исходного файла .py быть обнаружены как миграции в директории versions/
+# sourceless = false
+
+# установите 'true', чтобы искать исходные файлы рекурсивно в каждой директории "version_locations"
+# recursive_version_locations = false
+
+# пример post_write_hooks (раскомментируйте, чтобы использовать)
+# [[tool.alembic.post_write_hooks]]
+# name = "black"
+# type = "console_scripts"
+# entrypoint = "black"
+# options = "-l 79 REVISION_SCRIPT_FILENAME"
+

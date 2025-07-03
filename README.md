@@ -32,3 +32,20 @@ uv pip install -e .
 ```bash
 app # Команда ничего не выведет
 ```
+
+## Миграции Alembic
+
+- Миграции хранятся в src/app/adapters/migrations/versions
+- Конфиг: src/app/adapters/alembic.ini
+- Асинхронный режим (см. env.py)
+- Для автогенерации схемы используется Base из src/app/adapters/models.py
+- Не забудь добавить в .env DATABASE_URL
+
+### Примеры команд
+
+- Создать миграцию:
+  alembic -c src/app/adapters/alembic.ini revision --autogenerate -m "your message"
+- Применить миграции:
+  alembic -c src/app/adapters/alembic.ini upgrade head
+- Откатить миграцию:
+  alembic -c src/app/adapters/alembic.ini downgrade -1
