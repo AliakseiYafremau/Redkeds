@@ -73,9 +73,6 @@ ignore = [
 [tool.alembic]
 script_location = "%(here)s/src/app/adapters/migrations"
 
-# шаблон для генерации имен файлов миграций
-# file_template = "%%(year)d_%%(month).2d_%%(day).2d_%%(hour).2d%%(minute).2d-%%(rev)s_%%(slug)s"
-
 # дополнительные пути для sys.path
 prepend_sys_path = [
     "."
