@@ -88,20 +88,3 @@ version_locations = [
 
 # кодировка вывода, используемая при записи файлов миграций из script.py.mako
 output_encoding = "utf-8"
-
-# установите 'true', чтобы запустить среду во время команды 'revision', независимо от автогенерации
-# revision_environment = false
-
-# установите 'true', чтобы разрешить файлы .pyc и .pyo без исходного файла .py быть обнаружены как миграции в директории versions/
-# sourceless = false
-
-# установите 'true', чтобы искать исходные файлы рекурсивно в каждой директории "version_locations"
-# recursive_version_locations = false
-
-# пример post_write_hooks (раскомментируйте, чтобы использовать)
-# [[tool.alembic.post_write_hooks]]
-# name = "black"
-# type = "console_scripts"
-# entrypoint = "black"
-# options = "-l 79 REVISION_SCRIPT_FILENAME"
-
