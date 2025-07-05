@@ -1,29 +1,28 @@
 import asyncio
-import os
 
 from alembic import context
 from sqlalchemy import pool
+from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from app.adapters.database import build_database_url
 from app.adapters.models import Base
+from app.config import load_postgres_config
 
 config = context.config
 target_metadata = Base.metadata
 
 
 def get_database_url() -> str:
-    """Получает и собирает URL для подключения к базе данных из переменных окружения."""
-    login = os.environ.get("POSTGRES_LOGIN")
-    password = os.environ.get("POSTGRES_PASSWORD")
-    host = os.environ.get("POSTGRES_HOST")
-    port = os.environ.get("POSTGRES_PORT")
-    database = os.environ.get("POSTGRES_NAME")
-
-    if not all([login, password, host, port, database]):
-        raise RuntimeError("Не все переменные окружения для базы данных заданы!")
-
-    return build_database_url(login, password, host, port, database)
+    """Возращает собранный postgres-url из переменных окружения."""
+    config = load_postgres_config()
+    return build_database_url(
+        login=config.login,
+        password=config.password,
+        host=config.host,
+        port=config.port,
+        database=config.name,
+    )
 
 
 def run_migrations_offline() -> None:
@@ -40,18 +39,15 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
-def do_run_migrations(connection):
+def do_run_migrations(connection: Connection) -> None:
     """Конфигурирует и запускает миграции."""
-    context.configure(
-        connection=connection,
-        target_metadata=target_metadata,
-        render_as_batch=True,
-    )
+    context.configure(connection=connection, target_metadata=target_metadata)
+
     with context.begin_transaction():
         context.run_migrations()
 
 
-async def run_async_migrations():
+async def run_async_migrations() -> None:
     """Асинхронный запуск миграций."""
     url = get_database_url()
     section = config.get_section(config.config_ini_section)

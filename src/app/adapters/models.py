@@ -10,5 +10,7 @@ class Base(DeclarativeBase):
 class TagModel(Base):
     """Модель тега."""
 
+    __tablename__ = "tables"
+
     id: Mapped[UUID] = mapped_column(primary_key=True)
     name: Mapped[str]
