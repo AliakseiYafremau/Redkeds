@@ -11,6 +11,8 @@ dependencies = [
     "alembic>=1.16.2",
     "dishka>=1.6.0",
     "fastapi>=0.115.13",
+    "psycopg>=3.2.9",
+    "psycopg-binary>=3.2.9",
     "sqlalchemy>=2.0.41",
 ]
 
@@ -29,6 +31,7 @@ lint = [
     "ruff>=0.11.13",
 ]
 type-check = [
+    "alembic>=1.16.2",
     "dishka>=1.6.0",
     "fastapi>=0.115.13",
     "mypy>=1.16.1",
@@ -44,6 +47,14 @@ asyncio_mode = "auto"
 exclude = [
 	# Игнорировать папку "tests" и все её подпапки
 	"^tests/",
+    # Игнорировать папки миграций alembic
+    "src/app/adapters/migrations/versions"
+]
+
+[tool.ruff]
+exclude = [
+    # Игнорировать папки миграций alembic
+    "src/app/adapters/migrations/versions"
 ]
 
 [tool.ruff.lint]
