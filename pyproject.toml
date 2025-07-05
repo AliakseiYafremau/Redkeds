@@ -8,8 +8,11 @@ authors = [
 ]
 requires-python = ">=3.11"
 dependencies = [
+    "alembic>=1.16.2",
     "dishka>=1.6.0",
     "fastapi>=0.115.13",
+    "psycopg>=3.2.9",
+    "psycopg-binary>=3.2.9",
     "sqlalchemy>=2.0.41",
 ]
 
@@ -28,6 +31,7 @@ lint = [
     "ruff>=0.11.13",
 ]
 type-check = [
+    "alembic>=1.16.2",
     "dishka>=1.6.0",
     "fastapi>=0.115.13",
     "mypy>=1.16.1",
@@ -43,6 +47,14 @@ asyncio_mode = "auto"
 exclude = [
 	# Игнорировать папку "tests" и все её подпапки
 	"^tests/",
+    # Игнорировать папки миграций alembic
+    "src/app/adapters/migrations/versions"
+]
+
+[tool.ruff]
+exclude = [
+    # Игнорировать папки миграций alembic
+    "src/app/adapters/migrations/versions"
 ]
 
 [tool.ruff.lint]
@@ -68,3 +80,19 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["D103"] # Для тестов необязательно прописывать docstrings 
+
+[tool.alembic]
+script_location = "%(here)s/src/app/adapters/migrations"
+
+# дополнительные пути для sys.path
+prepend_sys_path = [
+    "."
+]
+
+# спецификация местоположения версий (по умолчанию: <script_location>/versions)
+version_locations = [
+    "%(here)s/src/app/adapters/migrations/versions"
+]
+
+# кодировка вывода, используемая при записи файлов миграций из script.py.mako
+output_encoding = "utf-8"
