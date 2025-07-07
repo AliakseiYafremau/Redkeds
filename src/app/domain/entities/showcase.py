@@ -6,7 +6,6 @@ from .user_id import UserId
 
 ShowcaseId = NewType("ShowcaseId", UUID)
 WorkId = NewType("WorkId", UUID)
-WorkFileId = NewType("WorkFileId", UUID)
 
 
 @dataclass
@@ -29,12 +28,4 @@ class Work:
     showcase_id: ShowcaseId
     title: str
     description: str
-
-
-@dataclass
-class WorkFile:
-    """Сущность файла работы в витрине пользователя."""
-
-    id: WorkFileId | None
-    work_id: WorkId
     file_path: str
