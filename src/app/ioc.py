@@ -5,18 +5,12 @@ from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.adapters.database import new_session_maker
-from app.adapters.gateways.showcase import ShowcaseGateway
 from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
 from app.adapters.gateways.user import UserGateway
 from app.adapters.id_provider import FakeIdProvider, FakeTokenManager, TokenManager
 from app.adapters.password import FakePasswordHasher
 from app.adapters.transaction import FakeSQLTransactionManager
-from app.application.interactors.showcase.create import CreateShowcaseInteractor
-from app.application.interactors.showcase.delete import DeleteShowcaseInteractor
-from app.application.interactors.showcase.delete import (
-    ShowcaseGateway as ShowcaseGatewayForDelete,
-)
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
 )
@@ -32,10 +26,6 @@ from app.application.interactors.user.update import (
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
-from app.application.interfaces.showcase.showcase_gateway import (
-    ShowcaseDeleter,
-    ShowcaseSaver,
-)
 from app.application.interfaces.specialization.specialization_gateway import (
     SpecializationReader,
 )
@@ -105,11 +95,6 @@ class AppProvider(Provider):
         scope=Scope.REQUEST,
         provides=SpecializationReader,
     )
-    showcase_gateway = provide(
-        ShowcaseGateway,
-        scope=Scope.REQUEST,
-        provides=AnyOf[ShowcaseSaver, ShowcaseDeleter, ShowcaseGatewayForDelete],
-    )
     register_user_interactor = provide(
         RegisterUserInteractor,
         scope=Scope.REQUEST,
@@ -132,14 +117,6 @@ class AppProvider(Provider):
     )
     read_tag_interactor = provide(
         ReadTagsInteractor,
-        scope=Scope.REQUEST,
-    )
-    create_showcase_interactor = provide(
-        CreateShowcaseInteractor,
-        scope=Scope.REQUEST,
-    )
-    delete_showcase_interactor = provide(
-        DeleteShowcaseInteractor,
         scope=Scope.REQUEST,
     )
     read_specializations_interactor = provide(
