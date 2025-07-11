@@ -23,8 +23,5 @@ class ShowcaseGateway(
             owner_id=user_id,
         )
 
-    async def save_showcase(self, showcase: Showcase) -> None:
-        """Сохраняет обьект витрины."""
-
     async def delete_showcase(self, showcase_id: ShowcaseId) -> None:
         """Удаляет обьект витрины."""
