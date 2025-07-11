@@ -32,6 +32,6 @@ class DeleteUserInteractor:
         """Удаляет пользователя."""
         user_id = self._id_provider()
         showcase = await self._showcase_gateway.get_showcase_by_user_id(user_id)
-        await self._showcase_gateway.delete_showcase(showcase.id)
         await self._user_gateway.delete_user(user_id)
+        await self._showcase_gateway.delete_showcase(showcase.id)
         await self._transaction_manager.commit()

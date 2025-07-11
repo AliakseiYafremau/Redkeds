@@ -43,7 +43,7 @@ class RegisterUserInteractor:
         validate_password(data.password)
         user_id = UserId(self._uuid_generator())
         hashed_password = self._password_hasher.hash_password(data.password)
-        showcase = Showcase(id=ShowcaseId(self._uuid_generator()), owner_id=user_id)
+        showcase = Showcase(id=ShowcaseId(self._uuid_generator()))
         await self._showcase_gateway.save_showcase(showcase)
         user = User(
             id=user_id,
@@ -56,7 +56,7 @@ class RegisterUserInteractor:
             tags=data.tags,
             communication_method=data.communication_method,
             status=data.status,
-            showcase=None,
+            showcase=showcase.id,
         )
         await self._user_gateway.save_user(user)
         await self._transaction_manager.commit()
