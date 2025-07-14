@@ -15,10 +15,12 @@ from app.adapters.transaction import FakeSQLTransactionManager
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
 )
-from app.application.interactors.user.delete import ShowcaseGateway as ShowcaseGatewayWithReaderAndDeleter
 from app.application.interactors.tag.read import ReadTagsInteractor
 from app.application.interactors.user.auth import AuthUserInteractor
 from app.application.interactors.user.delete import DeleteUserInteractor
+from app.application.interactors.user.delete import (
+    ShowcaseGateway as ShowcaseGatewayWithReaderAndDeleter,
+)
 from app.application.interactors.user.read import ReadUserInteractor
 from app.application.interactors.user.register import RegisterUserInteractor
 from app.application.interactors.user.register import (
