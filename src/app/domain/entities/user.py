@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from .city import CityId
 from .communication_method import CommunicationMethodId
 from .showcase import ShowcaseId
 from .specialization import SpecializationId
@@ -16,7 +17,7 @@ class User:
     password: str
     photo: str | None
     specialization: list[SpecializationId]
-    city: str | None
+    city: CityId
     description: str
     tags: list[TagId]
     communication_method: CommunicationMethodId

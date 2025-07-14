@@ -6,6 +6,7 @@ from app.application.interfaces.user.user_gateway import (
     UserSaver,
     UserUpdater,
 )
+from app.domain.entities.city import CityId
 from app.domain.entities.communication_method import CommunicationMethodId
 from app.domain.entities.user import User, UserId
 
@@ -32,7 +33,7 @@ class UserGateway(
             password="fake_password",
             photo=None,
             specialization=[],
-            city=None,
+            city=CityId(uuid4()),
             description="fake_description",
             tags=[],
             communication_method=CommunicationMethodId(uuid4()),
@@ -48,7 +49,7 @@ class UserGateway(
             password="fake_password",
             photo=None,
             specialization=[],
-            city=None,
+            city=CityId(uuid4()),
             description="fake_description",
             tags=[],
             communication_method=CommunicationMethodId(uuid4()),
