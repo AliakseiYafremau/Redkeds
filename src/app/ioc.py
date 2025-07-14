@@ -9,7 +9,7 @@ from app.adapters.gateways.showcase import ShowcaseGateway
 from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
 from app.adapters.gateways.user import UserGateway
-from app.adapters.id_provider import FakeIdProvider, FakeTokenManager, TokenManager
+from app.adapters.id_provider import JWTTokenManager, TokenIdProvider
 from app.adapters.password import FakePasswordHasher
 from app.adapters.transaction import FakeSQLTransactionManager
 from app.application.interactors.specialization.read import (
@@ -49,7 +49,12 @@ from app.application.interfaces.user.user_gateway import (
     UserSaver,
     UserUpdater,
 )
-from app.config import PostgresConfig, load_postgres_config
+from app.config import (
+    PostgresConfig,
+    TokenConfig,
+    load_postgres_config,
+    load_token_config,
+)
 
 
 class AppProvider(Provider):
@@ -81,10 +86,20 @@ class AppProvider(Provider):
         """Возвращает конфигурацию подключения к PostgreSQL."""
         return load_postgres_config()
 
+    @provide(scope=Scope.APP)
+    def get_token_config(self) -> TokenConfig:
+        """Возвращает конфигурацию для токенов."""
+        return load_token_config()
+
     @provide(scope=Scope.REQUEST)
-    def get_id_provider(self, manager: TokenManager, request: Request) -> IdProvider:
+    def get_jwt_manager(self, config: TokenConfig) -> JWTTokenManager:
+        """Возвращает менеджер jwt-токенов."""
+        return JWTTokenManager(config)
+
+    @provide(scope=Scope.REQUEST)
+    def get_id_provider(self, manager: JWTTokenManager, request: Request) -> IdProvider:
         """Возвращает провайдер идентификаторов."""
-        return FakeIdProvider(manager, request)
+        return TokenIdProvider(manager, request)
 
     user_gateway = provide(
         UserGateway,
@@ -155,9 +170,4 @@ class AppProvider(Provider):
         FakePasswordHasher,
         scope=Scope.REQUEST,
         provides=PasswordHasher,
-    )
-    token_manager = provide(
-        FakeTokenManager,
-        scope=Scope.REQUEST,
-        provides=TokenManager,
     )

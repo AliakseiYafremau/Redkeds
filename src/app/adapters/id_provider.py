@@ -1,48 +1,56 @@
-from typing import Protocol
-from uuid import UUID
+import datetime
+from dataclasses import dataclass
 
+import jwt
 from fastapi import HTTPException, Request
 
 from app.adapters.exceptions import AuthenticationError
 from app.application.interfaces.common.id_provider import IdProvider
+from app.config import TokenConfig
 from app.domain.entities.user_id import UserId
 
 
-class TokenManager(Protocol):
-    """Интерфейс менеджера токенов."""
+@dataclass
+class Token:
+    """Схема для jwt-токена."""
 
-    def create_token(self, user_id: UserId) -> str:
-        """Создает токен для пользователя."""
-        ...
+    access_token: str
+
+
+class JWTTokenManager:
+    """Менеджер jwt-токенов."""
+
+    def __init__(self, config: TokenConfig) -> None:
+        self.secret_key = config.secret_key
+        self.expire_time = config.expire_time
+        self.algorithm = config.algorithm
+
+    def create_token(self, user_id: UserId) -> Token:
+        """Создает jwt-токен для пользователя."""
+        payload = {
+            "sub": str(user_id),
+            "exp": (
+                datetime.datetime.now(datetime.UTC)
+                + datetime.timedelta(minutes=self.expire_time)
+            ),
+        }
+        return Token(
+            access_token=jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
+        )
 
     def validate_token(self, token: str) -> UserId:
-        """Проверяет токен и возвращает ID пользователя."""
-        ...
-
-
-class FakeTokenManager(TokenManager):
-    """Фейковый менеджер токенов."""
-
-    def create_token(self, user_id: UserId) -> str:
-        """Создает фейковый токен для пользователя."""
-        return f"fake-token-for-{user_id}"
-
-    def validate_token(self, token: str) -> UserId:
-        """Проверяет фейковый токен и возвращает ID пользователя."""
-        if not token or not token.startswith("fake-token-for-"):
-            raise AuthenticationError
-        user_id_str = token[len("fake-token-for-") :]
+        """Проверяет jwt-токен и возвращает ID пользователя."""
         try:
-            user_id = UUID(user_id_str)
-        except ValueError:
-            raise AuthenticationError
-        return UserId(user_id)
+            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
+            return UserId(payload["sub"])
+        except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, KeyError, ValueError):
+            raise AuthenticationError("Invalid or expired token")
 
 
-class FakeIdProvider(IdProvider):
-    """Фейковый провайдер для получения ID."""
+class TokenIdProvider(IdProvider):
+    """Провайдер для получения ID."""
 
-    def __init__(self, token_manager: TokenManager, request: Request) -> None:
+    def __init__(self, token_manager: JWTTokenManager, request: Request) -> None:
         self.token_manager = token_manager
         self.token = request.headers.get("token", "")
 

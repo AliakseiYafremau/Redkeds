@@ -8,7 +8,7 @@ from app.adapters.exceptions import (
     TagDoesNotExistError,
     UserAlreadyExistsError,
 )
-from app.adapters.id_provider import TokenManager
+from app.adapters.id_provider import JWTTokenManager, Token
 from app.application.dto.user import LoginUserDTO, NewUserDTO
 from app.application.interactors.user.auth import AuthUserInteractor
 from app.application.interactors.user.register import RegisterUserInteractor
@@ -24,9 +24,9 @@ auth_router = APIRouter(
 @inject
 async def register(
     user_data: NewUserDTO,
-    token_manager: FromDishka[TokenManager],
+    token_manager: FromDishka[JWTTokenManager],
     interactor: FromDishka[RegisterUserInteractor],
-) -> str:
+) -> Token:
     """Регистрация нового пользователя."""
     try:
         user_id = await interactor(user_data)
@@ -66,9 +66,9 @@ async def register(
 @inject
 async def login(
     user_data: LoginUserDTO,
-    token_manager: FromDishka[TokenManager],
+    token_manager: FromDishka[JWTTokenManager],
     interactor: FromDishka[AuthUserInteractor],
-) -> str:
+) -> Token:
     """Вход пользователя."""
     try:
         user_id = await interactor(user_data)
