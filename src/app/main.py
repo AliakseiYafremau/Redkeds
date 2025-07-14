@@ -5,14 +5,18 @@ from fastapi import Depends, FastAPI
 from fastapi.security import APIKeyHeader
 
 from app.ioc import AppProvider
+from app.logs import get_logger
 from app.presentation.routers.auth import auth_router
 from app.presentation.routers.specialization import specialization_router
 from app.presentation.routers.tag import tag_router
 from app.presentation.routers.user import user_router
 
+logger = get_logger(__name__)
+
 
 def get_app() -> FastAPI:
     """Создает и настраивает приложение FastAPI."""
+    logger.warning("something very bad")
     container = make_async_container(AppProvider(), FastapiProvider())
     app = FastAPI(
         title="Redkeds",
