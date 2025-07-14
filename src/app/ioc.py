@@ -5,6 +5,7 @@ from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.adapters.database import new_session_maker
+from app.adapters.gateways.showcase import ShowcaseGateway
 from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
 from app.adapters.gateways.user import UserGateway
@@ -17,8 +18,14 @@ from app.application.interactors.specialization.read import (
 from app.application.interactors.tag.read import ReadTagsInteractor
 from app.application.interactors.user.auth import AuthUserInteractor
 from app.application.interactors.user.delete import DeleteUserInteractor
+from app.application.interactors.user.delete import (
+    ShowcaseGateway as ShowcaseGatewayWithReaderAndDeleter,
+)
 from app.application.interactors.user.read import ReadUserInteractor
 from app.application.interactors.user.register import RegisterUserInteractor
+from app.application.interactors.user.register import (
+    UserGateway as UserGatewayWithReaderAndSaver,
+)
 from app.application.interactors.user.update import UpdateUserInteractor
 from app.application.interactors.user.update import (
     UserGateway as UserGatewayWithReaderAndDeleter,
@@ -26,6 +33,11 @@ from app.application.interactors.user.update import (
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
+from app.application.interfaces.showcase.showcase_gateway import (
+    ShowcaseDeleter,
+    ShowcaseReader,
+    ShowcaseSaver,
+)
 from app.application.interfaces.specialization.specialization_gateway import (
     SpecializationReader,
 )
@@ -83,6 +95,7 @@ class AppProvider(Provider):
             UserDeleter,
             UserUpdater,
             UserGatewayWithReaderAndDeleter,
+            UserGatewayWithReaderAndSaver,
         ],
     )
     tag_gateway = provide(
@@ -94,6 +107,16 @@ class AppProvider(Provider):
         SpecializationGateway,
         scope=Scope.REQUEST,
         provides=SpecializationReader,
+    )
+    showcase_gateway = provide(
+        ShowcaseGateway,
+        scope=Scope.REQUEST,
+        provides=AnyOf[
+            ShowcaseSaver,
+            ShowcaseDeleter,
+            ShowcaseReader,
+            ShowcaseGatewayWithReaderAndDeleter,
+        ],
     )
     register_user_interactor = provide(
         RegisterUserInteractor,
