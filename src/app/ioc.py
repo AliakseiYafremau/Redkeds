@@ -1,9 +1,9 @@
+from collections.abc import AsyncIterable
 from uuid import uuid4
 
 from dishka import AnyOf, Provider, Scope, provide
 from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
-from typing import AsyncIterable
 
 from app.adapters.database import new_session_maker
 from app.adapters.gateways.city import CityGateway
