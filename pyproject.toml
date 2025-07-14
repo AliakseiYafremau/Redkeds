@@ -36,6 +36,7 @@ type-check = [
     "dishka>=1.6.0",
     "fastapi>=0.115.13",
     "mypy>=1.16.1",
+    "pyjwt>=2.10.1",
     "sqlalchemy>=2.0.41",
     "uvicorn>=0.34.3",
 ]

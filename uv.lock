@@ -65,6 +65,7 @@ type-check = [
     { name = "dishka" },
     { name = "fastapi" },
     { name = "mypy" },
+    { name = "pyjwt" },
     { name = "sqlalchemy" },
     { name = "uvicorn" },
 ]
@@ -88,6 +89,7 @@ type-check = [
     { name = "dishka", specifier = ">=1.6.0" },
     { name = "fastapi", specifier = ">=0.115.13" },
     { name = "mypy", specifier = ">=1.16.1" },
+    { name = "pyjwt", specifier = ">=2.10.1" },
     { name = "sqlalchemy", specifier = ">=2.0.41" },
     { name = "uvicorn", specifier = ">=0.34.3" },
 ]
