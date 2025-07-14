@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from datetime import datetime
 from os import environ
 
 
@@ -31,7 +30,7 @@ class TokenConfig:
     """Конфигурация для токенов."""
 
     secret_key: str
-    expire_time: datetime
+    expire_time: int
     algorithm: str
 
 
@@ -50,6 +49,6 @@ def load_token_config() -> TokenConfig:
     """Загружает конфигурацию для токенов."""
     return TokenConfig(
         secret_key=get_env_variable("SECRET_KEY"),
-        expire_time=get_env_variable("EXPIRE_TIME"),
+        expire_time=int(get_env_variable("EXPIRE_TIME")),
         algorithm=get_env_variable("ALGORITHM"),
     )

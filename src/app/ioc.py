@@ -9,7 +9,7 @@ from app.adapters.gateways.showcase import ShowcaseGateway
 from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
 from app.adapters.gateways.user import UserGateway
-from app.adapters.id_provider import FakeIdProvider, FakeTokenManager, TokenManager
+from app.adapters.id_provider import JWTTokenManager, TokenIdProvider, TokenManager
 from app.adapters.password import FakePasswordHasher
 from app.adapters.transaction import FakeSQLTransactionManager
 from app.application.interactors.specialization.read import (
@@ -49,7 +49,12 @@ from app.application.interfaces.user.user_gateway import (
     UserSaver,
     UserUpdater,
 )
-from app.config import PostgresConfig, TokenConfig, load_postgres_config, load_token_config
+from app.config import (
+    PostgresConfig,
+    TokenConfig,
+    load_postgres_config,
+    load_token_config,
+)
 
 
 class AppProvider(Provider):
@@ -89,7 +94,7 @@ class AppProvider(Provider):
     @provide(scope=Scope.REQUEST)
     def get_id_provider(self, manager: TokenManager, request: Request) -> IdProvider:
         """Возвращает провайдер идентификаторов."""
-        return FakeIdProvider(manager, request)
+        return TokenIdProvider(manager, request)
 
     user_gateway = provide(
         UserGateway,
@@ -162,7 +167,7 @@ class AppProvider(Provider):
         provides=PasswordHasher,
     )
     token_manager = provide(
-        FakeTokenManager,
+        JWTTokenManager,
         scope=Scope.REQUEST,
         provides=TokenManager,
     )
