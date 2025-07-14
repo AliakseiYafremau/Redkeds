@@ -2,8 +2,6 @@ from dataclasses import dataclass
 from typing import NewType
 from uuid import UUID
 
-from .user_id import UserId
-
 ShowcaseId = NewType("ShowcaseId", UUID)
 WorkId = NewType("WorkId", UUID)
 
@@ -17,7 +15,6 @@ class Showcase:
     """
 
     id: ShowcaseId
-    owner_id: UserId
 
 
 @dataclass

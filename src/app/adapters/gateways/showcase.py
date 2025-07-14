@@ -16,11 +16,10 @@ class ShowcaseGateway(
 ):
     """Gateway для работы с витринами."""
 
-    async def get_showcase_by_user_id(self, user_id: UserId) -> Showcase:
+    async def get_showcase_by_user_id(self, user_id: UserId) -> Showcase:  # noqa: ARG002 Так как это фейковая реализация, нам не нужен user_id
         """Получает информацию о витрине по ID пользователя."""
         return Showcase(
             id=ShowcaseId(uuid4()),
-            owner_id=user_id,
         )
 
     async def delete_showcase(self, showcase_id: ShowcaseId) -> None:
