@@ -9,7 +9,7 @@ from app.adapters.gateways.showcase import ShowcaseGateway
 from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
 from app.adapters.gateways.user import UserGateway
-from app.adapters.id_provider import JWTTokenManager, TokenIdProvider, TokenManager
+from app.adapters.id_provider import JWTTokenManager, TokenIdProvider
 from app.adapters.password import FakePasswordHasher
 from app.adapters.transaction import FakeSQLTransactionManager
 from app.application.interactors.specialization.read import (
@@ -92,7 +92,12 @@ class AppProvider(Provider):
         return load_token_config()
 
     @provide(scope=Scope.REQUEST)
-    def get_id_provider(self, manager: TokenManager, request: Request) -> IdProvider:
+    def get_jwt_manager(self, config: TokenConfig) -> JWTTokenManager:
+        """Возвращает менеджер jwt-токенов."""
+        return JWTTokenManager(config)
+
+    @provide(scope=Scope.REQUEST)
+    def get_id_provider(self, manager: JWTTokenManager, request: Request) -> IdProvider:
         """Возвращает провайдер идентификаторов."""
         return TokenIdProvider(manager, request)
 
@@ -165,9 +170,4 @@ class AppProvider(Provider):
         FakePasswordHasher,
         scope=Scope.REQUEST,
         provides=PasswordHasher,
-    )
-    token_manager = provide(
-        JWTTokenManager,
-        scope=Scope.REQUEST,
-        provides=TokenManager,
     )

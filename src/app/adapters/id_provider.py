@@ -1,5 +1,5 @@
 import datetime
-from typing import Protocol
+from dataclasses import dataclass
 
 import jwt
 from fastapi import HTTPException, Request
@@ -10,19 +10,14 @@ from app.config import TokenConfig
 from app.domain.entities.user_id import UserId
 
 
-class TokenManager(Protocol):
-    """Интерфейс менеджера токенов."""
+@dataclass
+class Token:
+    """Схема для jwt-токена."""
 
-    def create_token(self, user_id: UserId) -> str:
-        """Создает токен для пользователя."""
-        ...
-
-    def validate_token(self, token: str) -> UserId:
-        """Проверяет токен и возвращает ID пользователя."""
-        ...
+    access_token: str
 
 
-class JWTTokenManager(TokenManager):
+class JWTTokenManager:
     """Менеджер jwt-токенов."""
 
     def __init__(self, config: TokenConfig) -> None:
@@ -30,7 +25,7 @@ class JWTTokenManager(TokenManager):
         self.expire_time = config.expire_time
         self.algorithm = config.algorithm
 
-    def create_token(self, user_id: UserId) -> str:
+    def create_token(self, user_id: UserId) -> Token:
         """Создает jwt-токен для пользователя."""
         payload = {
             "sub": str(user_id),
@@ -39,7 +34,9 @@ class JWTTokenManager(TokenManager):
                 + datetime.timedelta(minutes=self.expire_time)
             ),
         }
-        return jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
+        return Token(
+            access_token=jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
+        )
 
     def validate_token(self, token: str) -> UserId:
         """Проверяет jwt-токен и возвращает ID пользователя."""
@@ -53,7 +50,7 @@ class JWTTokenManager(TokenManager):
 class TokenIdProvider(IdProvider):
     """Провайдер для получения ID."""
 
-    def __init__(self, token_manager: TokenManager, request: Request) -> None:
+    def __init__(self, token_manager: JWTTokenManager, request: Request) -> None:
         self.token_manager = token_manager
         self.token = request.headers.get("token", "")
 
