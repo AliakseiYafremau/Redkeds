@@ -14,3 +14,12 @@ class TagModel(Base):
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
     name: Mapped[str]
+
+
+class CityModel(Base):
+    """Модель города."""
+
+    __tablename__ = "cities"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    name: Mapped[str]

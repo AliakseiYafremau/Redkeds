@@ -1,3 +1,4 @@
+from collections.abc import AsyncIterable
 from uuid import uuid4
 
 from dishka import AnyOf, Provider, Scope, provide
@@ -5,6 +6,7 @@ from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.adapters.database import new_session_maker
+from app.adapters.gateways.city import CityGateway
 from app.adapters.gateways.showcase import ShowcaseGateway
 from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
@@ -12,6 +14,7 @@ from app.adapters.gateways.user import UserGateway
 from app.adapters.id_provider import JWTTokenManager, TokenIdProvider
 from app.adapters.password import FakePasswordHasher
 from app.adapters.transaction import FakeSQLTransactionManager
+from app.application.interactors.city.read import ReadCitiesInteractor
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
 )
@@ -30,6 +33,7 @@ from app.application.interactors.user.update import UpdateUserInteractor
 from app.application.interactors.user.update import (
     UserGateway as UserGatewayWithReaderAndDeleter,
 )
+from app.application.interfaces.city.city_gateway import CityReader
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
@@ -81,6 +85,14 @@ class AppProvider(Provider):
             database=config.name,
         )
 
+    @provide(scope=Scope.REQUEST)
+    async def get_session(
+        self, session_maker: async_sessionmaker[AsyncSession]
+    ) -> AsyncIterable[AsyncSession]:
+        """Возвращает сессию для работы с базой данных."""
+        async with session_maker() as session:
+            yield session
+
     @provide(scope=Scope.APP)
     def get_postgres_config(self) -> PostgresConfig:
         """Возвращает конфигурацию подключения к PostgreSQL."""
@@ -123,6 +135,11 @@ class AppProvider(Provider):
         scope=Scope.REQUEST,
         provides=SpecializationReader,
     )
+    city_gateway = provide(
+        CityGateway,
+        scope=Scope.REQUEST,
+        provides=CityReader,
+    )
     showcase_gateway = provide(
         ShowcaseGateway,
         scope=Scope.REQUEST,
@@ -159,6 +176,10 @@ class AppProvider(Provider):
     )
     read_specializations_interactor = provide(
         ReadSpecializationsInteractor,
+        scope=Scope.REQUEST,
+    )
+    read_cities_interactor = provide(
+        ReadCitiesInteractor,
         scope=Scope.REQUEST,
     )
     transaction_manager = provide(

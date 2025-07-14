@@ -6,6 +6,7 @@ from fastapi.security import APIKeyHeader
 
 from app.ioc import AppProvider
 from app.presentation.routers.auth import auth_router
+from app.presentation.routers.city import city_router
 from app.presentation.routers.specialization import specialization_router
 from app.presentation.routers.tag import tag_router
 from app.presentation.routers.user import user_router
@@ -24,6 +25,7 @@ def get_app() -> FastAPI:
     app.include_router(user_router)
     app.include_router(tag_router)
     app.include_router(specialization_router)
+    app.include_router(city_router)
     setup_dishka(container, app)
     return app
 

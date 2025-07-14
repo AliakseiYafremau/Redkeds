@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from app.domain.entities.city import CityId
 from app.domain.entities.communication_method import CommunicationMethodId
 from app.domain.entities.showcase import ShowcaseId
 from app.domain.entities.specialization import SpecializationId
@@ -13,12 +14,12 @@ class NewUserDTO:
     username: str
     password: str
     specialization: list[SpecializationId]
+    city: CityId
     description: str
     tags: list[TagId]
     communication_method: CommunicationMethodId
 
     photo: str | None = None
-    city: str | None = None
     status: str | None = None
 
 
@@ -45,7 +46,7 @@ class UserDTO:
     username: str
     photo: str | None = None
     specialization: list[SpecializationId] | None = None
-    city: str | None = None
+    city: CityId | None = None
     description: str | None = None
     tags: list[TagId] | None = None
     communication_method: CommunicationMethodId | None = None
@@ -60,7 +61,7 @@ class UpdateUserDTO:
     username: str | None = None
     photo: str | None = None
     specialization: list[SpecializationId] | None = None
-    city: str | None = None
+    city: CityId | None = None
     description: str | None = None
     tags: list[TagId] | None = None
     communication_method: CommunicationMethodId | None = None
