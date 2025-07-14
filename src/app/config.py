@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 from os import environ
 
 
@@ -25,6 +26,15 @@ class PostgresConfig:
     name: str
 
 
+@dataclass
+class TokenConfig:
+    """Конфигурация для токенов."""
+
+    secret_key: str
+    expire_time: datetime
+    algorithm: str
+
+
 def load_postgres_config() -> PostgresConfig:
     """Загружает конфигурацию PostgreSQL из переменных окружения."""
     return PostgresConfig(
@@ -33,4 +43,13 @@ def load_postgres_config() -> PostgresConfig:
         host=get_env_variable("POSTGRES_HOST"),
         port=int(get_env_variable("POSTGRES_PORT")),
         name=get_env_variable("POSTGRES_NAME"),
+    )
+
+
+def load_token_config() -> TokenConfig:
+    """Загружает конфигурацию для токенов."""
+    return TokenConfig(
+        secret_key=get_env_variable("SECRET_KEY"),
+        expire_time=get_env_variable("EXPIRE_TIME"),
+        algorithm=get_env_variable("ALGORITHM"),
     )

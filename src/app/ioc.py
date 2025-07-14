@@ -49,7 +49,7 @@ from app.application.interfaces.user.user_gateway import (
     UserSaver,
     UserUpdater,
 )
-from app.config import PostgresConfig, load_postgres_config
+from app.config import PostgresConfig, TokenConfig, load_postgres_config, load_token_config
 
 
 class AppProvider(Provider):
@@ -80,6 +80,11 @@ class AppProvider(Provider):
     def get_postgres_config(self) -> PostgresConfig:
         """Возвращает конфигурацию подключения к PostgreSQL."""
         return load_postgres_config()
+
+    @provide(scope=Scope.APP)
+    def get_token_config(self) -> TokenConfig:
+        """Возвращает конфигурацию для токенов."""
+        return load_token_config()
 
     @provide(scope=Scope.REQUEST)
     def get_id_provider(self, manager: TokenManager, request: Request) -> IdProvider:
