@@ -3,6 +3,7 @@ from uuid import uuid4
 from dishka import AnyOf, Provider, Scope, provide
 from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+from typing import AsyncIterable
 
 from app.adapters.database import new_session_maker
 from app.adapters.gateways.city import CityGateway
@@ -83,6 +84,14 @@ class AppProvider(Provider):
             port=config.port,
             database=config.name,
         )
+
+    @provide(scope=Scope.REQUEST)
+    async def get_session(
+        self, session_maker: async_sessionmaker[AsyncSession]
+    ) -> AsyncIterable[AsyncSession]:
+        """Возвращает сессию для работы с базой данных."""
+        async with session_maker() as session:
+            yield session
 
     @provide(scope=Scope.APP)
     def get_postgres_config(self) -> PostgresConfig:
