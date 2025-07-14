@@ -5,7 +5,6 @@ from fastapi import Depends, FastAPI
 from fastapi.security import APIKeyHeader
 
 from app.ioc import AppProvider
-from app.logs import get_logger
 from app.presentation.routers.auth import auth_router
 from app.presentation.routers.specialization import specialization_router
 from app.presentation.routers.tag import tag_router
