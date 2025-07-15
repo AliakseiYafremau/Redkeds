@@ -1,7 +1,7 @@
 from uuid import UUID
 
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
@@ -52,23 +52,6 @@ class CommunicationMethodModel(Base):
     name: Mapped[str]
 
 
-class UserModel(Base):
-    """Модель пользователя."""
-
-    __tablename__ = "users"
-
-    id: Mapped[UUID] = mapped_column(primary_key=True)
-    username: Mapped[str]
-    password: Mapped[str]
-    photo: Mapped[str | None] = mapped_column(nullable=True)
-    description: Mapped[str]
-    status: Mapped[str | None] = mapped_column(nullable=True)
-
-    city_id: Mapped[UUID] = mapped_column(ForeignKey("cities.id"))
-    communication_method_id: Mapped[UUID] = mapped_column(ForeignKey("communication_methods.id"))
-    showcase_id: Mapped[UUID] = mapped_column(ForeignKey("showcases.id"))
-
-
 class UserTagModel(Base):
     """Связь пользователей с их тегами."""
 
@@ -84,4 +67,32 @@ class UserSpecializationModel(Base):
     __tablename__ = "user_specialization"
 
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), primary_key=True)
-    specialization_id: Mapped[UUID] = mapped_column(ForeignKey("specializations.id"), primary_key=True)
+    specialization_id: Mapped[UUID] = mapped_column(
+        ForeignKey("specializations.id"), primary_key=True
+    )
+
+
+class UserModel(Base):
+    """Модель пользователя."""
+
+    __tablename__ = "users"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    username: Mapped[str]
+    password: Mapped[str]
+    photo: Mapped[str | None] = mapped_column(nullable=True)
+    description: Mapped[str]
+    status: Mapped[str | None] = mapped_column(nullable=True)
+
+    city_id: Mapped[UUID] = mapped_column(ForeignKey("cities.id"))
+    communication_method_id: Mapped[UUID] = mapped_column(
+        ForeignKey("communication_methods.id")
+    )
+    showcase_id: Mapped[UUID] = mapped_column(ForeignKey("showcases.id"))
+
+    tags: Mapped[list[TagModel]] = relationship(
+        TagModel, secondary=UserTagModel.__table__
+    )
+    specializations: Mapped[list[SpecializationModel]] = relationship(
+        SpecializationModel, secondary=UserSpecializationModel.__table__
+    )
