@@ -3,9 +3,9 @@ from uuid import uuid4
 
 from dishka import AnyOf, Provider, Scope, provide
 from fastapi import Request
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
-from app.adapters.database import new_session_maker
+from app.adapters.database import new_async_engine, new_session_maker
 from app.adapters.gateways.city import CityGateway
 from app.adapters.gateways.showcase import ShowcaseGateway
 from app.adapters.gateways.specialization import SpecializationGateway
@@ -74,10 +74,18 @@ class AppProvider(Provider):
 
     @provide(scope=Scope.APP)
     def get_session_maker(
-        self, config: PostgresConfig
+        self, engine: AsyncEngine
     ) -> async_sessionmaker[AsyncSession]:
         """Возвращает фабрику сессий для работы с базой данных."""
-        return new_session_maker(
+        return new_session_maker(engine=engine)
+
+    @provide(scope=Scope.APP)
+    def get_engine(
+        self,
+        config: PostgresConfig,
+    ) -> AsyncEngine:
+        """Возвращает новый двигатель для работы с базой данных."""
+        return new_async_engine(
             login=config.login,
             password=config.password,
             host=config.host,
