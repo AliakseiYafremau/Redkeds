@@ -63,6 +63,9 @@ exclude = [
     "src/app/adapters/migrations/versions"
 ]
 
+[tool.ruff.lint.pylint]
+max-args = 10
+
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
