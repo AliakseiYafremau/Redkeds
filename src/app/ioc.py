@@ -13,7 +13,7 @@ from app.adapters.gateways.tag import TagGateway
 from app.adapters.gateways.user import UserGateway
 from app.adapters.id_provider import JWTTokenManager, TokenIdProvider
 from app.adapters.password import BcryptPasswordHasher
-from app.adapters.transaction import FakeSQLTransactionManager
+from app.adapters.transaction import SQLTransactionManager
 from app.application.interactors.city.read import ReadCitiesInteractor
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
@@ -183,7 +183,7 @@ class AppProvider(Provider):
         scope=Scope.REQUEST,
     )
     transaction_manager = provide(
-        FakeSQLTransactionManager,
+        SQLTransactionManager,
         scope=Scope.REQUEST,
         provides=TransactionManager,
     )
