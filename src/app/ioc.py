@@ -12,8 +12,8 @@ from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
 from app.adapters.gateways.user import UserGateway
 from app.adapters.id_provider import JWTTokenManager, TokenIdProvider
-from app.adapters.password import FakePasswordHasher
 from app.adapters.transaction import SQLTransactionManager
+from app.adapters.password import BcryptPasswordHasher
 from app.application.interactors.city.read import ReadCitiesInteractor
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
@@ -188,7 +188,7 @@ class AppProvider(Provider):
         provides=TransactionManager,
     )
     password_hasher = provide(
-        FakePasswordHasher,
+        BcryptPasswordHasher,
         scope=Scope.REQUEST,
         provides=PasswordHasher,
     )
