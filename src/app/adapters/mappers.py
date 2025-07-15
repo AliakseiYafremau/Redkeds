@@ -24,7 +24,9 @@ def map_model_to_user(model: UserModel) -> User:
         tags=[TagId(tag.id) for tag in model.tags],
         communication_method=CommunicationMethodId(model.communication_method_id),
         status=model.status,
-        showcase=ShowcaseId(model.showcase_id),
+        showcase=ShowcaseId(model.showcase_id)
+        if model.showcase_id is not None
+        else None,
     )
 
 

@@ -88,7 +88,9 @@ class UserModel(Base):
     communication_method_id: Mapped[UUID] = mapped_column(
         ForeignKey("communication_methods.id")
     )
-    showcase_id: Mapped[UUID] = mapped_column(ForeignKey("showcases.id"))
+    showcase_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("showcases.id"), nullable=True
+    )
 
     tags: Mapped[list[TagModel]] = relationship(
         TagModel, secondary=UserTagModel.__table__
