@@ -35,6 +35,6 @@ class UserUpdater(Protocol):
 class UserDeleter(Protocol):
     """Интерфейс для удаления пользователя."""
 
-    async def delete_user(self, user: UserId) -> None:
+    async def delete_user(self, user_id: UserId) -> None:
         """Удаляет обьект пользователя."""
         ...

@@ -14,6 +14,10 @@ class UserAlreadyExistsError(AdapterError):
     """Ошибка при попытке создания уже существующего пользователя."""
 
 
+class UserDoesNotExistError(AdapterError):
+    """Ошибка при попытке получить несуществующего пользователя."""
+
+
 class TagDoesNotExistError(AdapterError):
     """Ошибка при обращении к несуществуещему тегу."""
 
