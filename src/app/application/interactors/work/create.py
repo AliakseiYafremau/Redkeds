@@ -10,7 +10,7 @@ from app.application.interfaces.user.user_gateway import UserReader
 from app.domain.entities.showcase import Work, WorkId
 
 
-class AddWorkInteractor:
+class CreateWorkInteractor:
     """Интерактор для добавления работы."""
 
     def __init__(

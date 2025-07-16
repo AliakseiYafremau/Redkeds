@@ -6,7 +6,7 @@ from app.domain.entities.showcase import Work, WorkId
 class WorkReader(Protocol):
     """Интерфейс для чтения данных работы."""
 
-    def get_work_by_id(self, work_id: WorkId) -> None:
+    async def get_work_by_id(self, work_id: WorkId) -> Work:
         """Получает информацию о работе по ID."""
         ...
 
@@ -14,7 +14,7 @@ class WorkReader(Protocol):
 class WorkSaver(Protocol):
     """Интерфейс для сохранения данных работы."""
 
-    async def save_work(self, work: Work) -> None:
+    async def save_work(self, work: Work) -> WorkId:
         """Сохранение обьект работы."""
         ...
 
@@ -23,7 +23,7 @@ class WorkUpdater(Protocol):
     """Интерфейс для обновления данных работы."""
 
     async def update_work(self, work: Work) -> None:
-        """Обновления обьекта работы."""
+        """Обновление обьекта работы."""
         ...
 
 

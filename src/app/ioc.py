@@ -42,6 +42,10 @@ from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseReader,
     ShowcaseSaver,
 )
+from app.application.interactors.work.create import CreateWorkInteractor
+from app.application.interactors.work.read import ReadWorkInteractor
+from app.application.interfaces.showcase.work_gateway import WorkReader, WorkSaver
+from app.adapters.gateways.showcase import WorkGateway
 from app.application.interfaces.specialization.specialization_gateway import (
     SpecializationReader,
 )
@@ -158,6 +162,14 @@ class AppProvider(Provider):
             ShowcaseGatewayWithReaderAndDeleter,
         ],
     )
+    work_gateway = provide(
+        WorkGateway,
+        scope=Scope.REQUEST,
+        provides=AnyOf[
+            WorkReader,
+            WorkSaver,
+        ]
+    )
     register_user_interactor = provide(
         RegisterUserInteractor,
         scope=Scope.REQUEST,
@@ -188,6 +200,14 @@ class AppProvider(Provider):
     )
     read_cities_interactor = provide(
         ReadCitiesInteractor,
+        scope=Scope.REQUEST,
+    )
+    read_work_interactor = provide(
+        ReadWorkInteractor,
+        scope=Scope.REQUEST,
+    )
+    create_work_interactor = provide(
+        CreateWorkInteractor,
         scope=Scope.REQUEST,
     )
     transaction_manager = provide(

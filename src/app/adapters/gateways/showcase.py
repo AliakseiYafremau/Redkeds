@@ -5,7 +5,8 @@ from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseReader,
     ShowcaseSaver,
 )
-from app.domain.entities.showcase import Showcase, ShowcaseId
+from app.application.interfaces.showcase.work_gateway import WorkReader, WorkSaver, WorkUpdater, WorkDeleter
+from app.domain.entities.showcase import Showcase, ShowcaseId, Work, WorkId
 from app.domain.entities.user_id import UserId
 
 
@@ -24,3 +25,31 @@ class ShowcaseGateway(
 
     async def delete_showcase(self, showcase_id: ShowcaseId) -> None:
         """Удаляет обьект витрины."""
+
+
+class WorkGateway(
+    WorkSaver,
+    WorkReader,
+    WorkUpdater,
+    WorkDeleter,
+):
+    """Gateway для работы с работами витрины."""
+
+    async def get_work_by_id(self, work_id: WorkId) -> Work:
+        """Получает информацию о работе витрины по ID работы."""
+        return Work(
+            id=work_id,
+            showcase_id=ShowcaseId(uuid4()),
+            title="fake title",
+            description="fake description",
+            file_path="fake file_path",
+        )
+
+    async def save_work(self, work: Work) -> None:
+        """Сохраняет информацию о работе витрины."""
+
+    async def update_work(self, work: Work) -> None:
+        """Обновляет обьект работы."""
+
+    async def delete_work(self, work_id: WorkId) -> None:
+        """Удаление работы по ID."""

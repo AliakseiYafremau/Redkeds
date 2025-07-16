@@ -1,5 +1,5 @@
 class AdapterError(Exception):
-    """Базовый класс для ошибок в слое адаптора."""
+    """Базовый класс для ошибок в слое адаптера."""
 
 
 class AuthenticationError(AdapterError):
