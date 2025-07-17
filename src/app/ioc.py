@@ -38,7 +38,10 @@ from app.application.interactors.work.delete import DeleteWorkInteractor
 from app.application.interactors.work.delete import (
     WorkGateway as WorkGatewayWithDeleterAndReader,
 )
-from app.application.interactors.work.read import ReadWorkInteractor
+from app.application.interactors.work.read import (
+    ReadAllWorksInteractor,
+    ReadWorkInteractor,
+)
 from app.application.interactors.work.update import UpdateWorkInteractor
 from app.application.interactors.work.update import (
     WorkGateway as WorkGatewayWithUpdaterAndReader,
@@ -213,6 +216,10 @@ class AppProvider(Provider):
     )
     read_work_interactor = provide(
         ReadWorkInteractor,
+        scope=Scope.REQUEST,
+    )
+    read_all_works_interactor = provide(
+        ReadAllWorksInteractor,
         scope=Scope.REQUEST,
     )
     create_work_interactor = provide(

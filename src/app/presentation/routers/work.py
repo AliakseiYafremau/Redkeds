@@ -4,9 +4,12 @@ from fastapi import APIRouter
 from app.application.dto.work import NewWorkDTO, ReadWorkDTO, UpdateWorkDTO
 from app.application.interactors.work.create import CreateWorkInteractor
 from app.application.interactors.work.delete import DeleteWorkInteractor
-from app.application.interactors.work.read import ReadWorkInteractor
+from app.application.interactors.work.read import (
+    ReadAllWorksInteractor,
+    ReadWorkInteractor,
+)
 from app.application.interactors.work.update import UpdateWorkInteractor
-from app.domain.entities.showcase import WorkId
+from app.domain.entities.showcase import ShowcaseId, WorkId
 
 work_router = APIRouter(prefix="/work", tags=["Работа витрин"])
 
@@ -19,6 +22,16 @@ async def read_work(
 ) -> ReadWorkDTO:
     """Получение информации о работе по ее ID."""
     return await interactor(work_id)
+
+
+@work_router.get("/all/{showcase_id}")
+@inject
+async def read_all_works(
+    showcase_id: ShowcaseId,
+    interactor: FromDishka[ReadAllWorksInteractor],
+) -> list[ReadWorkDTO]:
+    """Получение информации о всех работах витрины по ID."""
+    return await interactor(showcase_id)
 
 
 @work_router.post("/")

@@ -26,6 +26,7 @@ class UpdateWorkDTO:
 class ReadWorkDTO:
     """DTO для чтения работы."""
 
+    id: WorkId
     showcase_id: ShowcaseId
     title: str
     description: str
