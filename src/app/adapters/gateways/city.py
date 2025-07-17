@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.models import CityModel
 from app.application.interfaces.city.city_gateway import CityReader
-from app.domain.entities.city import City
+from app.domain.entities.city import City, CityId
 
 
 class CityGateway(
@@ -17,5 +17,5 @@ class CityGateway(
     async def get_cities(self) -> list[City]:
         """Получает информацию о всех городах."""
         result = await self._session.execute(select(CityModel))
-        rows = result.fetchall()
-        return [City(id=row.id, name=row.name) for row in rows]
+        rows = result.scalars().all()
+        return [City(id=CityId(row.id), name=row.name) for row in rows]
