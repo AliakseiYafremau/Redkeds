@@ -1,3 +1,7 @@
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.adapters.models import SpecializationModel
 from app.application.interfaces.specialization.specialization_gateway import (
     SpecializationReader,
 )
@@ -9,6 +13,11 @@ class SpecializationGateway(
 ):
     """Gateway для работы со специализациями пользователя."""
 
+    def __init__(self, session: AsyncSession) -> None:
+        self._session = session
+
     async def get_specializations(self) -> list[Specialization]:
         """Получает список о всех специализациях."""
-        return []
+        result = await self._session.execute(select(SpecializationModel))
+        rows = result.fetchall()
+        return [Specialization(id=row.id, name=row.name) for row in rows]
