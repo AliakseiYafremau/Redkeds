@@ -15,7 +15,7 @@ class ShowcaseReader(Protocol):
 class ShowcaseSaver(Protocol):
     """Интерфейс для сохранения витрины."""
 
-    async def save_showcase(self, showcase: Showcase) -> None:
+    async def save_showcase(self, showcase: Showcase) -> ShowcaseId:
         """Сохраняет обьект витрины."""
         ...
 

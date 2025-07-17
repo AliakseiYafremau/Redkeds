@@ -1,11 +1,10 @@
-from uuid import uuid4
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.exceptions import WorkDoesNotExistError
+from app.adapters.exceptions import ShowcaseDoesNotExistError, WorkDoesNotExistError
 from app.adapters.mappers import map_model_to_work, map_work_to_model
-from app.adapters.models import WorkModel
+from app.adapters.models import ShowcaseModel, WorkModel
 from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseDeleter,
     ShowcaseReader,
@@ -28,14 +27,43 @@ class ShowcaseGateway(
 ):
     """Gateway для работы с витринами."""
 
-    async def get_showcase_by_user_id(self, user_id: UserId) -> Showcase:  # noqa: ARG002 Так как это фейковая реализация, нам не нужен user_id
+    def __init__(self, session: AsyncSession) -> None:
+        self._session = session
+
+    async def get_showcase_by_user_id(self, user_id: UserId) -> Showcase:
         """Получает информацию о витрине по ID пользователя."""
-        return Showcase(
-            id=ShowcaseId(uuid4()),
-        )
+        statement = select(ShowcaseModel).where(ShowcaseModel.id == user_id)
+        result = await self._session.execute(statement)
+        showcase_model = result.scalar_one_or_none()
+        if showcase_model is None:
+            raise ShowcaseDoesNotExistError(
+                f"Showcase with user id {user_id} not found"
+            )
+        return Showcase(id=ShowcaseId(showcase_model.id))
+
+    async def save_showcase(self, showcase: Showcase) -> ShowcaseId:
+        """Сохраняет витрину в базе данных."""
+        showcase_model = ShowcaseModel(id=showcase.id)
+        self._session.add(showcase_model)
+        return showcase.id
+
+    async def update_showcase(self, showcase: Showcase) -> None:
+        """Обновляет данные витрины."""
+        statement = select(ShowcaseModel).where(ShowcaseModel.id == showcase.id)
+        result = await self._session.execute(statement)
+        showcase_model = result.scalar_one_or_none()
+        if showcase_model is None:
+            raise ShowcaseDoesNotExistError(f"Showcase with id {showcase.id} not found")
+        # Здесь добавьте обновление нужных полей витрины, если они появятся
 
     async def delete_showcase(self, showcase_id: ShowcaseId) -> None:
         """Удаляет обьект витрины."""
+        statement = select(ShowcaseModel).where(ShowcaseModel.id == showcase_id)
+        result = await self._session.execute(statement)
+        showcase_model = result.scalar_one_or_none()
+        if showcase_model is None:
+            raise ShowcaseDoesNotExistError(f"Showcase with id {showcase_id} not found")
+        await self._session.delete(showcase_model)
 
 
 class WorkGateway(
