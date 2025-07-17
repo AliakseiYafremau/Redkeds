@@ -32,3 +32,7 @@ class CommunicationMethodDoesNotExistError(AdapterError):
 
 class WorkDoesNotExistError(AdapterError):
     """Ошибка при попытке получить несуществующую работу."""
+
+
+class ShowcaseDoesNotExistError(AdapterError):
+    """Ошибка при попытке получить несуществующую витрину."""
