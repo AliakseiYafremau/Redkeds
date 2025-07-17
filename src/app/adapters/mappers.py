@@ -7,6 +7,9 @@ from app.domain.entities.tag import TagId
 from app.domain.entities.user import User
 from app.domain.entities.user_id import UserId
 
+from app.domain.entities.showcase import Work
+from app.adapters.models import WorkModel
+
 
 def map_model_to_user(model: UserModel) -> User:
     """Маппит модель пользователя в сущность."""
@@ -42,4 +45,26 @@ def map_user_to_model(user: User) -> UserModel:
         city_id=user.city,
         communication_method_id=user.communication_method,
         showcase_id=user.showcase,
+    )
+
+
+def map_model_to_work(model: WorkModel) -> Work:
+    """Маппит модель работы витрины в сущность."""
+    return Work(
+        id=model.id,
+        showcase_id=model.showcase_id,
+        title=model.title,
+        description=model.description,
+        file_path=model.file_path,
+    )
+
+
+def map_work_to_model(work: Work) -> WorkModel:
+    """Маппит сущность работы витрины в модель."""
+    return WorkModel(
+        id=work.id,
+        showcase_id=work.showcase_id,
+        title=work.title,
+        description=work.description,
+        file_path=work.file_path,
     )

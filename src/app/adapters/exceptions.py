@@ -28,3 +28,7 @@ class SpecializationDoesNotExistError(AdapterError):
 
 class CommunicationMethodDoesNotExistError(AdapterError):
     """Ошибка при обращении к несуществющему методу связи."""
+
+
+class WorkDoesNotExistError(AdapterError):
+    """Ошибка при попытке получить несуществующую работу."""

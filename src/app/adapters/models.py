@@ -43,6 +43,18 @@ class ShowcaseModel(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True)
 
 
+class WorkModel(Base):
+    """Модель работы витрины."""
+
+    __tablename__ = "works"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    showcase_id: Mapped[UUID] = mapped_column(ForeignKey("showcases.id"))
+    title: Mapped[str]
+    description: Mapped[str]
+    file_path: Mapped[str]
+
+
 class CommunicationMethodModel(Base):
     """Модель предпочтения способа общения."""
 
