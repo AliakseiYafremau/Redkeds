@@ -12,3 +12,6 @@ wheels/
 
 # Logs
 *.log
+
+# Pycharm
+.idea/

@@ -8,3 +8,11 @@ class WeakPasswordError(DomainError):
 
 class CannotCreateShowcaseError(DomainError):
     """Ошибка при создании витрины."""
+
+
+class CannotUpdateWorkError(DomainError):
+    """Ошибка при обновлении работы."""
+
+
+class CannotManageWorkError(DomainError):
+    """Ошибка при управлением состояния работы витрины."""
