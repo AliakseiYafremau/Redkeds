@@ -1,3 +1,6 @@
+from typing import ClassVar
+from uuid import uuid4
+
 from fastapi import FastAPI
 from sqladmin import Admin, ModelView
 from sqlalchemy.ext.asyncio import AsyncEngine
@@ -10,28 +13,45 @@ from app.adapters.models import (
 )
 
 
-class CityAdmin(ModelView, model=CityModel):
-    """Модель города в админ-панели."""
+class IdGenerateView(ModelView):
+    """Базовая модель, генерирующая ID."""
 
-    form_include_pk = True
+    async def on_model_change(self, data, model, is_created, request) -> None:  # noqa: ANN001, ARG002
+        """Генерирует новый UUID."""
+        if is_created:
+            data["id"] = uuid4()
 
 
-class TagAdmin(ModelView, model=TagModel):
+class TagAdmin(IdGenerateView, model=TagModel):
     """Модель тега в админ-панели."""
 
-    form_include_pk = True
+    name = "Тег"
+    name_plural = "Теги"
+    column_list: ClassVar[list] = [TagModel.name]
 
 
-class SpecializationAdmin(ModelView, model=SpecializationModel):
+class CityAdmin(IdGenerateView, model=CityModel):
+    """Модель города в админ-панели."""
+
+    name = "Город"
+    name_plural = "Города"
+    column_list: ClassVar[list] = [CityModel.name]
+
+
+class SpecializationAdmin(IdGenerateView, model=SpecializationModel):
     """Модель специализации в админ-панели."""
 
-    form_include_pk = True
+    name = "Специализация"
+    name_plural = "Специализации"
+    column_list: ClassVar[list] = [SpecializationModel.name]
 
 
-class CommunicationMethodAdmin(ModelView, model=CommunicationMethodModel):
+class CommunicationMethodAdmin(IdGenerateView, model=CommunicationMethodModel):
     """Модель предпочтения общения в админ-панели."""
 
-    form_include_pk = True
+    name = "Метод общения"
+    name_plural = "Методы общения"
+    column_list: ClassVar[list] = [CommunicationMethodModel.name]
 
 
 def connect_admin_panel(app: FastAPI, engine: AsyncEngine) -> None:
