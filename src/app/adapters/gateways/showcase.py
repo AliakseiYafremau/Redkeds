@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.exceptions import ShowcaseDoesNotExistError, WorkDoesNotExistError
 from app.adapters.mappers import map_model_to_work, map_work_to_model
-from app.adapters.models import ShowcaseModel, WorkModel
+from app.adapters.models import ShowcaseModel, UserModel, WorkModel
 from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseDeleter,
     ShowcaseReader,
@@ -31,12 +31,21 @@ class ShowcaseGateway(
 
     async def get_showcase_by_user_id(self, user_id: UserId) -> Showcase:
         """Получает информацию о витрине по ID пользователя."""
-        statement = select(ShowcaseModel).where(ShowcaseModel.id == user_id)
-        result = await self._session.execute(statement)
+        user_statement = select(UserModel).where(UserModel.id == user_id)
+        result = await self._session.execute(user_statement)
+        user_model = result.scalar_one_or_none()
+        if user_model is None:
+            raise ShowcaseDoesNotExistError(f"User with id {user_id} not found")
+        if user_model.showcase_id is None:
+            raise ShowcaseDoesNotExistError(f"User with id {user_id} has no showcase")
+        showcase_statement = select(ShowcaseModel).where(
+            ShowcaseModel.id == user_model.showcase_id
+        )
+        result = await self._session.execute(showcase_statement)
         showcase_model = result.scalar_one_or_none()
         if showcase_model is None:
             raise ShowcaseDoesNotExistError(
-                f"Showcase with user id {user_id} not found"
+                f"Showcase with id {user_model.showcase_id} not found"
             )
         return Showcase(id=ShowcaseId(showcase_model.id))
 
@@ -84,6 +93,13 @@ class WorkGateway(
         if work_model is None:
             raise WorkDoesNotExistError(f"Work with id {work_id} not found")
         return map_model_to_work(work_model)
+
+    async def get_showcase_works_by_id(self, showcase_id: ShowcaseId) -> list[Work]:
+        """Получает информацию о всех работах витрины по ID."""
+        statement = select(WorkModel).where(WorkModel.showcase_id == showcase_id)
+        result = await self._session.execute(statement)
+        work_models = result.scalars().all()
+        return [map_model_to_work(model) for model in work_models]
 
     async def save_work(self, work: Work) -> WorkId:
         """Сохраняет информацию о работе витрины."""

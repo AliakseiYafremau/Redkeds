@@ -7,6 +7,7 @@ from app.application.interfaces.showcase.work_gateway import WorkReader, WorkUpd
 from app.application.interfaces.user.user_gateway import UserReader
 from app.domain.entities.showcase import Work
 from app.domain.services.work_service import ensure_can_manage_work
+from app.application.interfaces.common.transaction import TransactionManager
 
 
 class WorkGateway(WorkUpdater, WorkReader, Protocol):
@@ -22,11 +23,13 @@ class UpdateWorkInteractor:
         user_gateway: UserReader,
         showcase_gateway: ShowcaseReader,
         id_provider: IdProvider,
+        transaction_manager: TransactionManager,
     ) -> None:
         self._work_gateway = work_gateway
         self._user_gateway = user_gateway
         self._showcase_gateway = showcase_gateway
         self._id_provider = id_provider
+        self._transaction_manager = transaction_manager
 
     async def __call__(self, data: UpdateWorkDTO) -> None:
         """Обновляет данные пользователя."""
@@ -36,6 +39,7 @@ class UpdateWorkInteractor:
         ensure_can_manage_work(showcase, work)
         self.update_work(work, data)
         await self._work_gateway.update_work(work)
+        await self._transaction_manager.commit()
 
     def update_work(
         self,
