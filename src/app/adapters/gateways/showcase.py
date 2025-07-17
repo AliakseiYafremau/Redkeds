@@ -5,7 +5,12 @@ from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseReader,
     ShowcaseSaver,
 )
-from app.application.interfaces.showcase.work_gateway import WorkReader, WorkSaver, WorkUpdater, WorkDeleter
+from app.application.interfaces.showcase.work_gateway import (
+    WorkDeleter,
+    WorkReader,
+    WorkSaver,
+    WorkUpdater,
+)
 from app.domain.entities.showcase import Showcase, ShowcaseId, Work, WorkId
 from app.domain.entities.user_id import UserId
 
@@ -45,8 +50,9 @@ class WorkGateway(
             file_path="fake file_path",
         )
 
-    async def save_work(self, work: Work) -> None:
+    async def save_work(self, work: Work) -> WorkId:
         """Сохраняет информацию о работе витрины."""
+        return work.id
 
     async def update_work(self, work: Work) -> None:
         """Обновляет обьект работы."""

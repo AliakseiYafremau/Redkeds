@@ -21,7 +21,7 @@ class Showcase:
 class Work:
     """Сущность работы в витрине пользователя."""
 
-    id: WorkId | None
+    id: WorkId
     showcase_id: ShowcaseId
     title: str
     description: str

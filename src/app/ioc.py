@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from app.adapters.database import new_async_engine, new_session_maker
 from app.adapters.gateways.city import CityGateway
-from app.adapters.gateways.showcase import ShowcaseGateway
+from app.adapters.gateways.showcase import ShowcaseGateway, WorkGateway
 from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
 from app.adapters.gateways.user import UserGateway
@@ -33,6 +33,16 @@ from app.application.interactors.user.update import UpdateUserInteractor
 from app.application.interactors.user.update import (
     UserGateway as UserGatewayWithReaderAndDeleter,
 )
+from app.application.interactors.work.create import CreateWorkInteractor
+from app.application.interactors.work.delete import DeleteWorkInteractor
+from app.application.interactors.work.delete import (
+    WorkGateway as WorkGatewayWithDeleterAndReader,
+)
+from app.application.interactors.work.read import ReadWorkInteractor
+from app.application.interactors.work.update import UpdateWorkInteractor
+from app.application.interactors.work.update import (
+    WorkGateway as WorkGatewayWithUpdaterAndReader,
+)
 from app.application.interfaces.city.city_gateway import CityReader
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
@@ -42,10 +52,7 @@ from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseReader,
     ShowcaseSaver,
 )
-from app.application.interactors.work.create import CreateWorkInteractor
-from app.application.interactors.work.read import ReadWorkInteractor
 from app.application.interfaces.showcase.work_gateway import WorkReader, WorkSaver
-from app.adapters.gateways.showcase import WorkGateway
 from app.application.interfaces.specialization.specialization_gateway import (
     SpecializationReader,
 )
@@ -168,7 +175,9 @@ class AppProvider(Provider):
         provides=AnyOf[
             WorkReader,
             WorkSaver,
-        ]
+            WorkGatewayWithUpdaterAndReader,
+            WorkGatewayWithDeleterAndReader,
+        ],
     )
     register_user_interactor = provide(
         RegisterUserInteractor,
@@ -208,6 +217,14 @@ class AppProvider(Provider):
     )
     create_work_interactor = provide(
         CreateWorkInteractor,
+        scope=Scope.REQUEST,
+    )
+    update_work_interactor = provide(
+        UpdateWorkInteractor,
+        scope=Scope.REQUEST,
+    )
+    delete_work_interactor = provide(
+        DeleteWorkInteractor,
         scope=Scope.REQUEST,
     )
     transaction_manager = provide(

@@ -1,6 +1,6 @@
 from app.application.dto.work import ReadWorkDTO
 from app.application.interfaces.showcase.work_gateway import WorkReader
-from app.domain.entities.showcase import Work, WorkId
+from app.domain.entities.showcase import WorkId
 
 
 class ReadWorkInteractor:
@@ -12,7 +12,7 @@ class ReadWorkInteractor:
     ) -> None:
         self._work_gateway = work_gateway
 
-    async def __call__(self, work_id: WorkId) -> Work:
+    async def __call__(self, work_id: WorkId) -> ReadWorkDTO:
         """Читает данные о работе витрины пользователя."""
         work = await self._work_gateway.get_work_by_id(work_id)
         return ReadWorkDTO(

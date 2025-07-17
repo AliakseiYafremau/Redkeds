@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from app.domain.entities.showcase import ShowcaseId
+from app.domain.entities.showcase import ShowcaseId, WorkId
 
 
 @dataclass
@@ -16,9 +16,10 @@ class NewWorkDTO:
 class UpdateWorkDTO:
     """DTO для обновления работы."""
 
-    title: str
-    description: str
-    file_path: str
+    work_id: WorkId
+    title: str | None
+    description: str | None
+    file_path: str | None
 
 
 @dataclass
