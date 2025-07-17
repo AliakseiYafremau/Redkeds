@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.models import TagModel
 from app.application.interfaces.tag.tag_gateway import TagReader
-from app.domain.entities.tag import Tag
+from app.domain.entities.tag import Tag, TagId
 
 
 class TagGateway(
@@ -17,5 +17,5 @@ class TagGateway(
     async def get_tags(self) -> list[Tag]:
         """Получает информацию о всех тегах."""
         result = await self._session.execute(select(TagModel))
-        rows = result.fetchall()
-        return [Tag(id=row.id, name=row.name) for row in rows]
+        rows = result.scalars().all()
+        return [Tag(id=TagId(row.id), name=row.name) for row in rows]
