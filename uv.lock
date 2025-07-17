@@ -53,6 +53,7 @@ dependencies = [
     { name = "pyjwt" },
     { name = "sqladmin" },
     { name = "sqlalchemy" },
+    { name = "uvicorn" },
 ]
 
 [package.dev-dependencies]
@@ -85,6 +86,7 @@ requires-dist = [
     { name = "pyjwt", specifier = ">=2.10.1" },
     { name = "sqladmin", specifier = ">=0.21.0" },
     { name = "sqlalchemy", specifier = ">=2.0.41" },
+    { name = "uvicorn", specifier = ">=0.34.3" },
 ]
 
 [package.metadata.requires-dev]
