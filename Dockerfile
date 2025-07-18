@@ -17,6 +17,3 @@ WORKDIR /app
 COPY . /app/
 RUN uv sync --locked
 ENV PATH="/app/.venv/bin:$PATH"
-
-
-CMD [ "python3", "-m", "uvicorn", "src.app.main:get_app", "--host=0.0.0.0", "--port=8000" ]
