@@ -1,7 +1,10 @@
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter, HTTPException
 
-from app.adapters.exceptions import WorkDoesNotExistError
+from app.adapters.exceptions import (
+    ShowcaseDoesNotExistError,
+    WorkDoesNotExistError,
+)
 from app.application.dto.work import NewWorkDTO, ReadWorkDTO, UpdateWorkDTO
 from app.application.interactors.work.create import CreateWorkInteractor
 from app.application.interactors.work.delete import DeleteWorkInteractor
@@ -9,10 +12,9 @@ from app.application.interactors.work.read import (
     ReadAllWorksInteractor,
     ReadWorkInteractor,
 )
-from app.domain.exceptions import CannotManageWorkError
-from app.adapters.exceptions import UserDoesNotExistError, WorkDoesNotExistError, ShowcaseDoesNotExistError
 from app.application.interactors.work.update import UpdateWorkInteractor
 from app.domain.entities.showcase import ShowcaseId, WorkId
+from app.domain.exceptions import CannotManageWorkError
 
 work_router = APIRouter(prefix="/work", tags=["Работа витрин"])
 
@@ -56,7 +58,6 @@ async def create_work(
         raise HTTPException(status_code=404, detail="Пользователь не найден.")
 
 
-
 @work_router.patch("/")
 @inject
 async def update_work(
@@ -67,20 +68,11 @@ async def update_work(
     try:
         await interactor(work_data)
     except ShowcaseDoesNotExistError:
-        raise HTTPException(
-            status_code=404,
-            detail="Витрина не найдена."
-        )
+        raise HTTPException(status_code=404, detail="Витрина не найдена.")
     except WorkDoesNotExistError:
-        raise HTTPException(
-            status_code=404,
-            detail="Работа витрины не найдена."
-        )
+        raise HTTPException(status_code=404, detail="Работа витрины не найдена.")
     except CannotManageWorkError:
-        raise HTTPException(
-            status_code=403,
-            detail="Недостаточно прав."
-        )
+        raise HTTPException(status_code=403, detail="Недостаточно прав.")
 
 
 @work_router.delete("/{work_id}")
@@ -93,7 +85,4 @@ async def delete_work(
     try:
         await interactor(work_id)
     except WorkDoesNotExistError:
-        raise HTTPException(
-            status_code=404,
-            detail="Работа витрины не найдена."
-        )
+        raise HTTPException(status_code=404, detail="Работа витрины не найдена.")
