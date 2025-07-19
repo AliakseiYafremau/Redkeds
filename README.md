@@ -17,6 +17,8 @@ source .venv/bin/activate # для Linux/macOS
 .\venv\Scripts\activate # для Windows
 ```
 
+Укажите переменные окружения в `.env` (пример в .env.example)
+
 Загрузите переменные окружения
 ```bash
 source ./scripts/set_environment.sh
