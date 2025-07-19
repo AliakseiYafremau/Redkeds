@@ -92,6 +92,6 @@ class UserGateway(
         user_model = result.scalar_one_or_none()
 
         if user_model is None:
-            raise ValueError(f"User with id {user_id} not found")
+            raise UserDoesNotExistError(f"User with id {user_id} not found")
 
         await self._session.delete(user_model)
