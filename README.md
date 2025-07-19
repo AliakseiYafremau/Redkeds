@@ -17,6 +17,8 @@ source .venv/bin/activate # для Linux/macOS
 .\venv\Scripts\activate # для Windows
 ```
 
+Укажите переменные окружения в `.env` (пример в .env.example)
+
 Загрузите переменные окружения
 ```bash
 source ./scripts/set_environment.sh
@@ -30,5 +32,5 @@ uv pip install -e .
 ## Запуск
 Вы можете протестировать программу, запустив ее с помощью следующей команды
 ```bash
-app # Команда ничего не выведет
+run
 ```
