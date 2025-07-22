@@ -5,6 +5,10 @@ from app.application.interfaces.showcase.showcase_gateway import ShowcaseReader
 from app.application.interfaces.showcase.work_gateway import WorkReader
 from app.domain.entities.showcase import WorkId
 
+from app.logs import get_logger
+
+logger = get_logger(__name__)
+
 
 class ReadRecommendationFeed:
     """Интерактор для получения ленты рекомендаций."""
@@ -21,9 +25,10 @@ class ReadRecommendationFeed:
 
     async def __call__(self) -> list[ReadShowcaseDTO]:
         """Получает ленту рекомендаций."""
+        logger.info("here")
         user_id = self._id_provider()
         user_showcase = await self._showcase_gateway.get_showcase_by_user_id(user_id)
-        showcases = await self._showcase_gateway.get_showacases(
+        showcases = await self._showcase_gateway.get_showcases(
             exclude_showcase=user_showcase.id
         )
         showcases_dto: list[ReadShowcaseDTO] = []

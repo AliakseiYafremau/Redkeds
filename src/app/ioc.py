@@ -15,10 +15,10 @@ from app.adapters.id_provider import JWTTokenManager, TokenIdProvider
 from app.adapters.password import BcryptPasswordHasher
 from app.adapters.transaction import SQLTransactionManager
 from app.application.interactors.city.read import ReadCitiesInteractor
+from app.application.interactors.recommendation_feed.read import ReadRecommendationFeed
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
 )
-from app.application.interactors.recommendation_feed.read import ReadRecommendationFeed
 from app.application.interactors.tag.read import ReadTagsInteractor
 from app.application.interactors.user.auth import AuthUserInteractor
 from app.application.interactors.user.delete import DeleteUserInteractor

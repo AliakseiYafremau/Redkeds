@@ -10,8 +10,8 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from app.ioc import AppProvider
 from app.presentation.routers.admin_panel import connect_admin_panel
 from app.presentation.routers.auth import auth_router
-from app.presentation.routers.feed import feed_router
 from app.presentation.routers.city import city_router
+from app.presentation.routers.feed import feed_router
 from app.presentation.routers.specialization import specialization_router
 from app.presentation.routers.tag import tag_router
 from app.presentation.routers.user import user_router
