@@ -55,6 +55,20 @@ class ShowcaseGateway(
         self._session.add(showcase_model)
         return showcase.id
 
+    async def get_showcases(
+        self, exclude_showcase: ShowcaseId | None = None
+    ) -> list[Showcase]:
+        """Получает все витрины, игнорируя exclude_showcase (если задан)."""
+        if exclude_showcase is not None:
+            statement = select(ShowcaseModel).where(
+                ShowcaseModel.id != exclude_showcase
+            )
+        else:
+            statement = select(ShowcaseModel)
+        result = await self._session.execute(statement)
+        showcase_models = result.scalars().all()
+        return [Showcase(id=ShowcaseId(model.id)) for model in showcase_models]
+
     async def update_showcase(self, showcase: Showcase) -> None:
         """Обновляет данные витрины."""
         statement = select(ShowcaseModel).where(ShowcaseModel.id == showcase.id)

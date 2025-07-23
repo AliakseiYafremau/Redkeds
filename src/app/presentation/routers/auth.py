@@ -1,5 +1,6 @@
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter, HTTPException
+from sqlalchemy.exc import IntegrityError
 
 from app.adapters.exceptions import (
     AuthenticationError,
@@ -7,6 +8,7 @@ from app.adapters.exceptions import (
     SpecializationDoesNotExistError,
     TagDoesNotExistError,
     UserAlreadyExistsError,
+    UserDoesNotExistError,
 )
 from app.adapters.id_provider import JWTTokenManager, Token
 from app.application.dto.user import LoginUserDTO, NewUserDTO
@@ -59,6 +61,11 @@ async def register(
             status_code=400,
             detail=("Метод общения с таким ID не существует."),
         )
+    except IntegrityError:
+        raise HTTPException(
+            status_code=400,
+            detail="Невалидные данные",
+        )
     return token_manager.create_token(user_id)
 
 
@@ -72,7 +79,7 @@ async def login(
     """Вход пользователя."""
     try:
         user_id = await interactor(user_data)
-    except AuthenticationError:
+    except (AuthenticationError, UserDoesNotExistError):
         raise HTTPException(
             status_code=400,
             detail=("Неправильные входные данные."),
