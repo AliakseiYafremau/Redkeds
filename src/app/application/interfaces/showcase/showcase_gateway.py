@@ -11,7 +11,9 @@ class ShowcaseReader(Protocol):
         """Получает информацию о витрине по ID пользователя."""
         ...
 
-    async def get_showcases(self, exclude_showcase: ShowcaseId | None = None) -> list[Showcase]:
+    async def get_showcases(
+        self, exclude_showcase: ShowcaseId | None = None
+    ) -> list[Showcase]:
         """Получает все витрины, игнорируя exclude_showcase."""
         ...
 

@@ -4,7 +4,6 @@ from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.showcase.showcase_gateway import ShowcaseReader
 from app.application.interfaces.showcase.work_gateway import WorkReader
 from app.domain.entities.showcase import WorkId
-
 from app.logs import get_logger
 
 logger = get_logger(__name__)

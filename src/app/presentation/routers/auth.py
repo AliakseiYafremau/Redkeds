@@ -1,5 +1,6 @@
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter, HTTPException
+from sqlalchemy.exc import IntegrityError
 
 from app.adapters.exceptions import (
     AuthenticationError,
@@ -14,7 +15,6 @@ from app.application.dto.user import LoginUserDTO, NewUserDTO
 from app.application.interactors.user.auth import AuthUserInteractor
 from app.application.interactors.user.register import RegisterUserInteractor
 from app.domain.exceptions import WeakPasswordError
-from sqlalchemy.exc import IntegrityError
 
 auth_router = APIRouter(
     prefix="/auth",

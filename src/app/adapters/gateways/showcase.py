@@ -19,7 +19,6 @@ from app.domain.entities.showcase import Showcase, ShowcaseId, Work, WorkId
 from app.domain.entities.user_id import UserId
 
 
-
 class ShowcaseGateway(
     ShowcaseReader,
     ShowcaseSaver,
@@ -56,10 +55,14 @@ class ShowcaseGateway(
         self._session.add(showcase_model)
         return showcase.id
 
-    async def get_showcases(self, exclude_showcase: ShowcaseId | None = None) -> list[Showcase]:
+    async def get_showcases(
+        self, exclude_showcase: ShowcaseId | None = None
+    ) -> list[Showcase]:
         """Получает все витрины, игнорируя exclude_showcase (если задан)."""
         if exclude_showcase is not None:
-            statement = select(ShowcaseModel).where(ShowcaseModel.id != exclude_showcase)
+            statement = select(ShowcaseModel).where(
+                ShowcaseModel.id != exclude_showcase
+            )
         else:
             statement = select(ShowcaseModel)
         result = await self._session.execute(statement)
