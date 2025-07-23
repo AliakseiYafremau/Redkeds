@@ -14,6 +14,7 @@ from app.application.dto.user import LoginUserDTO, NewUserDTO
 from app.application.interactors.user.auth import AuthUserInteractor
 from app.application.interactors.user.register import RegisterUserInteractor
 from app.domain.exceptions import WeakPasswordError
+from sqlalchemy.exc import IntegrityError
 
 auth_router = APIRouter(
     prefix="/auth",
@@ -59,6 +60,11 @@ async def register(
         raise HTTPException(
             status_code=400,
             detail=("Метод общения с таким ID не существует."),
+        )
+    except IntegrityError:
+        raise HTTPException(
+            status_code=400,
+            detail="Невалидные данные",
         )
     return token_manager.create_token(user_id)
 
