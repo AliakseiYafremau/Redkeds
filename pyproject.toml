@@ -54,6 +54,8 @@ asyncio_mode = "auto"
 exclude = [
 	# Игнорировать папку "tests" и все её подпапки
 	"^tests/",
+    # Игнорировать папку "scripts" и все её подпапки
+    "^scripts/",
     # Игнорировать папки миграций alembic
     "src/app/adapters/migrations/versions"
 ]
