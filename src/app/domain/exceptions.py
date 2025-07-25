@@ -16,3 +16,7 @@ class CannotUpdateWorkError(DomainError):
 
 class CannotManageWorkError(DomainError):
     """Ошибка при управлением состояния работы витрины."""
+
+
+class CannotManageChatError(DomainError):
+    """Ошибка при управлении состояния чата."""

@@ -1,6 +1,7 @@
 from typing import Protocol
 
 from app.domain.entities.chat import Chat, ChatId
+from app.domain.entities.user_id import UserId
 
 
 class ChatReader(Protocol):
@@ -8,6 +9,10 @@ class ChatReader(Protocol):
 
     async def get_chat_by_id(self, chat_id: ChatId) -> Chat:
         """Получает чат по ID."""
+        ...
+
+    async def get_user_chats(self, user_id: UserId) -> list[Chat]:
+        """Получает чат по ID пользователя."""
         ...
 
 
