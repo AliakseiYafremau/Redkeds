@@ -8,29 +8,36 @@
 
 Обновите зависимости проекта
 ```bash
-uv sync
+  uv sync
 ```
 
 Активируйте виртуальное окружение
 ```bash
-source .venv/bin/activate # для Linux/macOS
-.\venv\Scripts\activate # для Windows
+  source .venv/bin/activate # для Linux/macOS
+```
+```bash
+  .\venv\Scripts\activate # для Windows
 ```
 
 Укажите переменные окружения в `.env` (пример в .env.example)
 
 Загрузите переменные окружения
 ```bash
-source ./scripts/set_environment.sh
+  source ./scripts/set_environment.sh
 ```
 
 Включите режим разработки
 ```bash
-uv pip install -e .
+  uv pip install -e .
+```
+
+## Применение миграций
+```bash
+  alembic upgrade head
 ```
 
 ## Запуск
 Вы можете протестировать программу, запустив ее с помощью следующей команды
 ```bash
-run
+  run
 ```
