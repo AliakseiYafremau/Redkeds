@@ -14,6 +14,11 @@ from app.adapters.gateways.user import UserGateway
 from app.adapters.id_provider import JWTTokenManager, TokenIdProvider
 from app.adapters.password import BcryptPasswordHasher
 from app.adapters.transaction import SQLTransactionManager
+from app.application.interactors.chat.create import CreateChatInteractor
+from app.application.interactors.chat.delete import DeleteChatInteractor
+from app.application.interactors.chat.messages.delete import DeleteChatMessageInteractor
+from app.application.interactors.chat.messages.read import ReadMessageInteractor
+from app.application.interactors.chat.messages.send import SendChatMessage
 from app.application.interactors.city.read import ReadCitiesInteractor
 from app.application.interactors.recommendation_feed.read import ReadRecommendationFeed
 from app.application.interactors.specialization.read import (
@@ -248,4 +253,24 @@ class AppProvider(Provider):
         BcryptPasswordHasher,
         scope=Scope.REQUEST,
         provides=PasswordHasher,
+    )
+    chat_create_interactor = provide(
+        CreateChatInteractor,
+        scope=Scope.REQUEST,
+    )
+    chat_delete_interactor = provide(
+        DeleteChatInteractor,
+        scope=Scope.REQUEST,
+    )
+    chat_message_delete_interactor = provide(
+        DeleteChatMessageInteractor,
+        scope=Scope.REQUEST,
+    )
+    chat_message_read_interactor = provide(
+        ReadMessageInteractor,
+        scope=Scope.REQUEST,
+    )
+    chat_message_send_interactor = provide(
+        SendChatMessage,
+        scope=Scope.REQUEST,
     )
