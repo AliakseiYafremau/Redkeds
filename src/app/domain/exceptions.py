@@ -20,3 +20,7 @@ class CannotManageWorkError(DomainError):
 
 class CannotManageChatError(DomainError):
     """Ошибка при управлении состояния чата."""
+
+
+class CannotManageChatMessageError(DomainError):
+    """Ошибка при управлении состояни сообщения."""

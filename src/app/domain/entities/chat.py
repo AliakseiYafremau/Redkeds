@@ -13,7 +13,7 @@ ChatMessageId = NewType("ChatMessageId", UUID)
 class Chat:
     """Сущность чата между двумя пользователями."""
 
-    id: ChatId | None
+    id: ChatId
     user1_id: UserId
     user2_id: UserId
 
@@ -22,7 +22,7 @@ class Chat:
 class ChatMessage:
     """Сущность сообщения в чате."""
 
-    id: ChatMessageId | None
+    id: ChatMessageId
     chat_id: ChatId
     sender_id: UserId
     text: str
