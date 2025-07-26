@@ -10,7 +10,7 @@ from app.domain.entities.chat import ChatMessage, ChatMessageId
 from app.domain.services.chat_service import ensure_can_manage_chat
 
 
-class SendChatMessage:
+class SendChatMessageInteractor:
     """Интерактор для отправки сообщений."""
 
     def __init__(
@@ -30,7 +30,7 @@ class SendChatMessage:
     async def __call__(
         self,
         data: NewChatMessageDTO,
-    ) -> None:
+    ) -> ChatMessageId:
         """Добавляет сообщение в чат."""
         user_id = self._id_provider()
         chat = await self._chat_gateway.get_chat_by_id(data.chat_id)
@@ -42,4 +42,4 @@ class SendChatMessage:
             text=data.text,
             timestamp=datetime.now(tz=UTC),
         )
-        await self._message_gateway.save_chat_message(message)
+        return await self._message_gateway.save_chat_message(message)
