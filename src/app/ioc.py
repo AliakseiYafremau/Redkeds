@@ -6,6 +6,7 @@ from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from app.adapters.database import new_async_engine, new_session_maker
+from app.adapters.gateways.chat import ChatGateway, ChatMessageGateway
 from app.adapters.gateways.city import CityGateway
 from app.adapters.gateways.showcase import ShowcaseGateway, WorkGateway
 from app.adapters.gateways.specialization import SpecializationGateway
@@ -14,6 +15,15 @@ from app.adapters.gateways.user import UserGateway
 from app.adapters.id_provider import JWTTokenManager, TokenIdProvider
 from app.adapters.password import BcryptPasswordHasher
 from app.adapters.transaction import SQLTransactionManager
+from app.application.interactors.chat.create import CreateChatInteractor
+from app.application.interactors.chat.delete import (
+    ChatGateway as ChatGatewayWithReaderAndDeleter,
+)
+from app.application.interactors.chat.messages.delete import ChatMessageGateway as ChatMessageGatewayWithDeleterAndReader
+from app.application.interactors.chat.delete import DeleteChatInteractor
+from app.application.interactors.chat.messages.delete import DeleteChatMessageInteractor
+from app.application.interactors.chat.messages.read import ReadMessageInteractor
+from app.application.interactors.chat.messages.send import SendChatMessageInteractor
 from app.application.interactors.city.read import ReadCitiesInteractor
 from app.application.interactors.recommendation_feed.read import ReadRecommendationFeed
 from app.application.interactors.specialization.read import (
@@ -46,6 +56,16 @@ from app.application.interactors.work.read import (
 from app.application.interactors.work.update import UpdateWorkInteractor
 from app.application.interactors.work.update import (
     WorkGateway as WorkGatewayWithUpdaterAndReader,
+)
+from app.application.interfaces.chat.chat_gateway import (
+    ChatDeleter,
+    ChatReader,
+    ChatSaver,
+)
+from app.application.interfaces.chat.chat_message_gateway import (
+    ChatMessageDeleter,
+    ChatMessageReader,
+    ChatMessageSaver,
 )
 from app.application.interfaces.city.city_gateway import CityReader
 from app.application.interfaces.common.id_provider import IdProvider
@@ -183,6 +203,26 @@ class AppProvider(Provider):
             WorkGatewayWithDeleterAndReader,
         ],
     )
+    chat_gateway = provide(
+        ChatGateway,
+        scope=Scope.REQUEST,
+        provides=AnyOf[
+            ChatSaver,
+            ChatDeleter,
+            ChatReader,
+            ChatGatewayWithReaderAndDeleter
+        ]
+    )
+    chat_message_gateway = provide(
+        ChatMessageGateway,
+        scope=Scope.REQUEST,
+        provides=AnyOf[
+            ChatMessageSaver,
+            ChatMessageDeleter,
+            ChatMessageReader,
+            ChatMessageGatewayWithDeleterAndReader,
+        ]
+    )
     register_user_interactor = provide(
         RegisterUserInteractor,
         scope=Scope.REQUEST,
@@ -248,4 +288,24 @@ class AppProvider(Provider):
         BcryptPasswordHasher,
         scope=Scope.REQUEST,
         provides=PasswordHasher,
+    )
+    chat_create_interactor = provide(
+        CreateChatInteractor,
+        scope=Scope.REQUEST,
+    )
+    chat_delete_interactor = provide(
+        DeleteChatInteractor,
+        scope=Scope.REQUEST,
+    )
+    chat_message_delete_interactor = provide(
+        DeleteChatMessageInteractor,
+        scope=Scope.REQUEST,
+    )
+    chat_message_read_interactor = provide(
+        ReadMessageInteractor,
+        scope=Scope.REQUEST,
+    )
+    chat_message_send_interactor = provide(
+        SendChatMessageInteractor,
+        scope=Scope.REQUEST,
     )

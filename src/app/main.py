@@ -16,6 +16,8 @@ from app.presentation.routers.specialization import specialization_router
 from app.presentation.routers.tag import tag_router
 from app.presentation.routers.user import user_router
 from app.presentation.routers.work import work_router
+from app.presentation.routers.chat import chat_router
+from app.presentation.routers.messages import message_router
 
 
 async def setup_admin_panel(app: FastAPI, container: AsyncContainer) -> None:
@@ -41,6 +43,8 @@ def get_app() -> FastAPI:
     app.include_router(city_router)
     app.include_router(work_router)
     app.include_router(feed_router)
+    app.include_router(chat_router)
+    app.include_router(message_router)
 
     asyncio.create_task(setup_admin_panel(app, container))  # noqa: RUF006
 

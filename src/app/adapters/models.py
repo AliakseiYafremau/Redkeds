@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import UUID
 
 from sqlalchemy import ForeignKey
@@ -110,3 +111,25 @@ class UserModel(Base):
     specializations: Mapped[list[SpecializationModel]] = relationship(
         SpecializationModel, secondary=UserSpecializationModel.__table__
     )
+
+
+class ChatModel(Base):
+    """Модель чата между двумя пользователями."""
+
+    __tablename__ = "chats"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    user1_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    user2_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+
+
+class ChatMessageModel(Base):
+    """Модель сообщения в чате."""
+
+    __tablename__ = "chat_messages"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    chat_id: Mapped[UUID] = mapped_column(ForeignKey("chats.id"))
+    sender_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    text: Mapped[str]
+    timestamp: Mapped[datetime]
