@@ -1,7 +1,6 @@
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter
 
-from app.application.dto.chat import NewChatMessageDTO
 from app.application.interactors.chat.create import CreateChatInteractor
 from app.application.interactors.chat.delete import DeleteChatInteractor
 from app.domain.entities.chat import ChatId

@@ -19,8 +19,10 @@ from app.application.interactors.chat.create import CreateChatInteractor
 from app.application.interactors.chat.delete import (
     ChatGateway as ChatGatewayWithReaderAndDeleter,
 )
-from app.application.interactors.chat.messages.delete import ChatMessageGateway as ChatMessageGatewayWithDeleterAndReader
 from app.application.interactors.chat.delete import DeleteChatInteractor
+from app.application.interactors.chat.messages.delete import (
+    ChatMessageGateway as ChatMessageGatewayWithDeleterAndReader,
+)
 from app.application.interactors.chat.messages.delete import DeleteChatMessageInteractor
 from app.application.interactors.chat.messages.read import ReadMessageInteractor
 from app.application.interactors.chat.messages.send import SendChatMessageInteractor
@@ -207,11 +209,8 @@ class AppProvider(Provider):
         ChatGateway,
         scope=Scope.REQUEST,
         provides=AnyOf[
-            ChatSaver,
-            ChatDeleter,
-            ChatReader,
-            ChatGatewayWithReaderAndDeleter
-        ]
+            ChatSaver, ChatDeleter, ChatReader, ChatGatewayWithReaderAndDeleter
+        ],
     )
     chat_message_gateway = provide(
         ChatMessageGateway,
@@ -221,7 +220,7 @@ class AppProvider(Provider):
             ChatMessageDeleter,
             ChatMessageReader,
             ChatMessageGatewayWithDeleterAndReader,
-        ]
+        ],
     )
     register_user_interactor = provide(
         RegisterUserInteractor,

@@ -10,14 +10,14 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from app.ioc import AppProvider
 from app.presentation.routers.admin_panel import connect_admin_panel
 from app.presentation.routers.auth import auth_router
+from app.presentation.routers.chat import chat_router
 from app.presentation.routers.city import city_router
 from app.presentation.routers.feed import feed_router
+from app.presentation.routers.messages import message_router
 from app.presentation.routers.specialization import specialization_router
 from app.presentation.routers.tag import tag_router
 from app.presentation.routers.user import user_router
 from app.presentation.routers.work import work_router
-from app.presentation.routers.chat import chat_router
-from app.presentation.routers.messages import message_router
 
 
 async def setup_admin_panel(app: FastAPI, container: AsyncContainer) -> None:
