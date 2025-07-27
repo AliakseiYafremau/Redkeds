@@ -1,10 +1,6 @@
 from dishka.integrations.fastapi import FromDishka, inject
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
-from app.adapters.exceptions import (
-    ShowcaseDoesNotExistError,
-    WorkDoesNotExistError,
-)
 from app.application.dto.work import NewWorkDTO, ReadWorkDTO, UpdateWorkDTO
 from app.application.interactors.work.create import CreateWorkInteractor
 from app.application.interactors.work.delete import DeleteWorkInteractor
@@ -14,7 +10,6 @@ from app.application.interactors.work.read import (
 )
 from app.application.interactors.work.update import UpdateWorkInteractor
 from app.domain.entities.showcase import ShowcaseId, WorkId
-from app.domain.exceptions import CannotManageWorkError
 
 work_router = APIRouter(prefix="/work", tags=["Работа витрин"])
 
@@ -26,13 +21,7 @@ async def read_work(
     interactor: FromDishka[ReadWorkInteractor],
 ) -> ReadWorkDTO:
     """Получение информации о работе по ее ID."""
-    try:
-        return await interactor(work_id)
-    except WorkDoesNotExistError:
-        raise HTTPException(
-            status_code=404,
-            detail="Работа витрины не найдена.",
-        )
+    return await interactor(work_id)
 
 
 @work_router.get("/all/{showcase_id}")
@@ -52,10 +41,7 @@ async def create_work(
     interactor: FromDishka[CreateWorkInteractor],
 ) -> None:
     """Создание новой работы витрины."""
-    try:
-        await interactor(work_data)
-    except ShowcaseDoesNotExistError:
-        raise HTTPException(status_code=404, detail="Пользователь не найден.")
+    await interactor(work_data)
 
 
 @work_router.patch("/")
@@ -65,14 +51,7 @@ async def update_work(
     interactor: FromDishka[UpdateWorkInteractor],
 ) -> None:
     """Обновление работы витрины."""
-    try:
-        await interactor(work_data)
-    except ShowcaseDoesNotExistError:
-        raise HTTPException(status_code=404, detail="Витрина не найдена.")
-    except WorkDoesNotExistError:
-        raise HTTPException(status_code=404, detail="Работа витрины не найдена.")
-    except CannotManageWorkError:
-        raise HTTPException(status_code=403, detail="Недостаточно прав.")
+    await interactor(work_data)
 
 
 @work_router.delete("/{work_id}")
@@ -82,7 +61,4 @@ async def delete_work(
     interactor: FromDishka[DeleteWorkInteractor],
 ) -> None:
     """Удаление работы витрины."""
-    try:
-        await interactor(work_id)
-    except WorkDoesNotExistError:
-        raise HTTPException(status_code=404, detail="Работа витрины не найдена.")
+    await interactor(work_id)
