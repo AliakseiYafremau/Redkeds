@@ -1,20 +1,14 @@
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter, HTTPException
-from sqlalchemy.exc import IntegrityError
 
 from app.adapters.exceptions import (
     AuthenticationError,
-    CommunicationMethodDoesNotExistError,
-    SpecializationDoesNotExistError,
-    TagDoesNotExistError,
-    UserAlreadyExistsError,
     UserDoesNotExistError,
 )
 from app.adapters.id_provider import JWTTokenManager, Token
 from app.application.dto.user import LoginUserDTO, NewUserDTO
 from app.application.interactors.user.auth import AuthUserInteractor
 from app.application.interactors.user.register import RegisterUserInteractor
-from app.domain.exceptions import WeakPasswordError
 
 auth_router = APIRouter(
     prefix="/auth",
@@ -30,42 +24,7 @@ async def register(
     interactor: FromDishka[RegisterUserInteractor],
 ) -> Token:
     """Регистрация нового пользователя."""
-    try:
-        user_id = await interactor(user_data)
-    except UserAlreadyExistsError:
-        raise HTTPException(
-            status_code=400,
-            detail="Пользователь с таким именем уже существует.",
-        )
-    except WeakPasswordError:
-        raise HTTPException(
-            status_code=400,
-            detail=(
-                "Пароль не соответствует требованиям безопасности. "
-                "Пароль должен содержать не менее 5 символов и "
-                "как минимум одну букву и одну цифру"
-            ),
-        )
-    except TagDoesNotExistError:
-        raise HTTPException(
-            status_code=400,
-            detail=("Теги с таким ID не существуют."),
-        )
-    except SpecializationDoesNotExistError:
-        raise HTTPException(
-            status_code=400,
-            detail=("Специализации с таким ID не существуют."),
-        )
-    except CommunicationMethodDoesNotExistError:
-        raise HTTPException(
-            status_code=400,
-            detail=("Метод общения с таким ID не существует."),
-        )
-    except IntegrityError:
-        raise HTTPException(
-            status_code=400,
-            detail="Невалидные данные",
-        )
+    user_id = await interactor(user_data)
     return token_manager.create_token(user_id)
 
 
