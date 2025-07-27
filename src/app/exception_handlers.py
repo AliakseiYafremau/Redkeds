@@ -1,4 +1,4 @@
-from fastapi import Request
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from app.adapters import exceptions as adapters_exc
@@ -37,6 +37,12 @@ adapter_exceptions: dict[type[Exception], tuple[int, str]] = {
     adapters_exc.UserDoesNotExistError: (400, "Пользователь не существует."),
     adapters_exc.WorkDoesNotExistError: (400, "Работа не существует."),
 }
+
+
+def setup_exception_handlers(app: FastAPI) -> None:
+    """Добавляет обработчики ошибок в fastapi-приложение."""
+    app.add_exception_handler(adapters_exc.AdapterError, adapter_exception_handler)
+    app.add_exception_handler(domain_exc.DomainError, domain_exception_handler)
 
 
 async def adapter_exception_handler(_: Request, exc: Exception) -> JSONResponse:

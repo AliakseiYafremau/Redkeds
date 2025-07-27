@@ -7,7 +7,7 @@ from fastapi import Depends, FastAPI
 from fastapi.security import APIKeyHeader
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from app.exception_handlers import adapter_exception_handler, domain_exception_handler
+from app.exception_handlers import setup_exception_handlers
 from app.ioc import AppProvider
 from app.presentation.routers.admin_panel import connect_admin_panel
 from app.presentation.routers.auth import auth_router
@@ -47,8 +47,7 @@ def get_app() -> FastAPI:
     app.include_router(chat_router)
     app.include_router(message_router)
 
-    app.add_exception_handler(Exception, adapter_exception_handler)
-    app.add_exception_handler(Exception, domain_exception_handler)
+    setup_exception_handlers(app)
 
     asyncio.create_task(setup_admin_panel(app, container))  # noqa: RUF006
 
