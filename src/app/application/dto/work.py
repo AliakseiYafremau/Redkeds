@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from app.domain.entities.file_id import FileId
 from app.domain.entities.showcase import ShowcaseId, WorkId
 
 
@@ -9,7 +10,7 @@ class NewWorkDTO:
 
     title: str
     description: str
-    file_path: str
+    file_path: FileId
 
 
 @dataclass
@@ -19,7 +20,7 @@ class UpdateWorkDTO:
     work_id: WorkId
     title: str | None
     description: str | None
-    file_path: str | None
+    file_path: FileId | None
 
 
 @dataclass
@@ -30,4 +31,4 @@ class ReadWorkDTO:
     showcase_id: ShowcaseId
     title: str
     description: str
-    file_path: str
+    file_path: FileId
