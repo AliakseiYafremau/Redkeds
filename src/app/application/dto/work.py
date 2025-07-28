@@ -10,7 +10,7 @@ class NewWorkDTO:
 
     title: str
     description: str
-    file_path: FileId
+    file: bytes
 
 
 @dataclass
@@ -20,7 +20,7 @@ class UpdateWorkDTO:
     work_id: WorkId
     title: str | None
     description: str | None
-    file_path: FileId | None
+    file: bytes | None
 
 
 @dataclass
