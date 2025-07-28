@@ -6,6 +6,7 @@ from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from app.adapters.database import new_async_engine, new_session_maker
+from app.adapters.file_manager import LocalFileManager
 from app.adapters.gateways.chat import ChatGateway, ChatMessageGateway
 from app.adapters.gateways.city import CityGateway
 from app.adapters.gateways.showcase import ShowcaseGateway, WorkGateway
@@ -27,6 +28,7 @@ from app.application.interactors.chat.messages.delete import DeleteChatMessageIn
 from app.application.interactors.chat.messages.read import ReadMessageInteractor
 from app.application.interactors.chat.messages.send import SendChatMessageInteractor
 from app.application.interactors.city.read import ReadCitiesInteractor
+from app.application.interactors.file.read import ReadFileInteractor
 from app.application.interactors.recommendation_feed.read import ReadRecommendationFeed
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
@@ -70,6 +72,7 @@ from app.application.interfaces.chat.chat_message_gateway import (
     ChatMessageSaver,
 )
 from app.application.interfaces.city.city_gateway import CityReader
+from app.application.interfaces.common.file_gateway import FileManager
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
@@ -91,8 +94,10 @@ from app.application.interfaces.user.user_gateway import (
     UserUpdater,
 )
 from app.config import (
+    MediaConfig,
     PostgresConfig,
     TokenConfig,
+    load_media_config,
     load_postgres_config,
     load_token_config,
 )
@@ -148,6 +153,11 @@ class AppProvider(Provider):
         """Возвращает конфигурацию для токенов."""
         return load_token_config()
 
+    @provide(scope=Scope.APP)
+    def get_media_config(self) -> MediaConfig:
+        """Возвращает конифигурацию для медиа."""
+        return load_media_config()
+
     @provide(scope=Scope.REQUEST)
     def get_jwt_manager(self, config: TokenConfig) -> JWTTokenManager:
         """Возвращает менеджер jwt-токенов."""
@@ -157,6 +167,15 @@ class AppProvider(Provider):
     def get_id_provider(self, manager: JWTTokenManager, request: Request) -> IdProvider:
         """Возвращает провайдер идентификаторов."""
         return TokenIdProvider(manager, request)
+
+    @provide(scope=Scope.REQUEST)
+    def get_file_manager(
+        self, config: MediaConfig, uuid_generator: UUIDGenerator
+    ) -> FileManager:
+        """Возвращает менеджер файлов."""
+        return LocalFileManager(
+            directory=config.media_directory, uuid_generator=uuid_generator
+        )
 
     user_gateway = provide(
         UserGateway,
@@ -306,5 +325,9 @@ class AppProvider(Provider):
     )
     chat_message_send_interactor = provide(
         SendChatMessageInteractor,
+        scope=Scope.REQUEST,
+    )
+    file_interactor = provide(
+        ReadFileInteractor,
         scope=Scope.REQUEST,
     )

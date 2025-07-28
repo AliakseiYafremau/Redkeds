@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from os import environ
+from pathlib import Path
 
 
 def get_env_variable(name: str) -> str:
@@ -34,6 +35,13 @@ class TokenConfig:
     algorithm: str
 
 
+@dataclass
+class MediaConfig:
+    """Конфигурация для управления медиа."""
+
+    media_directory: Path
+
+
 def load_postgres_config() -> PostgresConfig:
     """Загружает конфигурацию PostgreSQL из переменных окружения."""
     return PostgresConfig(
@@ -51,4 +59,11 @@ def load_token_config() -> TokenConfig:
         secret_key=get_env_variable("SECRET_KEY"),
         expire_time=int(get_env_variable("EXPIRE_TIME")),
         algorithm=get_env_variable("ALGORITHM"),
+    )
+
+
+def load_media_config() -> MediaConfig:
+    """Загружает конфигурацию для медиа."""
+    return MediaConfig(
+        media_directory=Path(get_env_variable("MEDIA_DIR")),
     )

@@ -4,6 +4,8 @@ from uuid import UUID
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
+from app.domain.entities.file_id import FileId
+
 
 class Base(DeclarativeBase):
     """Базовая модель в базе данных."""
@@ -53,7 +55,7 @@ class WorkModel(Base):
     showcase_id: Mapped[UUID] = mapped_column(ForeignKey("showcases.id"))
     title: Mapped[str]
     description: Mapped[str]
-    file_path: Mapped[str]
+    file_path: Mapped[FileId]
 
 
 class CommunicationMethodModel(Base):
@@ -93,7 +95,7 @@ class UserModel(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     username: Mapped[str]
     password: Mapped[str]
-    photo: Mapped[str | None] = mapped_column(nullable=True)
+    photo: Mapped[FileId | None] = mapped_column(nullable=True)
     description: Mapped[str]
     status: Mapped[str | None] = mapped_column(nullable=True)
 

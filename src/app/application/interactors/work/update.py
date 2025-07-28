@@ -1,6 +1,7 @@
 from typing import Protocol
 
 from app.application.dto.work import UpdateWorkDTO
+from app.application.interfaces.common.file_gateway import FileManager
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.showcase.showcase_gateway import ShowcaseReader
@@ -24,12 +25,14 @@ class UpdateWorkInteractor:
         showcase_gateway: ShowcaseReader,
         id_provider: IdProvider,
         transaction_manager: TransactionManager,
+        file_manager: FileManager,
     ) -> None:
         self._work_gateway = work_gateway
         self._user_gateway = user_gateway
         self._showcase_gateway = showcase_gateway
         self._id_provider = id_provider
         self._transaction_manager = transaction_manager
+        self._file_manager = file_manager
 
     async def __call__(self, data: UpdateWorkDTO) -> None:
         """Обновляет данные пользователя."""
@@ -39,6 +42,8 @@ class UpdateWorkInteractor:
         ensure_can_manage_work(showcase, work)
         self.update_work(work, data)
         await self._work_gateway.update_work(work)
+        if data.file is not None:
+            await self._file_manager.update(work.file_path, data.file)
         await self._transaction_manager.commit()
 
     def update_work(
@@ -51,5 +56,3 @@ class UpdateWorkInteractor:
             work.title = new_data.title
         if new_data.description is not None:
             work.description = new_data.description
-        if new_data.file_path is not None:
-            work.file_path = new_data.file_path
