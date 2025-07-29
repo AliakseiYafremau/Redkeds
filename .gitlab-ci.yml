@@ -2,6 +2,8 @@ stages:
   - check
   - deploy
 
+image: alpine:latest
+
 variables:
   PYTHON_VERSION: "3.11"
   UV_LINK_MODE: copy
