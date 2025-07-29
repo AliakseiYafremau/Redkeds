@@ -91,7 +91,7 @@ deploy_to_production:
     - ssh-keyscan 213.226.124.50 >> ~/.ssh/known_hosts
 
     # Копирование проекта на сервер
-    - rsync -az --delete ./ root@213.226.124.50:/opt/myapp/
+    - rsync -az --delete ./ root@213.226.124.50:~/application
 
     # Выполнение docker-compose на сервере
     - ssh root@213.226.124.50 '
