@@ -85,6 +85,8 @@ deploy_to_production:
   stage: deploy
   only:
     - main  # запускается только при пуше в main
+  before_script:
+    - apk update && apk add openssh-client rsync
   script:
     # Настройка SSH
     - mkdir -p ~/.ssh
