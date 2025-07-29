@@ -1,5 +1,6 @@
 stages:
   - check
+  - deploy
 
 variables:
   PYTHON_VERSION: "3.11"
@@ -77,3 +78,26 @@ tests:
     - uv cache prune --ci
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+deploy_to_production:
+  stage: deploy
+  only:
+    - main  # запускается только при пуше в main
+  script:
+    # Настройка SSH
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - ssh-keyscan 213.226.124.50 >> ~/.ssh/known_hosts
+
+    # Копирование проекта на сервер
+    - rsync -az --delete ./ root@213.226.124.50:/opt/myapp/
+
+    # Выполнение docker-compose на сервере
+    - ssh root@213.226.124.50 '
+        cd ~/application &&
+        docker-compose pull &&
+        docker-compose up -d --remove-orphans
+      '
+  environment:
+    name: production
