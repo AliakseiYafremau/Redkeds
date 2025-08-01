@@ -22,7 +22,7 @@ class AuthUserInteractor:
             data (LoginUserDTO): Данные для аутентификации пользователя.
 
         """
-        user = await self._user_gateway.get_user_by_username(data.username)
+        user = await self._user_gateway.get_user_by_email(data.email)
         self._password_hasher.verify_password(
             data.password,
             user.password,

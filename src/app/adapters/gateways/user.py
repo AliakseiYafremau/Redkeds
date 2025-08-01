@@ -50,11 +50,11 @@ class UserGateway(
 
         return map_model_to_user(user_model)
 
-    async def get_user_by_username(self, username: str) -> User:
+    async def get_user_by_email(self, email: str) -> User:
         """Получает пользователя по имени."""
         statement = (
             select(UserModel)
-            .where(UserModel.username == username)
+            .where(UserModel.email == email)
             .options(
                 selectinload(UserModel.specializations), selectinload(UserModel.tags)
             )
@@ -63,7 +63,7 @@ class UserGateway(
         user_model = result.scalar_one_or_none()
 
         if user_model is None:
-            raise UserDoesNotExistError(f"User with username {username} not found")
+            raise UserDoesNotExistError(f"User with email {email} not found")
 
         return map_model_to_user(user_model)
 

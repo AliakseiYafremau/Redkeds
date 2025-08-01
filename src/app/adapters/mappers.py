@@ -12,7 +12,9 @@ def map_model_to_user(model: UserModel) -> User:
     """Маппит модель пользователя в сущность."""
     return User(
         id=UserId(model.id),
+        email=model.email,
         username=model.username,
+        nickname=model.nickname,
         password=model.password,
         photo=model.photo,
         specialization=[
@@ -34,7 +36,9 @@ def map_user_to_model(user: User) -> UserModel:
     """Маппит сущность пользователя в модель."""
     return UserModel(
         id=user.id,
+        email=user.email,
         username=user.username,
+        nickname=user.nickname,
         password=user.password,
         photo=user.photo,
         description=user.description,

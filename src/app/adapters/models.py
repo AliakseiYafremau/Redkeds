@@ -95,7 +95,9 @@ class UserModel(Base):
     __tablename__ = "users"
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
+    email: Mapped[str] = mapped_column(unique=True)
     username: Mapped[str]
+    nickname: Mapped[str | None] = mapped_column(nullable=True)
     password: Mapped[str]
     photo: Mapped[FileId | None] = mapped_column(nullable=True)
     description: Mapped[str]

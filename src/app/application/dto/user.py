@@ -12,6 +12,7 @@ from app.domain.entities.tag import TagId
 class NewUserDTO:
     """DTO для создания нового пользователя."""
 
+    email: str
     username: str
     password: str
     specialization: list[SpecializationId]
@@ -20,6 +21,7 @@ class NewUserDTO:
     tags: list[TagId]
     communication_method: CommunicationMethodId
 
+    nickname: str | None = None
     photo: FileId | None = None
     status: str | None = None
 
@@ -28,7 +30,7 @@ class NewUserDTO:
 class LoginUserDTO:
     """DTO для входа пользователя."""
 
-    username: str
+    email: str
     password: str
 
 
@@ -44,7 +46,9 @@ class PasswordChangeDTO:
 class UserDTO:
     """DTO для чтения пользователя."""
 
+    email: str
     username: str
+    nickname: str | None = None
     photo: FileId | None = None
     specialization: list[SpecializationId] | None = None
     city: CityId | None = None
@@ -59,7 +63,9 @@ class UserDTO:
 class UpdateUserDTO:
     """DTO для обновления пользователя."""
 
+    email: str | None = None
     username: str | None = None
+    nickname: str | None = None
     photo: FileId | None = None
     specialization: list[SpecializationId] | None = None
     city: CityId | None = None
