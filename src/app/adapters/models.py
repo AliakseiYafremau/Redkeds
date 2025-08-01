@@ -5,6 +5,8 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from app.domain.entities.file_id import FileId
+from app.domain.entities.showcase import ShowcaseId
+from app.domain.entities.user_id import UserId
 
 
 class Base(DeclarativeBase):
@@ -112,6 +114,17 @@ class UserModel(Base):
     )
     specializations: Mapped[list[SpecializationModel]] = relationship(
         SpecializationModel, secondary=UserSpecializationModel.__table__
+    )
+
+
+class LikeModel(Base):
+    """Модель лайков."""
+
+    __tablename__ = "likes"
+
+    user_id: Mapped[UserId] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    showcase_id: Mapped[ShowcaseId] = mapped_column(
+        ForeignKey("showcases.id"), primary_key=True
     )
 
 
