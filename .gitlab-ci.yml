@@ -1,6 +1,5 @@
 stages:
   - check
-  - deploy
 
 image: alpine:latest
 
@@ -80,28 +79,3 @@ tests:
     - uv cache prune --ci
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
-deploy_to_production:
-  stage: deploy
-  only:
-    - main  # запускается только при пуше в main
-  before_script:
-    - apk update && apk add openssh-client rsync
-  script:
-    # Настройка SSH
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
-    - chmod 600 ~/.ssh/id_ed25519
-    - ssh-keyscan 213.226.124.50 >> ~/.ssh/known_hosts
-
-    # Копирование проекта на сервер
-    - rsync -az --delete ./ root@213.226.124.50:~/application
-
-    # Выполнение docker-compose на сервере
-    - ssh root@213.226.124.50 '
-        cd ~/application &&
-        docker-compose pull &&
-        docker-compose up -d --remove-orphans
-      '
-  environment:
-    name: production
