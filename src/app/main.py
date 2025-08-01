@@ -7,11 +7,15 @@ from fastapi import Depends, FastAPI
 from fastapi.security import APIKeyHeader
 from sqlalchemy.ext.asyncio import AsyncEngine
 
+from app.exception_handlers import setup_exception_handlers
 from app.ioc import AppProvider
 from app.presentation.routers.admin_panel import connect_admin_panel
 from app.presentation.routers.auth import auth_router
+from app.presentation.routers.chat import chat_router
 from app.presentation.routers.city import city_router
 from app.presentation.routers.feed import feed_router
+from app.presentation.routers.file import file_router
+from app.presentation.routers.messages import message_router
 from app.presentation.routers.specialization import specialization_router
 from app.presentation.routers.tag import tag_router
 from app.presentation.routers.user import user_router
@@ -41,6 +45,11 @@ def get_app() -> FastAPI:
     app.include_router(city_router)
     app.include_router(work_router)
     app.include_router(feed_router)
+    app.include_router(chat_router)
+    app.include_router(file_router)
+    app.include_router(message_router)
+
+    setup_exception_handlers(app)
 
     asyncio.create_task(setup_admin_panel(app, container))  # noqa: RUF006
 

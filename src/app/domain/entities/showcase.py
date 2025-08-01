@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from typing import NewType
 from uuid import UUID
 
+from .file_id import FileId
+
 ShowcaseId = NewType("ShowcaseId", UUID)
 WorkId = NewType("WorkId", UUID)
 
@@ -25,4 +27,4 @@ class Work:
     showcase_id: ShowcaseId
     title: str
     description: str
-    file_path: str
+    file_path: FileId

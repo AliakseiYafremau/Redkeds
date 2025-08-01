@@ -1,7 +1,6 @@
 from dishka.integrations.fastapi import FromDishka, inject
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
-from app.adapters.exceptions import ShowcaseDoesNotExistError, UserDoesNotExistError
 from app.application.dto.user import UpdateUserDTO, UserDTO
 from app.application.interactors.user.delete import DeleteUserInteractor
 from app.application.interactors.user.read import ReadUserInteractor
@@ -19,13 +18,7 @@ async def read_user(
     interactor: FromDishka[ReadUserInteractor],
 ) -> UserDTO:
     """Получение информации о текущем пользователе."""
-    try:
-        return await interactor()
-    except UserDoesNotExistError:
-        raise HTTPException(
-            status_code=404,
-            detail="Пользователь не найден.",
-        )
+    return await interactor()
 
 
 @user_router.patch("/")
@@ -35,10 +28,7 @@ async def update_user(
     interactor: FromDishka[UpdateUserInteractor],
 ) -> None:
     """Обновление пользователя."""
-    try:
-        await interactor(user_data)
-    except UserDoesNotExistError:
-        raise HTTPException(status_code=404, detail="Пользователь не найден.")
+    await interactor(user_data)
 
 
 @user_router.delete("/")
@@ -47,7 +37,4 @@ async def delete_user(
     interactor: FromDishka[DeleteUserInteractor],
 ) -> None:
     """Удаление пользователя."""
-    try:
-        await interactor()
-    except (UserDoesNotExistError, ShowcaseDoesNotExistError):
-        raise HTTPException(status_code=404, detail="Пользователь не найден.")
+    await interactor()

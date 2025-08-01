@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from app.domain.entities.city import CityId
 from app.domain.entities.communication_method import CommunicationMethodId
+from app.domain.entities.file_id import FileId
 from app.domain.entities.showcase import ShowcaseId
 from app.domain.entities.specialization import SpecializationId
 from app.domain.entities.tag import TagId
@@ -19,7 +20,7 @@ class NewUserDTO:
     tags: list[TagId]
     communication_method: CommunicationMethodId
 
-    photo: str | None = None
+    photo: FileId | None = None
     status: str | None = None
 
 
@@ -44,7 +45,7 @@ class UserDTO:
     """DTO для чтения пользователя."""
 
     username: str
-    photo: str | None = None
+    photo: FileId | None = None
     specialization: list[SpecializationId] | None = None
     city: CityId | None = None
     description: str | None = None
@@ -59,7 +60,7 @@ class UpdateUserDTO:
     """DTO для обновления пользователя."""
 
     username: str | None = None
-    photo: str | None = None
+    photo: FileId | None = None
     specialization: list[SpecializationId] | None = None
     city: CityId | None = None
     description: str | None = None

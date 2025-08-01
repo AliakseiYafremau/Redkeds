@@ -3,7 +3,7 @@ from app.domain.exceptions import CannotManageWorkError
 
 
 def ensure_can_manage_work(showcase: Showcase, work: Work) -> bool:
-    """Проверяет возможность управление обьектом."""
+    """Проверяет возможность управление работой витрины."""
     if showcase.id != work.showcase_id:
         raise CannotManageWorkError
     return True

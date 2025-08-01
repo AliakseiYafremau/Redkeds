@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import UUID
 
 from sqlalchemy import ForeignKey
@@ -5,6 +6,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from app.domain.entities.showcase import ShowcaseId
 from app.domain.entities.user_id import UserId
+from app.domain.entities.file_id import FileId
 
 
 class Base(DeclarativeBase):
@@ -55,7 +57,7 @@ class WorkModel(Base):
     showcase_id: Mapped[UUID] = mapped_column(ForeignKey("showcases.id"))
     title: Mapped[str]
     description: Mapped[str]
-    file_path: Mapped[str]
+    file_path: Mapped[FileId]
 
 
 class CommunicationMethodModel(Base):
@@ -95,7 +97,7 @@ class UserModel(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     username: Mapped[str]
     password: Mapped[str]
-    photo: Mapped[str | None] = mapped_column(nullable=True)
+    photo: Mapped[FileId | None] = mapped_column(nullable=True)
     description: Mapped[str]
     status: Mapped[str | None] = mapped_column(nullable=True)
 
@@ -122,3 +124,25 @@ class LikeModel(Base):
 
     user_id: Mapped[UserId] = mapped_column(ForeignKey("users.id"), primary_key=True)
     showcase_id: Mapped[ShowcaseId] = mapped_column(ForeignKey("showcases.id"), primary_key=True)
+
+
+class ChatModel(Base):
+    """Модель чата между двумя пользователями."""
+
+    __tablename__ = "chats"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    user1_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    user2_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+
+
+class ChatMessageModel(Base):
+    """Модель сообщения в чате."""
+
+    __tablename__ = "chat_messages"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    chat_id: Mapped[UUID] = mapped_column(ForeignKey("chats.id"))
+    sender_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    text: Mapped[str]
+    timestamp: Mapped[datetime]
