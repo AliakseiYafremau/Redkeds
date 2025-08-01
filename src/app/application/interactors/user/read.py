@@ -19,7 +19,9 @@ class ReadUserInteractor:
         user_id = self._id_provider()
         user = await self._user_gateway.get_user_by_id(user_id)
         return UserDTO(
+            email=user.email,
             username=user.username,
+            nickname=user.nickname,
             photo=user.photo,
             specialization=user.specialization,
             city=user.city,

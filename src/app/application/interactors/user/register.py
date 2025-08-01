@@ -47,7 +47,9 @@ class RegisterUserInteractor:
         await self._showcase_gateway.save_showcase(showcase)
         user = User(
             id=user_id,
+            email=data.email,
             username=data.username,
+            nickname=data.nickname,
             password=hashed_password,
             photo=data.photo,
             specialization=data.specialization,

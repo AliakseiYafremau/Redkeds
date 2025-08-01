@@ -19,8 +19,8 @@ class UserReader(Protocol):
         """Получает пользователя по ID."""
         ...
 
-    async def get_user_by_username(self, username: str) -> User:
-        """Получает пользователя по имени."""
+    async def get_user_by_email(self, email: str) -> User:
+        """Получает пользователя по почте."""
         ...
 
 

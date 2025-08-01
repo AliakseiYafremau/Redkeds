@@ -14,7 +14,9 @@ class User:
     """Сущность пользователя."""
 
     id: UserId
+    email: str
     username: str
+    nickname: str | None
     password: str
     photo: FileId | None
     specialization: list[SpecializationId]
