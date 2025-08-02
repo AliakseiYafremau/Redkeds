@@ -1,13 +1,12 @@
 from typing import Protocol
 
-from app.domain.entities.showcase import ShowcaseId
-from app.domain.entities.user_id import UserId
+from app.domain.entities.like import Like
 
 
 class AddLike(Protocol):
     """Интерфейс для добавления лайков."""
 
-    async def add_like(self, user_id: UserId, showcase_id: ShowcaseId) -> bool:
+    async def add_like(self, like: Like) -> None:
         """Добволяет лайк витрине от пользователя."""
         ...
 
@@ -15,6 +14,6 @@ class AddLike(Protocol):
 class DeleteLike(Protocol):
     """Интерфейс для удаления лайков."""
 
-    async def delete_like(self, user_id: UserId, showcase_id: ShowcaseId) -> bool:
+    async def delete_like(self, like: Like) -> None:
         """Удаляет лайк витрине от пользователя."""
         ...
