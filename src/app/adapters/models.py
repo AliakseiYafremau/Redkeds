@@ -124,10 +124,9 @@ class LikeModel(Base):
 
     __tablename__ = "likes"
 
-    user_id: Mapped[UserId] = mapped_column(ForeignKey("users.id"), primary_key=True)
-    showcase_id: Mapped[ShowcaseId] = mapped_column(
-        ForeignKey("showcases.id"), primary_key=True
-    )
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    user_id: Mapped[UserId] = mapped_column(ForeignKey("users.id"))
+    showcase_id: Mapped[ShowcaseId] = mapped_column(ForeignKey("showcases.id"))
 
 
 class ChatModel(Base):
