@@ -1,7 +1,7 @@
 from typing import Protocol
 
-from app.domain.entities.user_id import UserId
 from app.domain.entities.showcase import ShowcaseId
+from app.domain.entities.user_id import UserId
 
 
 class AddLike(Protocol):
