@@ -11,6 +11,10 @@ class AddLike(Protocol):
         """Добволяет лайк витрине от пользователя."""
         ...
 
+
+class DeleteLike(Protocol):
+    """Интерфейс для удаления лайков."""
+
     async def delete_like(self, user_id: UserId, showcase_id: ShowcaseId) -> bool:
         """Удаляет лайк витрине от пользователя."""
         ...
