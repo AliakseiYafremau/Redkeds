@@ -77,6 +77,8 @@ tests:
     - uv sync --frozen --only-group test
   script:
     - coverage run -m pytest
+    - coverage report
     - uv cache prune --ci
+  coverage: '/^TOTAL.*\s+(\d+%)$/'
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
