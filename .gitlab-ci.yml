@@ -76,7 +76,7 @@ tests:
     - source .venv/bin/activate
     - uv sync --frozen --only-group test
   script:
-    - coverage run -m pytest
+    - coverage run --source=src -m pytest
     - coverage report
     - uv cache prune --ci
   coverage: '/^TOTAL.*\s+(\d+%)$/'
