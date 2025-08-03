@@ -76,9 +76,58 @@ tests:
     - source .venv/bin/activate
     - uv sync --frozen --only-group test
   script:
+    - pytest
+    - uv cache prune --ci
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+coverage:
+  stage: check
+  image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
+  cache:
+    - key:
+        files:
+          - uv.lock
+      paths:
+        - $UV_CACHE_DIR
+    - key:
+        files:
+          - pyproject.toml
+      paths:
+        - .mypy_cache
+        - .venv
+  script:
+    - uv venv
+    - source .venv/bin/activate
+    - uv sync --frozen --only-group type-check
+    - mypy .
+    - uv cache prune --ci
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+tests:
+  stage: check
+  image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
+  cache:
+    - key:
+        files:
+          - uv.lock
+      paths:
+        - $UV_CACHE_DIR
+    - key:
+        files:
+          - pyproject.toml
+      paths:
+        - .pytest_cache
+        - .venv
+  before_script:
+    - uv venv
+    - source .venv/bin/activate
+    - uv sync --frozen --only-group test
+  script:
     - coverage run --source=src -m pytest
     - coverage report
     - uv cache prune --ci
   coverage: '/^TOTAL.*\s+(\d+%)$/'
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
