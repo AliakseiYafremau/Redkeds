@@ -29,6 +29,7 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 test = [
+    "coverage>=7.10.1",
     "pytest-asyncio>=1.0.0",
 ]
 lint = [
