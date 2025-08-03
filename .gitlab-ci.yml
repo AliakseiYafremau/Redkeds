@@ -71,11 +71,12 @@ tests:
       paths:
         - .pytest_cache
         - .venv
-  script:
+  before_script:
     - uv venv
     - source .venv/bin/activate
     - uv sync --frozen --only-group test
-    - pytest
+  script:
+    - coverage run -m pytest
     - uv cache prune --ci
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
