@@ -1,7 +1,7 @@
-from app.application.dto.like import LikeDTO
+from app.application.dto.like import NewLikeDTO
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
-from app.application.interfaces.like.like_geteway import AddLike
+from app.application.interfaces.like.like_geteway import LikeSaver
 from app.domain.entities.like import Like, LikeId
 
 
@@ -10,7 +10,7 @@ class AddLikeInteractor:
 
     def __init__(
         self,
-        like_gateway: AddLike,
+        like_gateway: LikeSaver,
         transaction_manager: TransactionManager,
         uuid_generator: UUIDGenerator,
     ) -> None:
@@ -18,7 +18,7 @@ class AddLikeInteractor:
         self._transaction_manager = transaction_manager
         self._uuid_generator = uuid_generator
 
-    async def __call__(self, data: LikeDTO) -> LikeId:
+    async def __call__(self, data: NewLikeDTO) -> LikeId:
         """Добавляет лайк."""
         like_id = LikeId(self._uuid_generator())
         like = Like(
