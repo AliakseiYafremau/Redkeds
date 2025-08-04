@@ -18,9 +18,16 @@ class LikeDeleter(Protocol):
         """Удаляет лайк витрине от пользователя."""
         ...
 
-class IdProvider(Protocol):
-    """Интерфейс для получения идентификатора."""
+# class IdProvider(Protocol):
+#     """Интерфейс для получения идентификатора."""
+#
+#     def __call__(self) -> LikeId:
+#         """Возвращает ID лайка."""
+#         ...
 
-    def __call__(self) -> LikeId:
-        """Возвращает ID лайка."""
+class LikeReader(Protocol):
+    """Интерфейс для получения лайка."""
+
+    async def get_like_by_id(self, like_id: LikeId) -> Like:
+        """Получает лайк по ID."""
         ...

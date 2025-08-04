@@ -24,3 +24,7 @@ class CannotManageChatError(DomainError):
 
 class CannotManageChatMessageError(DomainError):
     """Ошибка при управлении состояни сообщения."""
+
+
+class CannotManageLikeError(DomainError):
+    """Ошибка при управлении лайком."""
