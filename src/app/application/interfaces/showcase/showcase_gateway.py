@@ -1,6 +1,10 @@
 from typing import Protocol
 
+from app.domain.entities.city import CityId
+from app.domain.entities.communication_method import CommunicationMethodId
 from app.domain.entities.showcase import Showcase, ShowcaseId
+from app.domain.entities.specialization import SpecializationId
+from app.domain.entities.tag import TagId
 from app.domain.entities.user_id import UserId
 
 
@@ -12,7 +16,12 @@ class ShowcaseReader(Protocol):
         ...
 
     async def get_showcases(
-        self, exclude_showcase: ShowcaseId | None = None
+        self,
+        exclude_showcase: ShowcaseId | None = None,
+        specialization_ids: list[SpecializationId] | None = None,
+        city_ids: list[CityId] | None = None,
+        tag_ids: list[TagId] | None = None,
+        communication_method_ids: list[CommunicationMethodId] | None = None,
     ) -> list[Showcase]:
         """Получает все витрины, игнорируя exclude_showcase."""
         ...
