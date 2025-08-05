@@ -9,6 +9,7 @@ from app.adapters.database import new_async_engine, new_session_maker
 from app.adapters.file_manager import LocalFileManager
 from app.adapters.gateways.chat import ChatGateway, ChatMessageGateway
 from app.adapters.gateways.city import CityGateway
+from app.adapters.gateways.like import LikeGateway
 from app.adapters.gateways.showcase import ShowcaseGateway, WorkGateway
 from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
@@ -29,6 +30,8 @@ from app.application.interactors.chat.messages.read import ReadMessageInteractor
 from app.application.interactors.chat.messages.send import SendChatMessageInteractor
 from app.application.interactors.city.read import ReadCitiesInteractor
 from app.application.interactors.file.read import ReadFileInteractor
+from app.application.interactors.like.add_like import AddLikeInteractor
+from app.application.interactors.like.delete_like import DeleteLikeInteractor
 from app.application.interactors.recommendation_feed.read import ReadRecommendationFeed
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
@@ -76,6 +79,7 @@ from app.application.interfaces.common.file_gateway import FileManager
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
+from app.application.interfaces.like.like_geteway import LikeDeleter, LikeSaver
 from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseDeleter,
     ShowcaseReader,
@@ -204,6 +208,14 @@ class AppProvider(Provider):
         scope=Scope.REQUEST,
         provides=CityReader,
     )
+    like_gateway = provide(
+        LikeGateway,
+        scope=Scope.REQUEST,
+        provides=AnyOf[
+            LikeSaver,
+            LikeDeleter,
+        ],
+    )
     showcase_gateway = provide(
         ShowcaseGateway,
         scope=Scope.REQUEST,
@@ -329,5 +341,13 @@ class AppProvider(Provider):
     )
     file_interactor = provide(
         ReadFileInteractor,
+        scope=Scope.REQUEST,
+    )
+    add_like_interactor = provide(
+        AddLikeInteractor,
+        scope=Scope.REQUEST,
+    )
+    delete_like_interactor = provide(
+        DeleteLikeInteractor,
         scope=Scope.REQUEST,
     )
