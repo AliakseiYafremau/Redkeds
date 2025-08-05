@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, join
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.exceptions import ShowcaseDoesNotExistError, WorkDoesNotExistError
@@ -56,15 +56,27 @@ class ShowcaseGateway(
         return showcase.id
 
     async def get_showcases(
-        self, exclude_showcase: ShowcaseId | None = None
+        self,
+        exclude_showcase: ShowcaseId | None = None,
     ) -> list[Showcase]:
-        """Получает все витрины, игнорируя exclude_showcase (если задан)."""
+        """Возвращает все витрины, отсортированные по пользователю (user_id).
+
+        Если exclude_showcase задан, исключает его из результата.
+        """
+        j = join(ShowcaseModel, UserModel, ShowcaseModel.id == UserModel.showcase_id)
         if exclude_showcase is not None:
-            statement = select(ShowcaseModel).where(
-                ShowcaseModel.id != exclude_showcase
+            statement = (
+                select(ShowcaseModel)
+                .select_from(j)
+                .where(ShowcaseModel.id != exclude_showcase)
+                .order_by(UserModel.id)
             )
         else:
-            statement = select(ShowcaseModel)
+            statement = (
+                select(ShowcaseModel)
+                .select_from(j)
+                .order_by(UserModel.id)
+            )
         result = await self._session.execute(statement)
         showcase_models = result.scalars().all()
         return [Showcase(id=ShowcaseId(model.id)) for model in showcase_models]
