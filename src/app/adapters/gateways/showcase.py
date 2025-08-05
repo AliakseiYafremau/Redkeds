@@ -1,4 +1,4 @@
-from sqlalchemy import select, join
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.exceptions import ShowcaseDoesNotExistError, WorkDoesNotExistError
@@ -15,7 +15,11 @@ from app.application.interfaces.showcase.work_gateway import (
     WorkSaver,
     WorkUpdater,
 )
+from app.domain.entities.city import CityId
+from app.domain.entities.communication_method import CommunicationMethodId
 from app.domain.entities.showcase import Showcase, ShowcaseId, Work, WorkId
+from app.domain.entities.specialization import SpecializationId
+from app.domain.entities.tag import TagId
 from app.domain.entities.user_id import UserId
 
 
@@ -58,27 +62,59 @@ class ShowcaseGateway(
     async def get_showcases(
         self,
         exclude_showcase: ShowcaseId | None = None,
+        specialization_ids: list[SpecializationId] | None = None,
+        city_ids: list[CityId] | None = None,
+        tag_ids: list[TagId] | None = None,
+        communication_method_ids: list[CommunicationMethodId] | None = None,
     ) -> list[Showcase]:
-        """Возвращает все витрины, отсортированные по пользователю (user_id).
+        """Получает все витрины, игнорируя exclude_showcase (если задан).
 
-        Если exclude_showcase задан, исключает его из результата.
+        Сортирует витрины по совпадениям с параметрами specialization_ids,
+        city_ids, tag_ids, communication_method_ids:
+        сначала идут витрины с совпадениями, затем остальные.
         """
-        j = join(ShowcaseModel, UserModel, ShowcaseModel.id == UserModel.showcase_id)
         if exclude_showcase is not None:
-            statement = (
-                select(ShowcaseModel)
-                .select_from(j)
-                .where(ShowcaseModel.id != exclude_showcase)
-                .order_by(UserModel.id)
+            statement = select(ShowcaseModel).where(
+                ShowcaseModel.id != exclude_showcase
             )
         else:
-            statement = (
-                select(ShowcaseModel)
-                .select_from(j)
-                .order_by(UserModel.id)
-            )
+            statement = select(ShowcaseModel)
         result = await self._session.execute(statement)
-        showcase_models = result.scalars().all()
+        showcase_models = list(result.scalars().all())
+
+        user_statement = select(UserModel)
+        user_result = await self._session.execute(user_statement)
+        user_models = user_result.scalars().all()
+        showcase_id_to_user = {
+            user.showcase_id: user
+            for user in user_models
+            if user.showcase_id is not None
+        }
+
+        def match(user: UserModel | None) -> int:
+            score = 0
+            if specialization_ids and any(
+                spec.id in specialization_ids
+                for spec in getattr(user, "specializations", [])
+            ):
+                score += 1
+            if city_ids and user and user.city_id in city_ids:
+                score += 1
+            if tag_ids and any(tag.id in tag_ids for tag in getattr(user, "tags", [])):
+                score += 1
+            if (
+                communication_method_ids
+                and user
+                and user.communication_method_id in communication_method_ids
+            ):
+                score += 1
+            return score
+
+        showcase_models.sort(
+            key=lambda model: -match(showcase_id_to_user.get(model.id))
+            if showcase_id_to_user.get(model.id)
+            else 0
+        )
         return [Showcase(id=ShowcaseId(model.id)) for model in showcase_models]
 
     async def update_showcase(self, showcase: Showcase) -> None:

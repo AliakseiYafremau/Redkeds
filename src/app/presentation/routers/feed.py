@@ -1,6 +1,7 @@
+from typing import Annotated
+
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter, Query
-from typing import Annotated
 
 from app.application.dto.showcase import ReadShowcaseDTO
 from app.application.interactors.recommendation_feed.read import ReadRecommendationFeed
@@ -19,7 +20,9 @@ async def read_feed(
     specialization_ids: Annotated[list[SpecializationId] | None, Query()] = None,
     city_ids: Annotated[list[CityId] | None, Query()] = None,
     tag_ids: Annotated[list[TagId] | None, Query()] = None,
-    communication_method_ids: Annotated[list[CommunicationMethodId] | None, Query()] = None,
+    communication_method_ids: Annotated[
+        list[CommunicationMethodId] | None, Query()
+    ] = None,
 ) -> list[ReadShowcaseDTO]:
     """Возвращает ленту из витрин пользователей."""
     return await interactor(
