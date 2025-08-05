@@ -15,6 +15,7 @@ from app.presentation.routers.chat import chat_router
 from app.presentation.routers.city import city_router
 from app.presentation.routers.feed import feed_router
 from app.presentation.routers.file import file_router
+from app.presentation.routers.like import like_router
 from app.presentation.routers.messages import message_router
 from app.presentation.routers.specialization import specialization_router
 from app.presentation.routers.tag import tag_router
@@ -39,15 +40,16 @@ def get_app() -> FastAPI:
         ],
     )
     app.include_router(auth_router)
-    app.include_router(user_router)
-    app.include_router(tag_router)
-    app.include_router(specialization_router)
-    app.include_router(city_router)
-    app.include_router(work_router)
-    app.include_router(feed_router)
     app.include_router(chat_router)
+    app.include_router(city_router)
+    app.include_router(feed_router)
     app.include_router(file_router)
+    app.include_router(like_router)
     app.include_router(message_router)
+    app.include_router(specialization_router)
+    app.include_router(tag_router)
+    app.include_router(user_router)
+    app.include_router(work_router)
 
     setup_exception_handlers(app)
 
