@@ -8,7 +8,6 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 from app.adapters.database import new_async_engine, new_session_maker
 from app.adapters.file_manager import LocalFileManager
 from app.adapters.gateways.chat import ChatGateway, ChatMessageGateway
-from app.application.interactors.like.delete_like import LikeGateway as LikeGatewayWithDeleterAndReader
 from app.adapters.gateways.city import CityGateway
 from app.adapters.gateways.like import LikeGateway
 from app.adapters.gateways.showcase import ShowcaseGateway, WorkGateway
@@ -33,6 +32,9 @@ from app.application.interactors.city.read import ReadCitiesInteractor
 from app.application.interactors.file.read import ReadFileInteractor
 from app.application.interactors.like.add_like import AddLikeInteractor
 from app.application.interactors.like.delete_like import DeleteLikeInteractor
+from app.application.interactors.like.delete_like import (
+    LikeGateway as LikeGatewayWithDeleterAndReader,
+)
 from app.application.interactors.recommendation_feed.read import ReadRecommendationFeed
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
