@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 from app.adapters.database import new_async_engine, new_session_maker
 from app.adapters.file_manager import LocalFileManager
 from app.adapters.gateways.chat import ChatGateway, ChatMessageGateway
+from app.application.interactors.like.delete_like import LikeGateway as LikeGatewayWithDeleterAndReader
 from app.adapters.gateways.city import CityGateway
 from app.adapters.gateways.like import LikeGateway
 from app.adapters.gateways.showcase import ShowcaseGateway, WorkGateway
@@ -214,6 +215,7 @@ class AppProvider(Provider):
         provides=AnyOf[
             LikeSaver,
             LikeDeleter,
+            LikeGatewayWithDeleterAndReader,
         ],
     )
     showcase_gateway = provide(
