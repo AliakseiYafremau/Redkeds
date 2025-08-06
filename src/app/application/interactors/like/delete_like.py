@@ -10,6 +10,7 @@ from app.domain.services.like_service import ensure_can_manage_like
 class LikeGateway(LikeDeleter, LikeReader, Protocol):
     """Интерфейс для удаления лайка."""
 
+
 class DeleteLikeInteractor:
     """Интерактор для удаления лайков."""
 
