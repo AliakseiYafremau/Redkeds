@@ -1,5 +1,5 @@
 from dishka.integrations.fastapi import FromDishka, inject
-from fastapi import APIRouter
+from fastapi import APIRouter, Response
 
 from app.application.interactors.file.read import ReadFileInteractor
 from app.domain.entities.file_id import FileId
@@ -14,4 +14,5 @@ async def read_file(
     interactor: FromDishka[ReadFileInteractor],
 ) -> bytes:
     """Получение файла по его ID."""
-    return await interactor(file_id)
+    file = await interactor(file_id)
+    return Response(content=file)

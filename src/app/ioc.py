@@ -45,6 +45,9 @@ from app.application.interactors.user.delete import DeleteUserInteractor
 from app.application.interactors.user.delete import (
     ShowcaseGateway as ShowcaseGatewayWithReaderAndDeleter,
 )
+from app.application.interactors.user.delete import (
+    UserGateway as UserGatewayDeleterAndReader,
+)
 from app.application.interactors.user.read import ReadUserInteractor
 from app.application.interactors.user.register import RegisterUserInteractor
 from app.application.interactors.user.register import (
@@ -52,7 +55,7 @@ from app.application.interactors.user.register import (
 )
 from app.application.interactors.user.update import UpdateUserInteractor
 from app.application.interactors.user.update import (
-    UserGateway as UserGatewayWithReaderAndDeleter,
+    UserGateway as UserGatewayWithReaderAndUpdater,
 )
 from app.application.interactors.work.create import CreateWorkInteractor
 from app.application.interactors.work.delete import DeleteWorkInteractor
@@ -192,7 +195,8 @@ class AppProvider(Provider):
             UserReader,
             UserDeleter,
             UserUpdater,
-            UserGatewayWithReaderAndDeleter,
+            UserGatewayWithReaderAndUpdater,
+            UserGatewayDeleterAndReader,
             UserGatewayWithReaderAndSaver,
         ],
     )
