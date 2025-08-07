@@ -12,7 +12,7 @@ file_router = APIRouter(prefix="/file", tags=["Файлы"])
 async def read_file(
     file_id: FileId,
     interactor: FromDishka[ReadFileInteractor],
-) -> bytes:
+) -> Response:
     """Получение файла по его ID."""
     file = await interactor(file_id)
     return Response(content=file)

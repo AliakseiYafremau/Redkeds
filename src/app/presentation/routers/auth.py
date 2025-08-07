@@ -25,19 +25,15 @@ auth_router = APIRouter(
 
 @auth_router.post("/register")
 @inject
-async def register( # noqa: PLR0913
+async def register(  # noqa: PLR0913
     token_manager: FromDishka[JWTTokenManager],
     interactor: FromDishka[RegisterUserInteractor],
     email: Annotated[str, Form()],
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     description: Annotated[str, Form()],
-    city: Annotated[
-        str, Form()
-    ] = '{"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}',
-    tags: Annotated[
-        str, Form()
-    ] = '[{"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}]',
+    city: Annotated[str, Form()] = '{"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}',
+    tags: Annotated[str, Form()] = '[{"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}]',
     communication_method: Annotated[
         str, Form()
     ] = '{"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}',
