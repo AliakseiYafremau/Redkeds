@@ -1,6 +1,7 @@
 from typing import Protocol
 
 from app.application.dto.user import UpdateUserDTO
+from app.application.interfaces.common.file_gateway import FileManager
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.user.user_gateway import UserReader, UserUpdater
@@ -18,10 +19,12 @@ class UpdateUserInteractor:
         self,
         user_gateway: UserGateway,
         id_provider: IdProvider,
+        file_manager: FileManager,
         transaction_manager: TransactionManager,
     ) -> None:
         self._user_gateway = user_gateway
         self._id_provider = id_provider
+        self._file_manager = file_manager
         self._transaction_manager = transaction_manager
 
     async def __call__(self, data: UpdateUserDTO) -> None:
@@ -34,6 +37,14 @@ class UpdateUserInteractor:
         user_id = self._id_provider()
         user = await self._user_gateway.get_user_by_id(user_id)
         self.update_user(user, data)
+
+        if data.photo is not None:
+            if user.photo is not None:
+                await self._file_manager.update(user.photo, data.photo)
+            else:
+                file_id = await self._file_manager.save(data.photo)
+                user.photo = file_id
+
         await self._user_gateway.update_user(user)
         await self._transaction_manager.commit()
 
@@ -45,8 +56,6 @@ class UpdateUserInteractor:
         """Обновляет сущность пользователя."""
         if new_data.username is not None:
             user.username = new_data.username
-        if new_data.photo is not None:
-            user.photo = new_data.photo
         if new_data.specialization is not None:
             user.specialization = new_data.specialization
         if new_data.city is not None:

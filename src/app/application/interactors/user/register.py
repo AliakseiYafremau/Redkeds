@@ -1,6 +1,7 @@
 from typing import Protocol
 
 from app.application.dto.user import NewUserDTO
+from app.application.interfaces.common.file_gateway import FileManager
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
 from app.application.interfaces.showcase.showcase_gateway import ShowcaseSaver
@@ -25,12 +26,14 @@ class RegisterUserInteractor:
         showcase_gateway: ShowcaseSaver,
         uuid_generator: UUIDGenerator,
         password_hasher: PasswordHasher,
+        file_manager: FileManager,
         transaction_manager: TransactionManager,
     ) -> None:
         self._user_gateway = user_gateway
         self._showcase_gateway = showcase_gateway
         self._uuid_generator = uuid_generator
         self._password_hasher = password_hasher
+        self._file_manager = file_manager
         self._transaction_manager = transaction_manager
 
     async def __call__(self, data: NewUserDTO) -> UserId:
@@ -45,13 +48,18 @@ class RegisterUserInteractor:
         hashed_password = self._password_hasher.hash_password(data.password)
         showcase = Showcase(id=ShowcaseId(self._uuid_generator()))
         await self._showcase_gateway.save_showcase(showcase)
+
+        photo_id = None
+        if data.photo is not None:
+            photo_id = await self._file_manager.save(data.photo)
+
         user = User(
             id=user_id,
             email=data.email,
             username=data.username,
             nickname=data.nickname,
             password=hashed_password,
-            photo=data.photo,
+            photo=photo_id,
             specialization=data.specialization,
             city=data.city,
             description=data.description,

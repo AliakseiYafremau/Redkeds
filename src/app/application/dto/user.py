@@ -22,7 +22,7 @@ class NewUserDTO:
     communication_method: CommunicationMethodId
 
     nickname: str | None = None
-    photo: FileId | None = None
+    photo: bytes | None = None
     status: str | None = None
 
 
@@ -66,7 +66,7 @@ class UpdateUserDTO:
     email: str | None = None
     username: str | None = None
     nickname: str | None = None
-    photo: FileId | None = None
+    photo: bytes | None = None
     specialization: list[SpecializationId] | None = None
     city: CityId | None = None
     description: str | None = None
