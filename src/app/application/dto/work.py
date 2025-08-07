@@ -18,9 +18,9 @@ class UpdateWorkDTO:
     """DTO для обновления работы."""
 
     work_id: WorkId
-    title: str | None
-    description: str | None
-    file: bytes | None
+    title: str | None = None
+    description: str | None = None
+    file: bytes | None = None
 
 
 @dataclass
