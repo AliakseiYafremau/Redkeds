@@ -27,7 +27,7 @@ class LikeGateway(LikeSaver, LikeDeleter):
             showcase_id=ShowcaseId(like_model.showcase_id),
         )
 
-    async def save_like(self, like: Like) -> LikeId:
+    async def save_like(self, like: Like) -> LikeId | None:
         """Сохраняет лайк в базе данных."""
         like_model = LikeModel(
             id=like.id,
