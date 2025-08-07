@@ -19,3 +19,7 @@ wheels/
 
 # Media
 /media
+
+# VertualEnv
+.venv/
+**/[Vv]env/
