@@ -26,7 +26,7 @@
   source ./scripts/set_environment.sh # для Linux/macOS
 ```
 ```bash
-  ./scripts/set_environment.sh # для Windows
+  .\scripts\set_environment.ps1 # для Windows
 ```
 
 Включите режим разработки
