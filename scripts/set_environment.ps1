@@ -1,13 +1,19 @@
-Import-Module dotenv -ErrorAction SilentlyContinue
+# Устанавливает переменные из .env (PowerShell)
 
-# Проверяем существование .env файла
 if (-Not (Test-Path .env)) {
-    Write-Error ".env file not found in current directory"
+    Write-Error "ОШИБКА: Файл .env не найден" -ForegroundColor Red
     exit 1
 }
 
-# Загружаем переменные из .env файла
-dotenv .env
+foreach ($line in Get-Content .env) {
+    if ($line -match '^\s*#') { continue }  # Пропускаем комментарии
+    if ($line -match '^\s*$') { continue }  # Пропускаем пустые строки
 
-# Проверяем, что переменные загружены (опционально)
-Write-Host "Environment variables loaded from .env file" -ForegroundColor Green
+    if ($line -match '^\s*([^=]+)\s*=\s*(.*)') {
+        $name = $matches[1].Trim()
+        $value = $matches[2].Trim() -replace '^["'']|["'']$', ''  # Удаляем кавычки в начале/конце
+        Set-Item -Path "env:$name" -Value $value
+    }
+}
+
+Write-Host "Переменные из .env загружены" -ForegroundColor Green

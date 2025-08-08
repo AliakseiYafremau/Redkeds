@@ -23,7 +23,10 @@
 
 Загрузите переменные окружения
 ```bash
-  source ./scripts/set_environment.sh
+  source ./scripts/set_environment.sh # для Linux/macOS
+```
+```bash
+  ./scripts/set_environment.sh # для Windows
 ```
 
 Включите режим разработки
