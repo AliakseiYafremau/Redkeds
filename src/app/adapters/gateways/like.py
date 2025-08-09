@@ -26,3 +26,22 @@ class LikeGateway(LikeSaver, LikeDeleter):
             user_id=UserId(like_model.user_id),
             showcase_id=ShowcaseId(like_model.showcase_id),
         )
+
+    async def save_like(self, like: Like) -> LikeId | None:
+        """Сохраняет лайк в базе данных."""
+        like_model = LikeModel(
+            id=like.id,
+            user_id=like.user_id,
+            showcase_id=like.showcase_id,
+        )
+        self._session.add(like_model)
+        return like.id
+
+    async def delete_like(self, like_id: LikeId) -> None:
+        """Удаляет лайк по id."""
+        statement = select(LikeModel).where(LikeModel.id == like_id)
+        result = await self._session.execute(statement)
+        like_model = result.scalar_one_or_none()
+        if like_model is None:
+            raise ValueError(f"Like with id {like_id} not found")
+        await self._session.delete(like_model)
