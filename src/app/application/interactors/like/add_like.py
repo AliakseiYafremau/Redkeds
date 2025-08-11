@@ -1,7 +1,7 @@
 from app.application.dto.like import NewLikeDTO
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
-from app.application.interfaces.like.like_geteway import LikeSaver
+from app.application.interfaces.like.like_gateway import LikeSaver
 from app.domain.entities.like import Like, LikeId
 
 

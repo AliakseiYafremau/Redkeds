@@ -11,6 +11,7 @@ from app.adapters.gateways.chat import ChatGateway, ChatMessageGateway
 from app.adapters.gateways.city import CityGateway
 from app.adapters.gateways.like import LikeGateway
 from app.adapters.gateways.showcase import ShowcaseGateway, WorkGateway
+from app.adapters.gateways.skip import SkipGateway
 from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
 from app.adapters.gateways.user import UserGateway
@@ -34,6 +35,11 @@ from app.application.interactors.like.add_like import AddLikeInteractor
 from app.application.interactors.like.delete_like import DeleteLikeInteractor
 from app.application.interactors.like.delete_like import (
     LikeGateway as LikeGatewayWithDeleterAndReader,
+)
+from app.application.interactors.skip.add_skip import AddSkipInteractor
+from app.application.interactors.skip.delete_skip import DeleteSkipInteractor
+from app.application.interactors.skip.delete_skip import (
+    SkipGateway as SkipGatewayWithDeleterAndReader,
 )
 from app.application.interactors.recommendation_feed.read import ReadRecommendationFeed
 from app.application.interactors.specialization.read import (
@@ -85,7 +91,8 @@ from app.application.interfaces.common.file_gateway import FileManager
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
-from app.application.interfaces.like.like_geteway import LikeDeleter, LikeSaver
+from app.application.interfaces.like.like_gateway import LikeDeleter, LikeSaver
+from app.application.interfaces.skip.skip_gateway import SkipDeleter, SkipSaver
 from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseDeleter,
     ShowcaseReader,
@@ -224,6 +231,15 @@ class AppProvider(Provider):
             LikeGatewayWithDeleterAndReader,
         ],
     )
+    skip_gateway = provide(
+        SkipGateway,
+        scope=Scope.REQUEST,
+        provides=AnyOf[
+            SkipSaver,
+            SkipDeleter,
+            SkipGatewayWithDeleterAndReader,
+        ],
+    )
     showcase_gateway = provide(
         ShowcaseGateway,
         scope=Scope.REQUEST,
@@ -357,5 +373,13 @@ class AppProvider(Provider):
     )
     delete_like_interactor = provide(
         DeleteLikeInteractor,
+        scope=Scope.REQUEST,
+    )
+    add_skip_interactor = provide(
+        AddSkipInteractor,
+        scope=Scope.REQUEST,
+    )
+    delete_skip_interactor = provide(
+        DeleteSkipInteractor,
         scope=Scope.REQUEST,
     )

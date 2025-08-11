@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.models import LikeModel
-from app.application.interfaces.like.like_geteway import LikeDeleter, LikeSaver
+from app.application.interfaces.like.like_gateway import LikeDeleter, LikeSaver
 from app.domain.entities.like import Like, LikeId
 from app.domain.entities.showcase import ShowcaseId
 from app.domain.entities.user_id import UserId

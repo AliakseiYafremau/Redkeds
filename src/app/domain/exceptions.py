@@ -28,3 +28,7 @@ class CannotManageChatMessageError(DomainError):
 
 class CannotManageLikeError(DomainError):
     """Ошибка при управлении лайком."""
+
+
+class CannotManageSkipError(DomainError):
+    """Ошибка при управлении скипом."""
