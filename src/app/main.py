@@ -17,6 +17,7 @@ from app.presentation.routers.feed import feed_router
 from app.presentation.routers.file import file_router
 from app.presentation.routers.like import like_router
 from app.presentation.routers.messages import message_router
+from app.presentation.routers.skip import skip_router
 from app.presentation.routers.specialization import specialization_router
 from app.presentation.routers.tag import tag_router
 from app.presentation.routers.user import user_router
@@ -46,6 +47,7 @@ def get_app() -> FastAPI:
     app.include_router(file_router)
     app.include_router(like_router)
     app.include_router(message_router)
+    app.include_router(skip_router)
     app.include_router(specialization_router)
     app.include_router(tag_router)
     app.include_router(user_router)
