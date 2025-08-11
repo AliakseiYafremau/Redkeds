@@ -36,12 +36,12 @@ from app.application.interactors.like.delete_like import DeleteLikeInteractor
 from app.application.interactors.like.delete_like import (
     LikeGateway as LikeGatewayWithDeleterAndReader,
 )
+from app.application.interactors.recommendation_feed.read import ReadRecommendationFeed
 from app.application.interactors.skip.add_skip import AddSkipInteractor
 from app.application.interactors.skip.delete_skip import DeleteSkipInteractor
 from app.application.interactors.skip.delete_skip import (
     SkipGateway as SkipGatewayWithDeleterAndReader,
 )
-from app.application.interactors.recommendation_feed.read import ReadRecommendationFeed
 from app.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
 )
@@ -92,13 +92,13 @@ from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
 from app.application.interfaces.like.like_gateway import LikeDeleter, LikeSaver
-from app.application.interfaces.skip.skip_gateway import SkipDeleter, SkipSaver
 from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseDeleter,
     ShowcaseReader,
     ShowcaseSaver,
 )
 from app.application.interfaces.showcase.work_gateway import WorkReader, WorkSaver
+from app.application.interfaces.skip.skip_gateway import SkipDeleter, SkipSaver
 from app.application.interfaces.specialization.specialization_gateway import (
     SpecializationReader,
 )

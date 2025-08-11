@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.models import SkipModel
 from app.application.interfaces.skip.skip_gateway import SkipDeleter, SkipSaver
-from app.domain.entities.skip import Skip, SkipId
 from app.domain.entities.showcase import ShowcaseId
+from app.domain.entities.skip import Skip, SkipId
 from app.domain.entities.user_id import UserId
 
 
