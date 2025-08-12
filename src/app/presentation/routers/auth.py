@@ -2,12 +2,8 @@ import json
 from typing import Annotated
 
 from dishka.integrations.fastapi import FromDishka, inject
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException
 
-from app.adapters.exceptions import (
-    AuthenticationError,
-    UserDoesNotExistError,
-)
 from app.adapters.id_provider import JWTTokenManager, Token
 from app.application.dto.user import LoginUserDTO, NewUserDTO
 from app.application.interactors.user.auth import AuthUserInteractor
@@ -42,7 +38,7 @@ async def register(  # noqa: PLR0913
     ] = '[{"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}]',
     nickname: Annotated[str | None, Form()] = None,
     status: Annotated[str | None, Form()] = None,
-    photo: Annotated[UploadFile | None, File()] = None,
+    photo: Annotated[bytes | None, File()] = None,
 ) -> Token:
     """Регистрация нового пользователя."""
     try:
@@ -57,10 +53,6 @@ async def register(  # noqa: PLR0913
     except json.JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=f"Неправильные входные данные: {e}")
 
-    photo_bytes = None
-    if photo:
-        photo_bytes = await photo.read()
-
     user_dto = NewUserDTO(
         email=email,
         username=username,
@@ -71,7 +63,7 @@ async def register(  # noqa: PLR0913
         tags=tags_list,
         communication_method=communication_method_id,
         nickname=nickname,
-        photo=photo_bytes,
+        photo=photo,
         status=status,
     )
     user_id = await interactor(user_dto)
@@ -86,11 +78,5 @@ async def login(
     interactor: FromDishka[AuthUserInteractor],
 ) -> Token:
     """Вход пользователя."""
-    try:
-        user_id = await interactor(user_data)
-    except (AuthenticationError, UserDoesNotExistError):
-        raise HTTPException(
-            status_code=400,
-            detail=("Неправильные входные данные."),
-        )
+    user_id = await interactor(user_data)
     return token_manager.create_token(user_id)
