@@ -7,9 +7,9 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from app.adapters.database import new_async_engine, new_session_maker
 from app.adapters.file_manager import LocalFileManager
-from app.adapters.gateways.channel import ChannelGateway
 from app.adapters.gateways.chat import ChatGateway, ChatMessageGateway
 from app.adapters.gateways.city import CityGateway
+from app.adapters.gateways.communication_method import CommunicationMethodGateway
 from app.adapters.gateways.like import LikeGateway
 from app.adapters.gateways.showcase import ShowcaseGateway, WorkGateway
 from app.adapters.gateways.specialization import SpecializationGateway
@@ -30,6 +30,9 @@ from app.application.interactors.chat.messages.delete import DeleteChatMessageIn
 from app.application.interactors.chat.messages.read import ReadMessageInteractor
 from app.application.interactors.chat.messages.send import SendChatMessageInteractor
 from app.application.interactors.city.read import ReadCitiesInteractor
+from app.application.interactors.communication_method.read import (
+    ReadCommunicationMethodsInteractor,
+)
 from app.application.interactors.file.read import ReadFileInteractor
 from app.application.interactors.like.add_like import AddLikeInteractor
 from app.application.interactors.like.delete_like import DeleteLikeInteractor
@@ -71,7 +74,6 @@ from app.application.interactors.work.update import UpdateWorkInteractor
 from app.application.interactors.work.update import (
     WorkGateway as WorkGatewayWithUpdaterAndReader,
 )
-from app.application.interfaces.channel.channel_gateway import ChannelReader
 from app.application.interfaces.chat.chat_gateway import (
     ChatDeleter,
     ChatReader,
@@ -87,6 +89,10 @@ from app.application.interfaces.common.file_gateway import FileManager
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
+from app.application.interfaces.communication_method.\
+    communication_method_gateway import (
+    CommunicationMethodReader,
+)
 from app.application.interfaces.like.like_geteway import LikeDeleter, LikeSaver
 from app.application.interfaces.showcase.showcase_gateway import (
     ShowcaseDeleter,
@@ -207,10 +213,10 @@ class AppProvider(Provider):
         scope=Scope.REQUEST,
         provides=TagReader,
     )
-    channel_gateway = provide(
-        ChannelGateway,
+    communication_method_gateway = provide(
+        CommunicationMethodGateway,
         scope=Scope.REQUEST,
-        provides=ChannelReader,
+        provides=CommunicationMethodReader,
     )
     specialization_gateway = provide(
         SpecializationGateway,
@@ -292,8 +298,8 @@ class AppProvider(Provider):
         ReadTagsInteractor,
         scope=Scope.REQUEST,
     )
-    read_channel_interactor = provide(
-        ReadTagsInteractor,
+    read_communication_method_interactor = provide(
+        ReadCommunicationMethodsInteractor,
         scope=Scope.REQUEST,
     )
     read_specializations_interactor = provide(

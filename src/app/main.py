@@ -11,9 +11,9 @@ from app.exception_handlers import setup_exception_handlers
 from app.ioc import AppProvider
 from app.presentation.routers.admin_panel import connect_admin_panel
 from app.presentation.routers.auth import auth_router
-from app.presentation.routers.channels import channels_router
 from app.presentation.routers.chat import chat_router
 from app.presentation.routers.city import city_router
+from app.presentation.routers.communication_method import communication_method_router
 from app.presentation.routers.feed import feed_router
 from app.presentation.routers.file import file_router
 from app.presentation.routers.like import like_router
@@ -41,9 +41,9 @@ def get_app() -> FastAPI:
         ],
     )
     app.include_router(auth_router)
-    app.include_router(channels_router)
     app.include_router(chat_router)
     app.include_router(city_router)
+    app.include_router(communication_method_router)
     app.include_router(feed_router)
     app.include_router(file_router)
     app.include_router(like_router)

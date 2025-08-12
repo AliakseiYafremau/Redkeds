@@ -1,11 +1,11 @@
 from typing import Protocol
 
-from app.domain.entities.channel import Channel
+from app.domain.entities.communication_method import CommunicationMethod
 
 
-class ChannelReader(Protocol):
+class CommunicationMethodReader(Protocol):
     """Интерфейс для получения методов общения."""
 
-    async def get_channels(self) -> list[Channel]:
+    async def get_communication_methods(self) -> list[CommunicationMethod]:
         """Получает все методы общения."""
         ...
