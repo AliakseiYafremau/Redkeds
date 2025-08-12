@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from app.adapters.database import new_async_engine, new_session_maker
 from app.adapters.file_manager import LocalFileManager
+from app.adapters.gateways.channel import ChannelGateway
 from app.adapters.gateways.chat import ChatGateway, ChatMessageGateway
 from app.adapters.gateways.city import CityGateway
 from app.adapters.gateways.like import LikeGateway
@@ -70,6 +71,7 @@ from app.application.interactors.work.update import UpdateWorkInteractor
 from app.application.interactors.work.update import (
     WorkGateway as WorkGatewayWithUpdaterAndReader,
 )
+from app.application.interfaces.channel.channel_gateway import ChannelReader
 from app.application.interfaces.chat.chat_gateway import (
     ChatDeleter,
     ChatReader,
@@ -205,6 +207,11 @@ class AppProvider(Provider):
         scope=Scope.REQUEST,
         provides=TagReader,
     )
+    channel_gateway = provide(
+        ChannelGateway,
+        scope=Scope.REQUEST,
+        provides=ChannelReader,
+    )
     specialization_gateway = provide(
         SpecializationGateway,
         scope=Scope.REQUEST,
@@ -282,6 +289,10 @@ class AppProvider(Provider):
         scope=Scope.REQUEST,
     )
     read_tag_interactor = provide(
+        ReadTagsInteractor,
+        scope=Scope.REQUEST,
+    )
+    read_channel_interactor = provide(
         ReadTagsInteractor,
         scope=Scope.REQUEST,
     )

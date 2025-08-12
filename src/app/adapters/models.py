@@ -22,6 +22,15 @@ class TagModel(Base):
     name: Mapped[str]
 
 
+class ChannelModel(Base):
+    """Модель методов общения."""
+
+    __tablename__ = "channels"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    name: Mapped[str]
+
+
 class CityModel(Base):
     """Модель города."""
 
