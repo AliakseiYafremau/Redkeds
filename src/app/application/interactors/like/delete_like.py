@@ -2,7 +2,7 @@ from typing import Protocol
 
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
-from app.application.interfaces.like.like_geteway import LikeDeleter, LikeReader
+from app.application.interfaces.like.like_gateway import LikeDeleter, LikeReader
 from app.domain.entities.like import LikeId
 from app.domain.services.like_service import ensure_can_manage_like
 
