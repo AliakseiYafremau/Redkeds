@@ -2,7 +2,7 @@ import json
 from typing import Annotated
 
 from dishka.integrations.fastapi import FromDishka, inject
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException
 
 from app.adapters.exceptions import (
     AuthenticationError,
@@ -16,6 +16,7 @@ from app.domain.entities.city import CityId
 from app.domain.entities.communication_method import CommunicationMethodId
 from app.domain.entities.specialization import SpecializationId
 from app.domain.entities.tag import TagId
+from app.domain.entities.user import NameDisplay
 
 auth_router = APIRouter(
     prefix="/auth",
@@ -32,6 +33,7 @@ async def register(  # noqa: PLR0913
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     description: Annotated[str, Form()],
+    name_display: Annotated[NameDisplay, Form()] = NameDisplay.USERNAME,
     city: Annotated[str, Form()] = '{"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}',
     tags: Annotated[str, Form()] = '[{"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}]',
     communication_method: Annotated[
@@ -42,7 +44,7 @@ async def register(  # noqa: PLR0913
     ] = '[{"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}]',
     nickname: Annotated[str | None, Form()] = None,
     status: Annotated[str | None, Form()] = None,
-    photo: Annotated[UploadFile | None, File()] = None,
+    photo: Annotated[bytes | None, File()] = None,
 ) -> Token:
     """Регистрация нового пользователя."""
     try:
@@ -57,10 +59,6 @@ async def register(  # noqa: PLR0913
     except json.JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=f"Неправильные входные данные: {e}")
 
-    photo_bytes = None
-    if photo:
-        photo_bytes = await photo.read()
-
     user_dto = NewUserDTO(
         email=email,
         username=username,
@@ -71,8 +69,9 @@ async def register(  # noqa: PLR0913
         tags=tags_list,
         communication_method=communication_method_id,
         nickname=nickname,
-        photo=photo_bytes,
+        photo=photo,
         status=status,
+        name_display=name_display,
     )
     user_id = await interactor(user_dto)
     return token_manager.create_token(user_id)

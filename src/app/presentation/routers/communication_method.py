@@ -15,7 +15,7 @@ communication_method_router = APIRouter(
 @communication_method_router.get("/")
 @inject
 async def get_communication_method(
-        interactor: FromDishka[ReadCommunicationMethodsInteractor]
+    interactor: FromDishka[ReadCommunicationMethodsInteractor],
 ) -> list[CommunicationMethodDTO]:
     """Получение методов общения."""
     return await interactor()

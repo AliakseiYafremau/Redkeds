@@ -1,11 +1,12 @@
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import Enum, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from app.domain.entities.file_id import FileId
 from app.domain.entities.showcase import ShowcaseId
+from app.domain.entities.user import NameDisplay
 from app.domain.entities.user_id import UserId
 
 
@@ -109,6 +110,9 @@ class UserModel(Base):
     )
     showcase_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("showcases.id"), nullable=True
+    )
+    name_display: Mapped[NameDisplay | None] = mapped_column(
+        Enum(NameDisplay), default=NameDisplay.USERNAME, nullable=True
     )
 
     tags: Mapped[list[TagModel]] = relationship(
