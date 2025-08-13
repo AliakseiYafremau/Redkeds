@@ -98,7 +98,7 @@ class UserModel(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(unique=True)
     username: Mapped[str]
-    nickname: Mapped[str | None] = mapped_column(nullable=True)
+    nickname: Mapped[str | None] = mapped_column(unique=True, nullable=True)
     password: Mapped[str]
     photo: Mapped[FileId | None] = mapped_column(nullable=True)
     description: Mapped[str]
