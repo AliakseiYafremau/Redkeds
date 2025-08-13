@@ -1,3 +1,4 @@
+from sqlalchemy.exc import IntegrityError
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
@@ -16,6 +17,7 @@ exceptions: dict[type[Exception], int] = {
     WeakPasswordError: 400,
     AuthenticationError: 400,
     InvalidPasswordError: 400,
+    IntegrityError: 400,
 }
 
 
