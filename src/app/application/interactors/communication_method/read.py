@@ -1,6 +1,5 @@
 from app.application.dto.communication_method import CommunicationMethodDTO
-from app.application.interfaces.communication_method.\
-    communication_method_gateway import (
+from app.application.interfaces.communication_method.communication_method_gateway import (  # noqa: E501
     CommunicationMethodReader,
 )
 
@@ -16,8 +15,9 @@ class ReadCommunicationMethodsInteractor:
 
     async def __call__(self) -> list[CommunicationMethodDTO]:
         """Возвращает данные о способах общения."""
-        communication_methods = await self._communication_method_gateway.\
-            get_communication_methods()
+        communication_methods = (
+            await self._communication_method_gateway.get_communication_methods()
+        )
         return [
             CommunicationMethodDTO(
                 id=entity.id,

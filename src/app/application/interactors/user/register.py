@@ -67,6 +67,7 @@ class RegisterUserInteractor:
             communication_method=data.communication_method,
             status=data.status,
             showcase=showcase.id,
+            name_display=data.name_display,
         )
         await self._user_gateway.save_user(user)
         await self._transaction_manager.commit()

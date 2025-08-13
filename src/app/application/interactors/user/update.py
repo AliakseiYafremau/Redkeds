@@ -70,3 +70,5 @@ class UpdateUserInteractor:
             user.status = new_data.status
         if new_data.showcase is not None:
             user.showcase = new_data.showcase
+        if new_data.name_display is not None:
+            user.name_display = new_data.name_display

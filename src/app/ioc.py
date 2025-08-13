@@ -95,8 +95,7 @@ from app.application.interfaces.common.file_gateway import FileManager
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
-from app.application.interfaces.communication_method.\
-    communication_method_gateway import (
+from app.application.interfaces.communication_method.communication_method_gateway import (  # noqa: E501
     CommunicationMethodReader,
 )
 from app.application.interfaces.like.like_gateway import LikeDeleter, LikeSaver

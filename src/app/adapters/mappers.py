@@ -15,6 +15,7 @@ def map_model_to_user(model: UserModel) -> User:
         email=model.email,
         username=model.username,
         nickname=model.nickname,
+        name_display=model.name_display,
         password=model.password,
         photo=model.photo,
         specialization=[
@@ -39,6 +40,7 @@ def map_user_to_model(user: User) -> UserModel:
         email=user.email,
         username=user.username,
         nickname=user.nickname,
+        name_display=user.name_display,
         password=user.password,
         photo=user.photo,
         description=user.description,

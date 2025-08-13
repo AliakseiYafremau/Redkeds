@@ -84,6 +84,7 @@ class UserGateway(
         user_model.city_id = user.city
         user_model.communication_method_id = user.communication_method
         user_model.showcase_id = user.showcase
+        user_model.name_display = user.name_display
 
     async def delete_user(self, user_id: UserId) -> None:
         """Удаляет пользователя."""
