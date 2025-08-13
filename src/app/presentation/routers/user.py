@@ -13,6 +13,7 @@ from app.domain.entities.communication_method import CommunicationMethodId
 from app.domain.entities.showcase import ShowcaseId
 from app.domain.entities.specialization import SpecializationId
 from app.domain.entities.tag import TagId
+from app.domain.entities.user import NameDisplay
 
 user_router = APIRouter(
     prefix="/user",
@@ -34,6 +35,7 @@ class UpdateSchema:
     communication_method: CommunicationMethodId | None = None
     status: str | None = None
     showcase: ShowcaseId | None = None
+    name_display: NameDisplay | None = None
 
 
 @user_router.get("/")

@@ -6,6 +6,7 @@ from app.domain.entities.file_id import FileId
 from app.domain.entities.showcase import ShowcaseId
 from app.domain.entities.specialization import SpecializationId
 from app.domain.entities.tag import TagId
+from app.domain.entities.user import NameDisplay
 
 
 @dataclass
@@ -20,6 +21,7 @@ class NewUserDTO:
     description: str
     tags: list[TagId]
     communication_method: CommunicationMethodId
+    name_display: NameDisplay
 
     nickname: str | None = None
     photo: bytes | None = None
@@ -57,6 +59,7 @@ class UserDTO:
     communication_method: CommunicationMethodId | None = None
     status: str | None = None
     showcase: ShowcaseId | None = None
+    name_display: NameDisplay | None = None
 
 
 @dataclass
@@ -74,3 +77,4 @@ class UpdateUserDTO:
     communication_method: CommunicationMethodId | None = None
     status: str | None = None
     showcase: ShowcaseId | None = None
+    name_display: NameDisplay | None = None

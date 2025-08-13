@@ -10,11 +10,14 @@ from app.domain.entities.user_id import UserId
 
 def map_model_to_user(model: UserModel) -> User:
     """Маппит модель пользователя в сущность."""
+    if model.name_display is None:
+        raise ValueError("Name display cannot be None")
     return User(
         id=UserId(model.id),
         email=model.email,
         username=model.username,
         nickname=model.nickname,
+        name_display=model.name_display,
         password=model.password,
         photo=model.photo,
         specialization=[
@@ -39,6 +42,7 @@ def map_user_to_model(user: User) -> UserModel:
         email=user.email,
         username=user.username,
         nickname=user.nickname,
+        name_display=user.name_display,
         password=user.password,
         photo=user.photo,
         description=user.description,

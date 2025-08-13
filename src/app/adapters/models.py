@@ -1,11 +1,12 @@
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import Enum, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from app.domain.entities.file_id import FileId
 from app.domain.entities.showcase import ShowcaseId
+from app.domain.entities.user import NameDisplay
 from app.domain.entities.user_id import UserId
 
 
@@ -110,6 +111,9 @@ class UserModel(Base):
     showcase_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("showcases.id"), nullable=True
     )
+    name_display: Mapped[NameDisplay | None] = mapped_column(
+        Enum(NameDisplay), default=NameDisplay.USERNAME, nullable=True
+    )
 
     tags: Mapped[list[TagModel]] = relationship(
         TagModel, secondary=UserTagModel.__table__
@@ -123,6 +127,16 @@ class LikeModel(Base):
     """Модель лайков."""
 
     __tablename__ = "likes"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    user_id: Mapped[UserId] = mapped_column(ForeignKey("users.id"))
+    showcase_id: Mapped[ShowcaseId] = mapped_column(ForeignKey("showcases.id"))
+
+
+class SkipModel(Base):
+    """Модель скипа."""
+
+    __tablename__ = "skips"
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
     user_id: Mapped[UserId] = mapped_column(ForeignKey("users.id"))

@@ -12,6 +12,7 @@ from app.domain.entities.city import CityId
 from app.domain.entities.communication_method import CommunicationMethodId
 from app.domain.entities.specialization import SpecializationId
 from app.domain.entities.tag import TagId
+from app.domain.entities.user import NameDisplay
 
 auth_router = APIRouter(
     prefix="/auth",
@@ -28,6 +29,7 @@ async def register(  # noqa: PLR0913
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     description: Annotated[str, Form()],
+    name_display: Annotated[NameDisplay, Form()] = NameDisplay.USERNAME,
     city: Annotated[str, Form()] = '{"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}',
     tags: Annotated[str, Form()] = '[{"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"}]',
     communication_method: Annotated[
@@ -65,6 +67,7 @@ async def register(  # noqa: PLR0913
         nickname=nickname,
         photo=photo,
         status=status,
+        name_display=name_display,
     )
     user_id = await interactor(user_dto)
     return token_manager.create_token(user_id)
