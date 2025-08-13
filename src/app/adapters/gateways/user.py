@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.adapters.exceptions import UserDoesNotExistError
+from app.adapters.exceptions import TargetNotFoundError
 from app.adapters.mappers import map_model_to_user, map_user_to_model
 from app.adapters.models import UserModel
 from app.application.interfaces.user.user_gateway import (
@@ -46,7 +46,7 @@ class UserGateway(
         user_model = result.scalar_one_or_none()
 
         if user_model is None:
-            raise UserDoesNotExistError(f"User with id {user_id} not found")
+            raise TargetNotFoundError(f"User with id {user_id} not found")
 
         return map_model_to_user(user_model)
 
@@ -63,7 +63,7 @@ class UserGateway(
         user_model = result.scalar_one_or_none()
 
         if user_model is None:
-            raise UserDoesNotExistError(f"User with email {email} not found")
+            raise TargetNotFoundError(f"User with email {email} not found")
 
         return map_model_to_user(user_model)
 
@@ -74,7 +74,7 @@ class UserGateway(
         user_model = result.scalar_one()
 
         if user_model is None:
-            raise UserDoesNotExistError(f"User with id {user.id} not found")
+            raise TargetNotFoundError(f"User with id {user.id} not found")
 
         user_model.username = user.username
         user_model.password = user.password
@@ -93,6 +93,6 @@ class UserGateway(
         user_model = result.scalar_one_or_none()
 
         if user_model is None:
-            raise UserDoesNotExistError(f"User with id {user_id} not found")
+            raise TargetNotFoundError(f"User with id {user_id} not found")
 
         await self._session.delete(user_model)

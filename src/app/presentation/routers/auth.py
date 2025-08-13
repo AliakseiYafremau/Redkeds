@@ -4,10 +4,6 @@ from typing import Annotated
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter, File, Form, HTTPException
 
-from app.adapters.exceptions import (
-    AuthenticationError,
-    UserDoesNotExistError,
-)
 from app.adapters.id_provider import JWTTokenManager, Token
 from app.application.dto.user import LoginUserDTO, NewUserDTO
 from app.application.interactors.user.auth import AuthUserInteractor
@@ -85,11 +81,5 @@ async def login(
     interactor: FromDishka[AuthUserInteractor],
 ) -> Token:
     """Вход пользователя."""
-    try:
-        user_id = await interactor(user_data)
-    except (AuthenticationError, UserDoesNotExistError):
-        raise HTTPException(
-            status_code=400,
-            detail=("Неправильные входные данные."),
-        )
+    user_id = await interactor(user_data)
     return token_manager.create_token(user_id)

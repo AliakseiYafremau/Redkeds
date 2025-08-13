@@ -10,29 +10,9 @@ class InvalidPasswordError(AuthenticationError):
     """Неправильный пароль."""
 
 
-class UserAlreadyExistsError(AdapterError):
-    """Ошибка при попытке создания уже существующего пользователя."""
+class TargetNotFoundError(AdapterError):
+    """Ошибка при не нахождении цели."""
 
 
-class UserDoesNotExistError(AdapterError):
-    """Ошибка при попытке получить несуществующего пользователя."""
-
-
-class TagDoesNotExistError(AdapterError):
-    """Ошибка при обращении к несуществуещему тегу."""
-
-
-class SpecializationDoesNotExistError(AdapterError):
-    """Ошибка при обращении к несуществующей специальности."""
-
-
-class CommunicationMethodDoesNotExistError(AdapterError):
-    """Ошибка при обращении к несуществющему методу связи."""
-
-
-class WorkDoesNotExistError(AdapterError):
-    """Ошибка при попытке получить несуществующую работу."""
-
-
-class ShowcaseDoesNotExistError(AdapterError):
-    """Ошибка при попытке получить несуществующую витрину."""
+class TargetAlreadyExistError(AdapterError):
+    """Ошибка при существовании создаваемой цели."""

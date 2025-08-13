@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.exceptions import ShowcaseDoesNotExistError, WorkDoesNotExistError
+from app.adapters.exceptions import TargetNotFoundError
 from app.adapters.mappers import map_model_to_work, map_work_to_model
 from app.adapters.models import ShowcaseModel, UserModel, WorkModel
 from app.application.interfaces.showcase.showcase_gateway import (
@@ -39,16 +39,16 @@ class ShowcaseGateway(
         result = await self._session.execute(user_statement)
         user_model = result.scalar_one_or_none()
         if user_model is None:
-            raise ShowcaseDoesNotExistError(f"User with id {user_id} not found")
+            raise TargetNotFoundError(f"User with id {user_id} not found")
         if user_model.showcase_id is None:
-            raise ShowcaseDoesNotExistError(f"User with id {user_id} has no showcase")
+            raise TargetNotFoundError(f"User with id {user_id} has no showcase")
         showcase_statement = select(ShowcaseModel).where(
             ShowcaseModel.id == user_model.showcase_id
         )
         result = await self._session.execute(showcase_statement)
         showcase_model = result.scalar_one_or_none()
         if showcase_model is None:
-            raise ShowcaseDoesNotExistError(
+            raise TargetNotFoundError(
                 f"Showcase with id {user_model.showcase_id} not found"
             )
         return Showcase(id=ShowcaseId(showcase_model.id))
@@ -123,7 +123,7 @@ class ShowcaseGateway(
         result = await self._session.execute(statement)
         showcase_model = result.scalar_one_or_none()
         if showcase_model is None:
-            raise ShowcaseDoesNotExistError(f"Showcase with id {showcase.id} not found")
+            raise TargetNotFoundError(f"Showcase with id {showcase.id} not found")
         # Здесь добавьте обновление нужных полей витрины, если они появятся
 
     async def delete_showcase(self, showcase_id: ShowcaseId) -> None:
@@ -132,7 +132,7 @@ class ShowcaseGateway(
         result = await self._session.execute(statement)
         showcase_model = result.scalar_one_or_none()
         if showcase_model is None:
-            raise ShowcaseDoesNotExistError(f"Showcase with id {showcase_id} not found")
+            raise TargetNotFoundError(f"Showcase with id {showcase_id} not found")
         await self._session.delete(showcase_model)
 
 
@@ -153,7 +153,7 @@ class WorkGateway(
         result = await self._session.execute(statement)
         work_model = result.scalar_one_or_none()
         if work_model is None:
-            raise WorkDoesNotExistError(f"Work with id {work_id} not found")
+            raise TargetNotFoundError(f"Work with id {work_id} not found")
         return map_model_to_work(work_model)
 
     async def get_showcase_works_by_id(self, showcase_id: ShowcaseId) -> list[Work]:
@@ -175,7 +175,7 @@ class WorkGateway(
         result = await self._session.execute(statement)
         work_model = result.scalar_one_or_none()
         if work_model is None:
-            raise WorkDoesNotExistError(f"Work with id {work.id} not found")
+            raise TargetNotFoundError(f"Work with id {work.id} not found")
         work_model.title = work.title
         work_model.description = work.description
         work_model.file_path = work.file_path
@@ -187,5 +187,5 @@ class WorkGateway(
         result = await self._session.execute(statement)
         work_model = result.scalar_one_or_none()
         if work_model is None:
-            raise WorkDoesNotExistError(f"Work with id {work_id} not found")
+            raise TargetNotFoundError(f"Work with id {work_id} not found")
         await self._session.delete(work_model)
