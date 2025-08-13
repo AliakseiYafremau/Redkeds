@@ -111,8 +111,8 @@ class UserModel(Base):
     showcase_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("showcases.id"), nullable=True
     )
-    name_display: Mapped[NameDisplay] = mapped_column(
-        Enum(NameDisplay), default=NameDisplay.USERNAME
+    name_display: Mapped[NameDisplay | None] = mapped_column(
+        Enum(NameDisplay), default=NameDisplay.USERNAME, nullable=True
     )
 
     tags: Mapped[list[TagModel]] = relationship(

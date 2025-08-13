@@ -10,6 +10,8 @@ from app.domain.entities.user_id import UserId
 
 def map_model_to_user(model: UserModel) -> User:
     """Маппит модель пользователя в сущность."""
+    if model.name_display is None:
+        raise ValueError("Name display cannot be None")
     return User(
         id=UserId(model.id),
         email=model.email,
