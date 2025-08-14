@@ -32,3 +32,12 @@ class ReadChatDTO:
     user1_id: UserId
     user2_id: UserId
     messages: list[ReadChatMessageDTO]
+
+
+@dataclass
+class ReadShortChatDTO:
+    """DTO для минимального чтения чата."""
+
+    id: ChatId
+    user1_id: UserId
+    user2_id: UserId
