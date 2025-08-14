@@ -30,6 +30,7 @@ from app.application.interactors.chat.messages.delete import (
 from app.application.interactors.chat.messages.delete import DeleteChatMessageInteractor
 from app.application.interactors.chat.messages.read import ReadMessageInteractor
 from app.application.interactors.chat.messages.send import SendChatMessageInteractor
+from app.application.interactors.chat.read import ReadUserChatInteractor
 from app.application.interactors.city.read import ReadCitiesInteractor
 from app.application.interactors.communication_method.read import (
     ReadCommunicationMethodsInteractor,
@@ -365,6 +366,10 @@ class AppProvider(Provider):
     )
     chat_delete_interactor = provide(
         DeleteChatInteractor,
+        scope=Scope.REQUEST,
+    )
+    chat_read_interactor = provide(
+        ReadUserChatInteractor,
         scope=Scope.REQUEST,
     )
     chat_message_delete_interactor = provide(
