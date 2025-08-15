@@ -124,7 +124,7 @@ coverage:
     - uv venv
     - source .venv/bin/activate
     - uv sync --frozen --only-group test
-      uv pip install -e .
+    - uv pip install -e .
   script:
     - coverage run --source=src -m pytest
     - coverage report
