@@ -2,7 +2,6 @@ from unittest.mock import AsyncMock, Mock
 from uuid import uuid4
 
 import pytest
-from faker import Faker
 
 from app.adapters.exceptions import InvalidPasswordError
 from app.adapters.password import PasswordHasher
