@@ -46,5 +46,5 @@ class User:
             self._check_invariant()
 
     def _check_invariant(self):
-        if self.name_display is NameDisplay.NICKNAME and self.nickname is not None:
+        if self.name_display is NameDisplay.NICKNAME and self.nickname is None:
             raise ValueError("Пользователь не может отображать nickname, если его нет.")
