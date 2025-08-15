@@ -81,7 +81,7 @@ tests:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
-coverage:
+tests:
   stage: check
   image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
   cache:
@@ -105,7 +105,7 @@ coverage:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
-tests:
+coverage:
   stage: check
   image: ghcr.io/astral-sh/uv:python$PYTHON_VERSION-alpine
   cache:
@@ -124,6 +124,7 @@ tests:
     - uv venv
     - source .venv/bin/activate
     - uv sync --frozen --only-group test
+      uv pip install -e .
   script:
     - coverage run --source=src -m pytest
     - coverage report
