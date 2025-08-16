@@ -48,14 +48,18 @@ class UpdateUserInteractor:
         await self._user_gateway.update_user(user)
         await self._transaction_manager.commit()
 
-    def update_user(
+    def update_user(  # noqa: C901
         self,
         user: User,
         new_data: UpdateUserDTO,
     ) -> None:
         """Обновляет сущность пользователя."""
+        if new_data.email is not None:
+            user.email = new_data.email
         if new_data.username is not None:
             user.username = new_data.username
+        if new_data.nickname is not None:
+            user.nickname = new_data.nickname
         if new_data.specialization is not None:
             user.specialization = new_data.specialization
         if new_data.city is not None:
