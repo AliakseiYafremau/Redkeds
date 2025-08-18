@@ -12,7 +12,7 @@ tag_router = APIRouter(
 
 @tag_router.get(
     path="/",
-    summary="Получение всех тегов",
+    summary="Получение всех тегов.",
     description="Возвращает список всех тегов.",
 )
 @inject
