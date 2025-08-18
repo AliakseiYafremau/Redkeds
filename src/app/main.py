@@ -36,7 +36,8 @@ def get_app() -> FastAPI:
     """Создает и настраивает приложение FastAPI."""
     container = make_async_container(AppProvider(), FastapiProvider())
     app = FastAPI(
-        title="Redkeds",
+        title="Redkeds API",
+        version="0.0.1",
         dependencies=[
             Depends(APIKeyHeader(name="token", auto_error=False)),
         ],
