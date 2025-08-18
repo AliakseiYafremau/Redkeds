@@ -18,7 +18,7 @@ deploy_prod:
     - apk add --no-cache openssh-client git
     - eval "$(ssh-agent -s)"
     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
-  
+
     # 1) Приватный ключ из GitLab CI
     # Если переменная типа File — это ПУТЬ к файлу -> просто ужесточаем права и добавляем
     - |
@@ -31,7 +31,7 @@ deploy_prod:
         chmod 400 ~/.ssh/id_ci
         ssh-add ~/.ssh/id_ci
       fi
-  
+
     # 2) known_hosts (лучше тоже File-переменная)
     - |
       if [ -n "$SSH_KNOWN_HOSTS" ]; then
@@ -44,7 +44,7 @@ deploy_prod:
       fi
   script:
     - >
-      ssh -o StrictHostKeyChecking=yes "$DEPLOY_PATH" '
+      ssh -o StrictHostKeyChecking=yes -p 2022 "$DEPLOY_PATH" '
         set -e
         cd application/backend
         git reset --hard
