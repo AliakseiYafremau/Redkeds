@@ -8,11 +8,15 @@ from app.application.interactors.communication_method.read import (
 
 communication_method_router = APIRouter(
     prefix="/communication_method",
-    tags=["методы общения"],
+    tags=["Способы общения"],
 )
 
 
-@communication_method_router.get("/")
+@communication_method_router.get(
+    path="/",
+    summary="Получение всех способов общения.",
+    description="Возвращает список всех способов общения.",
+)
 @inject
 async def get_communication_method(
     interactor: FromDishka[ReadCommunicationMethodsInteractor],

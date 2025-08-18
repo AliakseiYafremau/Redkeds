@@ -10,7 +10,11 @@ tag_router = APIRouter(
 )
 
 
-@tag_router.get("/")
+@tag_router.get(
+    path="/",
+    summary="Получение всех тегов",
+    description="Возвращает список всех тегов.",
+)
 @inject
 async def get_tags(interactor: FromDishka[ReadTagsInteractor]) -> list[TagDTO]:
     """Получение список тегов."""

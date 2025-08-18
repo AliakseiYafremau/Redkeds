@@ -10,7 +10,11 @@ from app.domain.entities.chat import ChatId, ChatMessageId
 message_router = APIRouter(prefix="/message", tags=["Чат"])
 
 
-@message_router.post("/")
+@message_router.post(
+    path="/",
+    summary="Отправка сообщения.",
+    description="Отправляет сообщение в указанный чат.",
+)
 @inject
 async def send_message(
     message_data: NewChatMessageDTO,
@@ -20,7 +24,11 @@ async def send_message(
     return await interactor(message_data)
 
 
-@message_router.get("/")
+@message_router.get(
+    path="/",
+    summary="Получение всех сообщений чата.",
+    description="Возвращает все сообщения чата.",
+)
 @inject
 async def get_messages(
     chat_id: ChatId,
@@ -30,7 +38,9 @@ async def get_messages(
     return await interactor(chat_id)
 
 
-@message_router.delete("/")
+@message_router.delete(
+    path="/", summary="Удаление сообщения.", description="Удаляет сообщение из чата."
+)
 @inject
 async def delete_message(
     message_id: ChatMessageId,

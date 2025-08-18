@@ -38,7 +38,11 @@ class UpdateSchema:
     name_display: NameDisplay | None = None
 
 
-@user_router.get("/")
+@user_router.get(
+    path="/",
+    summary="Чтение пользователя.",
+    description="Возвращает информацию о пользователе.",
+)
 @inject
 async def read_user(
     interactor: FromDishka[ReadUserInteractor],
@@ -47,7 +51,11 @@ async def read_user(
     return await interactor()
 
 
-@user_router.patch("/")
+@user_router.patch(
+    path="/",
+    summary="Обновление пользователя.",
+    description="Обновляет информацию о пользователе.",
+)
 @inject
 async def update_user(
     user_data: UpdateSchema,
@@ -59,7 +67,11 @@ async def update_user(
     await interactor(user_dto)
 
 
-@user_router.patch("/photo")
+@user_router.patch(
+    path="/photo",
+    summary="Замена аватара.",
+    description="Заменяет фото пользователя (аватар).",
+)
 @inject
 async def update_user_photo(
     photo: Annotated[bytes, File()], interactor: FromDishka[UpdateUserInteractor]
@@ -69,7 +81,9 @@ async def update_user_photo(
     await interactor(user_dto)
 
 
-@user_router.delete("/")
+@user_router.delete(
+    path="/", summary="Удаление пользователя.", description="Удаляет пользователя."
+)
 @inject
 async def delete_user(
     interactor: FromDishka[DeleteUserInteractor],

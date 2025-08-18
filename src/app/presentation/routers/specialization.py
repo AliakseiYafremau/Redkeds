@@ -12,7 +12,11 @@ specialization_router = APIRouter(
 )
 
 
-@specialization_router.get("/")
+@specialization_router.get(
+    path="/",
+    summary="Получение всех специализаций.",
+    description="Возвращает список всех специализаций.",
+)
 @inject
 async def get_specializations(
     interactor: FromDishka[ReadSpecializationsInteractor],

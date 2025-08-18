@@ -14,17 +14,29 @@ chat_router = APIRouter(
 )
 
 
-@chat_router.post("/")
+@chat_router.post(
+    path="/",
+    summary="Создание чата.",
+    description=(
+        "Создания чата с определенным пользователем. "
+        "После запроса создается чат пользователя, "
+        "который послал запрос с пользователем, посланного **user_id**."
+    ),
+)
 @inject
 async def create_chat(
-    chat_data: UserId,
+    user_id: UserId,
     interactor: FromDishka[CreateChatInteractor],
 ) -> ChatId:
     """Создание чата."""
-    return await interactor(chat_data)
+    return await interactor(user_id)
 
 
-@chat_router.get("/")
+@chat_router.get(
+    path="/",
+    summary="Получение всех чатов пользователя.",
+    description="Возвращается список всех доступных пользователю чатов.",
+)
 @inject
 async def get_chats(
     interactor: FromDishka[ReadUserChatInteractor],
@@ -33,7 +45,11 @@ async def get_chats(
     return await interactor()
 
 
-@chat_router.delete("/")
+@chat_router.delete(
+    path="/",
+    summary="Удаление чата.",
+    description="Удаления чата пользователя. Чат удаляется у всех участников чата.",
+)
 @inject
 async def delete_chat(
     chat_id: ChatId,

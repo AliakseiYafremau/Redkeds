@@ -7,7 +7,11 @@ from app.domain.entities.file_id import FileId
 file_router = APIRouter(prefix="/file", tags=["Файлы"])
 
 
-@file_router.get("/{file_id}")
+@file_router.get(
+    path="/{file_id}",
+    summary="Загрузка файла.",
+    description="Возвращает сохраненный файл по его ID.",
+)
 @inject
 async def read_file(
     file_id: FileId,

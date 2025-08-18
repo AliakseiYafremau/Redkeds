@@ -8,11 +8,15 @@ from app.domain.entities.like import LikeId
 
 like_router = APIRouter(
     prefix="/like",
-    tags=["Добавление и удаление лайков"],
+    tags=["Лайки"],
 )
 
 
-@like_router.get("/")
+@like_router.post(
+    path="/",
+    summary="Постановка лайка.",
+    description="Ставит лайкает на указанную витрину.",
+)
 @inject
 async def add_like(
     like_data: NewLikeDTO,
@@ -22,7 +26,9 @@ async def add_like(
     return await interactor(like_data)
 
 
-@like_router.delete("/")
+@like_router.delete(
+    path="/", summary="Удаление лайка.", description="Убирает лайк с указанной витрины."
+)
 @inject
 async def delete_like(
     like_id: LikeId,
