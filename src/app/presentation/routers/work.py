@@ -14,7 +14,7 @@ from app.application.interactors.work.read import (
 from app.application.interactors.work.update import UpdateWorkInteractor
 from app.domain.entities.showcase import ShowcaseId, WorkId
 
-work_router = APIRouter(prefix="/work", tags=["Работа витрин"])
+work_router = APIRouter(prefix="/work", tags=["Работы витрин"])
 
 
 @dataclass
@@ -42,7 +42,7 @@ async def read_work(
 
 @work_router.get(
     path="/all/{showcase_id}",
-    summary="Получение работ витрины",
+    summary="Получение работ витрины.",
     description="Получает все работы витрины по её ID.",
 )
 @inject
@@ -92,7 +92,7 @@ async def update_work(
 
 @work_router.patch(
     path="/photo",
-    summary="Замена файла работы витрины",
+    summary="Замена файла работы витрины.",
     description="Заменяет файл работы витрины.",
 )
 @inject

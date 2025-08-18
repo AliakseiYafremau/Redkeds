@@ -8,7 +8,7 @@ from app.domain.entities.skip import SkipId
 
 skip_router = APIRouter(
     prefix="/skip",
-    tags=["Добавление и удаление скипов"],
+    tags=["Скипы"],
 )
 
 
@@ -27,7 +27,7 @@ async def add_skip(
 
 
 @skip_router.delete(
-    path="/", summary="Удаляет скип", description="Убирает скип с указанной витрины"
+    path="/", summary="Удаляет скип.", description="Убирает скип с указанной витрины"
 )
 @inject
 async def delete_skip(
