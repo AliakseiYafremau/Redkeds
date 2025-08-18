@@ -12,7 +12,11 @@ skip_router = APIRouter(
 )
 
 
-@skip_router.get("/")
+@skip_router.get(
+    path="/",
+    summary="Постановка скипа.",
+    description="Ставит скип на указанную витрину.",
+)
 @inject
 async def add_skip(
     skip_data: NewSkipDTO,
@@ -22,7 +26,9 @@ async def add_skip(
     return await interactor(skip_data)
 
 
-@skip_router.delete("/")
+@skip_router.delete(
+    path="/", summary="Удаляет скип", description="Убирает скип с указанной витрины"
+)
 @inject
 async def delete_skip(
     skip_id: SkipId,

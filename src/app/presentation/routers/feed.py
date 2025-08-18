@@ -10,10 +10,14 @@ from app.domain.entities.communication_method import CommunicationMethodId
 from app.domain.entities.specialization import SpecializationId
 from app.domain.entities.tag import TagId
 
-feed_router = APIRouter(prefix="/feed", tags=["Работа с лентой рекомендаций"])
+feed_router = APIRouter(prefix="/feed", tags=["Лента рекомендаций"])
 
 
-@feed_router.get("/")
+@feed_router.get(
+    path="/",
+    summary="Получение ленты рекомендаций.",
+    description="Возвращает список витрин, основываясь на предпочтениях пользователя.",
+)
 @inject
 async def read_feed(
     interactor: FromDishka[ReadRecommendationFeed],

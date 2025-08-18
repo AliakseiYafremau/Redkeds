@@ -12,7 +12,11 @@ city_router = APIRouter(
 )
 
 
-@city_router.get("/")
+@city_router.get(
+    path="/",
+    summary="Получение всех городов.",
+    description="Возвращает список всех городов.",
+)
 @inject
 async def get_cities(
     interactor: FromDishka[ReadCitiesInteractor],

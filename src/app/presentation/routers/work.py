@@ -26,7 +26,11 @@ class UpdateSchema:
     description: str | None
 
 
-@work_router.get("/{work_id}")
+@work_router.get(
+    path="/{work_id}",
+    summary="Получение работы витрины.",
+    description="Возвращает работу витрины по её ID.",
+)
 @inject
 async def read_work(
     work_id: WorkId,
@@ -36,7 +40,11 @@ async def read_work(
     return await interactor(work_id)
 
 
-@work_router.get("/all/{showcase_id}")
+@work_router.get(
+    path="/all/{showcase_id}",
+    summary="Получение работ витрины",
+    description="Получает все работы витрины по её ID.",
+)
 @inject
 async def read_all_works(
     showcase_id: ShowcaseId,
@@ -46,7 +54,11 @@ async def read_all_works(
     return await interactor(showcase_id)
 
 
-@work_router.post("/")
+@work_router.post(
+    path="/",
+    summary="Сохранение работы витрины.",
+    description="Сохраняет новую работу витрины пользователя.",
+)
 @inject
 async def create_work(
     title: Annotated[str, Form()],
@@ -59,7 +71,11 @@ async def create_work(
     await interactor(work_dto)
 
 
-@work_router.patch("/")
+@work_router.patch(
+    path="/",
+    summary="Обновление работы витрины.",
+    description="Обновляет информацию о работе витрины.",
+)
 @inject
 async def update_work(
     work_data: UpdateSchema,
@@ -74,7 +90,11 @@ async def update_work(
     await interactor(work_dto)
 
 
-@work_router.patch("/photo")
+@work_router.patch(
+    path="/photo",
+    summary="Замена файла работы витрины",
+    description="Заменяет файл работы витрины.",
+)
 @inject
 async def update_work_photo(
     work_id: Annotated[WorkId, Form()],
@@ -89,7 +109,11 @@ async def update_work_photo(
     await interactor(work_dto)
 
 
-@work_router.delete("/{work_id}")
+@work_router.delete(
+    path="/{work_id}",
+    summary="Удаление работы витрины.",
+    description="Удаляет работу витрины пользователя по её ID.",
+)
 @inject
 async def delete_work(
     work_id: WorkId,
