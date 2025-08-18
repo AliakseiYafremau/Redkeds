@@ -30,6 +30,7 @@ auth_router = APIRouter(
         "Поля **фото**, **статус**, **ник**, **город**, **способ общения** "
         "являются не обязательными."
     ),
+    deprecated=True,
 )
 @inject
 async def register(  # noqa: PLR0913
@@ -121,4 +122,76 @@ async def login(
 ) -> Token:
     """Вход пользователя."""
     user_id = await interactor(user_data)
+    return token_manager.create_token(user_id)
+
+
+@auth_router.post(
+    path="/v2/register",
+    summary="Регистрация пользователя.",
+    description=(
+        "Регистрация пользователя происходит по *E-mail* и *паролю*. \n\n"
+        "Пароль должен содержать не менее **5 символов** и как минимум **одну цифру** "
+        "и **одну букву**. \n\n"
+        "Поля **photo**, **status**, **nickname** "
+        "являются не обязательными. "
+        "При пропуске поля **tags** и **specializations**, "
+        "пользователю не назначаются цели и специализации соответственно. \n\n"
+    ),
+)
+@inject
+async def register_v2(  # noqa: PLR0913
+    token_manager: FromDishka[JWTTokenManager],
+    interactor: FromDishka[RegisterUserInteractor],
+    email: Annotated[str, Form(description="Почта пользователя.")],
+    username: Annotated[str, Form(description="Имя пользователя.")],
+    password: Annotated[str, Form(description="Пароль.")],
+    description: Annotated[str, Form(description="Краткое описание 'О себе'.")],
+    city: Annotated[CityId, Form(description="Город.")],
+    communication_method: Annotated[
+        CommunicationMethodId, Form(description="Метод общения.")
+    ],
+    name_display: Annotated[
+        NameDisplay,
+        Form(
+            description=("Выбор отображения между именем (username) и ником (nickname)."
+                         " По умолчанию устанавливается имя.")
+        ),
+    ] = NameDisplay.USERNAME,
+    tags: Annotated[list[TagId] | None, Form(description="Цели пользователя.")] = None,
+    specializations: Annotated[
+        list[SpecializationId] | None, Form(description="Специализации пользователя.")
+    ] = None,
+    nickname: Annotated[str | None, Form(description="Никнейм пользователя.")] = None,
+    status: Annotated[
+        str | None, Form(description="Текущий статус пользователя.")
+    ] = None,
+    photo: Annotated[bytes | None, File(description="Фото пользователя.")] = None,
+) -> Token:
+    """Регистрация пользователя."""
+    if city is None:
+        city = CityId("3fa85f64-5717-4562-b3fc-2c963f66afa6")
+    if tags is None:
+        tags = []
+    if communication_method is None:
+        communication_method = CommunicationMethodId(
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        )
+    if specializations is None:
+        specializations = []
+
+    user_dto = NewUserDTO(
+        email=email,
+        username=username,
+        password=password,
+        specialization=specializations,
+        city=city,
+        description=description,
+        tags=tags,
+        communication_method=communication_method,
+        nickname=nickname,
+        photo=photo,
+        status=status,
+        name_display=name_display,
+    )
+    user_id = await interactor(user_dto)
     return token_manager.create_token(user_id)
