@@ -17,8 +17,31 @@ deploy_prod:
   before_script:
     - apk add --no-cache openssh-client git
     - eval "$(ssh-agent -s)"
-    - ssh-add "$SSH_PRIVATE_KEY"
-    - mkdir -p ~/.ssh && cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+  
+    # 1) Приватный ключ из GitLab CI
+    # Если переменная типа File — это ПУТЬ к файлу -> просто ужесточаем права и добавляем
+    - |
+      if [ -f "$SSH_PRIVATE_KEY" ]; then
+        chmod 400 "$SSH_PRIVATE_KEY"
+        ssh-add "$SSH_PRIVATE_KEY"
+      else
+        # Если переменная текстовая — это СОДЕРЖИМОЕ -> пишем во временный файл
+        printf "%s\n" "$(printf "%s" "$SSH_PRIVATE_KEY" | tr -d '\r')" > ~/.ssh/id_ci
+        chmod 400 ~/.ssh/id_ci
+        ssh-add ~/.ssh/id_ci
+      fi
+  
+    # 2) known_hosts (лучше тоже File-переменная)
+    - |
+      if [ -n "$SSH_KNOWN_HOSTS" ]; then
+        if [ -f "$SSH_KNOWN_HOSTS" ]; then
+          cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+        else
+          printf "%s\n" "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+        fi
+        chmod 644 ~/.ssh/known_hosts
+      fi
   script:
     - >
       ssh -o StrictHostKeyChecking=yes "$DEPLOY_PATH" '
