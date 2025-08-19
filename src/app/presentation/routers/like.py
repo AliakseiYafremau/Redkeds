@@ -6,7 +6,6 @@ from app.application.interactors.like.delete_like import DeleteLikeInteractor
 from app.domain.entities.like import LikeId
 from app.domain.entities.showcase import ShowcaseId
 
-
 like_router = APIRouter(
     prefix="/like",
     tags=["Лайки"],

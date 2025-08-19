@@ -6,7 +6,6 @@ from app.application.interactors.skip.delete_skip import DeleteSkipInteractor
 from app.domain.entities.showcase import ShowcaseId
 from app.domain.entities.skip import SkipId
 
-
 skip_router = APIRouter(
     prefix="/skip",
     tags=["Скипы"],
