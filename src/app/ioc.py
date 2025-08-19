@@ -15,7 +15,7 @@ from app.adapters.gateways.showcase import ShowcaseGateway, WorkGateway
 from app.adapters.gateways.skip import SkipGateway
 from app.adapters.gateways.specialization import SpecializationGateway
 from app.adapters.gateways.tag import TagGateway
-from app.adapters.gateways.user import UserGateway
+from app.adapters.gateways.user import DefaultPhotoGateway, UserGateway
 from app.adapters.id_provider import JWTTokenManager, TokenIdProvider
 from app.adapters.password import BcryptPasswordHasher
 from app.adapters.transaction import SQLTransactionManager
@@ -52,6 +52,9 @@ from app.application.interactors.specialization.read import (
 )
 from app.application.interactors.tag.read import ReadTagsInteractor
 from app.application.interactors.user.auth import AuthUserInteractor
+from app.application.interactors.user.default_photo.read import (
+    ReadDefaultPhotoInteractor,
+)
 from app.application.interactors.user.delete import DeleteUserInteractor
 from app.application.interactors.user.delete import (
     ShowcaseGateway as ShowcaseGatewayWithReaderAndDeleter,
@@ -111,6 +114,7 @@ from app.application.interfaces.specialization.specialization_gateway import (
     SpecializationReader,
 )
 from app.application.interfaces.tag.tag_gateway import TagReader
+from app.application.interfaces.user.default_photo_gateway import DefaultPhotoReader
 from app.application.interfaces.user.password_manager import PasswordHasher
 from app.application.interfaces.user.user_gateway import (
     UserDeleter,
@@ -310,6 +314,10 @@ class AppProvider(Provider):
         DeleteUserInteractor,
         scope=Scope.REQUEST,
     )
+    read_default_photo_interactor = provide(
+        ReadDefaultPhotoInteractor,
+        scope=Scope.REQUEST,
+    )
     read_tag_interactor = provide(
         ReadTagsInteractor,
         scope=Scope.REQUEST,
@@ -403,4 +411,9 @@ class AppProvider(Provider):
     delete_skip_interactor = provide(
         DeleteSkipInteractor,
         scope=Scope.REQUEST,
+    )
+    default_photo_provider = provide(
+        DefaultPhotoGateway,
+        scope=Scope.REQUEST,
+        provides=DefaultPhotoReader,
     )

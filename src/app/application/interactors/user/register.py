@@ -5,6 +5,7 @@ from app.application.interfaces.common.file_gateway import FileManager
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
 from app.application.interfaces.showcase.showcase_gateway import ShowcaseSaver
+from app.application.interfaces.user.default_photo_gateway import DefaultPhotoReader
 from app.application.interfaces.user.password_manager import PasswordHasher
 from app.application.interfaces.user.user_gateway import UserReader, UserSaver
 from app.domain.entities.showcase import Showcase, ShowcaseId
@@ -27,10 +28,12 @@ class RegisterUserInteractor:
         uuid_generator: UUIDGenerator,
         password_hasher: PasswordHasher,
         file_manager: FileManager,
+        default_photo_reader: DefaultPhotoReader,
         transaction_manager: TransactionManager,
     ) -> None:
         self._user_gateway = user_gateway
         self._showcase_gateway = showcase_gateway
+        self._default_photo_reader = default_photo_reader
         self._uuid_generator = uuid_generator
         self._password_hasher = password_hasher
         self._file_manager = file_manager
@@ -44,10 +47,18 @@ class RegisterUserInteractor:
 
         """
         validate_password(data.password)
+
+        if data.default_photo is not None and data.photo is not None:
+            raise ValueError("Нельзя указать и фото, и фото по умолчанию одновременно.")
         user_id = UserId(self._uuid_generator())
         hashed_password = self._password_hasher.hash_password(data.password)
         showcase = Showcase(id=ShowcaseId(self._uuid_generator()))
         await self._showcase_gateway.save_showcase(showcase)
+
+        if data.default_photo is not None:
+            default_photos = await self._default_photo_reader.get_default_photos()
+            if data.default_photo not in default_photos:
+                raise ValueError("Указанное фото по умолчанию не найдено.")
 
         photo_id = None
         if data.photo is not None:
@@ -60,6 +71,7 @@ class RegisterUserInteractor:
             nickname=data.nickname,
             password=hashed_password,
             photo=photo_id,
+            default_photo=data.default_photo,
             specialization=data.specialization,
             city=data.city,
             description=data.description,

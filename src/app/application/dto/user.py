@@ -25,6 +25,7 @@ class NewUserDTO:
 
     nickname: str | None = None
     photo: bytes | None = None
+    default_photo: FileId | None = None
     status: str | None = None
 
 

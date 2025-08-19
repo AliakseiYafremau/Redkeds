@@ -4,13 +4,19 @@ from sqlalchemy.orm import selectinload
 
 from app.adapters.exceptions import TargetNotFoundError
 from app.adapters.mappers import map_model_to_user, map_user_to_model
-from app.adapters.models import UserModel, UserSpecializationModel, UserTagModel
+from app.adapters.models import (
+    DefaultPhotoModel,
+    UserModel,
+    UserSpecializationModel,
+    UserTagModel,
+)
 from app.application.interfaces.user.user_gateway import (
     UserDeleter,
     UserReader,
     UserSaver,
     UserUpdater,
 )
+from app.domain.entities.file_id import FileId
 from app.domain.entities.user import User, UserId
 
 
@@ -95,6 +101,7 @@ class UserGateway(
         user_model.communication_method_id = user.communication_method
         user_model.showcase_id = user.showcase
         user_model.name_display = user.name_display
+        user_model.default_photo = user.default_photo
 
         # Удаляем старые связи с тегами
         await self._session.execute(
@@ -138,3 +145,18 @@ class UserGateway(
             )
         )
         await self._session.delete(user_model)
+
+
+class DefaultPhotoGateway:
+    """Gateway для работы с фото по умолчанию."""
+
+    def __init__(self, session: AsyncSession) -> None:
+        self._session = session
+
+    async def get_default_photos(self) -> list[FileId]:
+        """Получает URL фото по умолчанию."""
+        statement = select(DefaultPhotoModel)
+        result = await self._session.execute(statement)
+        default_photos = result.scalars().all()
+
+        return [FileId(photo.id) for photo in default_photos]

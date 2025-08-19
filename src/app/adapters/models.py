@@ -90,6 +90,14 @@ class UserSpecializationModel(Base):
     )
 
 
+class DefaultPhotoModel(Base):
+    """Модель фото по умолчанию."""
+
+    __tablename__ = "default_photos"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+
+
 class UserModel(Base):
     """Модель пользователя."""
 
@@ -101,6 +109,9 @@ class UserModel(Base):
     nickname: Mapped[str | None] = mapped_column(unique=True, nullable=True)
     password: Mapped[str]
     photo: Mapped[FileId | None] = mapped_column(nullable=True)
+    default_photo: Mapped[FileId | None] = mapped_column(
+        ForeignKey("default_photos.id"), nullable=True
+    )
     description: Mapped[str]
     status: Mapped[str | None] = mapped_column(nullable=True)
 

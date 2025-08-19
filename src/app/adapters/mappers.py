@@ -24,6 +24,7 @@ def map_model_to_user(model: UserModel) -> User:
             SpecializationId(specialization.id)
             for specialization in model.specializations
         ],
+        default_photo=model.default_photo,
         city=CityId(model.city_id),
         description=model.description,
         tags=[TagId(tag.id) for tag in model.tags],
@@ -45,6 +46,7 @@ def map_user_to_model(user: User) -> UserModel:
         name_display=user.name_display,
         password=user.password,
         photo=user.photo,
+        default_photo=user.default_photo,
         description=user.description,
         status=user.status,
         city_id=user.city,

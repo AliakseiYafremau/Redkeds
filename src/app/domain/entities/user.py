@@ -29,6 +29,7 @@ class User:
     name_display: NameDisplay
     password: str
     photo: FileId | None
+    default_photo: FileId | None
     specialization: list[SpecializationId]
     city: CityId
     description: str
@@ -48,3 +49,7 @@ class User:
     def _check_invariant(self):
         if self.name_display is NameDisplay.NICKNAME and self.nickname is None:
             raise ValueError("Пользователь не может отображать nickname, если его нет.")
+        if self.photo is not None and self.default_photo is not None:
+            raise ValueError(
+                "Пользователь не может иметь и фото, и фото по умолчанию одновременно."
+            )
