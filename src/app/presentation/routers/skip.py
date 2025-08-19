@@ -25,7 +25,7 @@ async def add_skip(
         interactor: FromDishka[AddSkipInteractor],
 ) -> SkipId:
     """Добавелние скипа."""
-    return await interactor(showcase_id, user_id)
+    return await interactor(showcase_id)
 
 
 @skip_router.delete(

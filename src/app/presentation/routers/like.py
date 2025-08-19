@@ -21,11 +21,10 @@ like_router = APIRouter(
 @inject
 async def add_like(
     showcase_id: ShowcaseId,
-    user_id: UserId,
     interactor: FromDishka[AddLikeInteractor],
 ) -> LikeId:
     """Добавелние лойка."""
-    return await interactor(showcase_id, user_id)
+    return await interactor(showcase_id)
 
 
 @like_router.delete(
