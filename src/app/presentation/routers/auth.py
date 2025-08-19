@@ -150,6 +150,10 @@ async def register_v2(  # noqa: PLR0913
     communication_method: Annotated[
         CommunicationMethodId, Form(description="Метод общения.")
     ],
+    tags: Annotated[list[TagId], Form(description="Цели пользователя.")],
+    specializations: Annotated[
+        list[SpecializationId], Form(description="Специализации пользователя.")
+    ],
     name_display: Annotated[
         NameDisplay,
         Form(
@@ -157,10 +161,6 @@ async def register_v2(  # noqa: PLR0913
                          " По умолчанию устанавливается имя.")
         ),
     ] = NameDisplay.USERNAME,
-    tags: Annotated[list[TagId] | None, Form(description="Цели пользователя.")] = None,
-    specializations: Annotated[
-        list[SpecializationId] | None, Form(description="Специализации пользователя.")
-    ] = None,
     nickname: Annotated[str | None, Form(description="Никнейм пользователя.")] = None,
     status: Annotated[
         str | None, Form(description="Текущий статус пользователя.")
@@ -168,17 +168,6 @@ async def register_v2(  # noqa: PLR0913
     photo: Annotated[bytes | None, File(description="Фото пользователя.")] = None,
 ) -> Token:
     """Регистрация пользователя."""
-    if city is None:
-        city = CityId("3fa85f64-5717-4562-b3fc-2c963f66afa6")
-    if tags is None:
-        tags = []
-    if communication_method is None:
-        communication_method = CommunicationMethodId(
-            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-        )
-    if specializations is None:
-        specializations = []
-
     user_dto = NewUserDTO(
         email=email,
         username=username,

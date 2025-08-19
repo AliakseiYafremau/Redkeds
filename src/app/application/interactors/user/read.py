@@ -29,5 +29,6 @@ class ReadUserInteractor:
             communication_method=user.communication_method,
             status=user.status,
             showcase=user.showcase,
+            tags=user.tags,
             name_display=user.name_display,
         )
