@@ -1,10 +1,11 @@
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter
 
-from app.application.dto.skip import NewSkipDTO
 from app.application.interactors.skip.add_skip import AddSkipInteractor
 from app.application.interactors.skip.delete_skip import DeleteSkipInteractor
+from app.domain.entities.showcase import ShowcaseId
 from app.domain.entities.skip import SkipId
+from app.domain.entities.user import UserId
 
 skip_router = APIRouter(
     prefix="/skip",
@@ -19,11 +20,12 @@ skip_router = APIRouter(
 )
 @inject
 async def add_skip(
-    skip_data: NewSkipDTO,
-    interactor: FromDishka[AddSkipInteractor],
+        showcase_id: ShowcaseId,
+        user_id: UserId,
+        interactor: FromDishka[AddSkipInteractor],
 ) -> SkipId:
     """Добавелние скипа."""
-    return await interactor(skip_data)
+    return await interactor(showcase_id, user_id)
 
 
 @skip_router.delete(

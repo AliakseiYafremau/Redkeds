@@ -1,8 +1,8 @@
-from app.application.dto.skip import NewSkipDTO
 from app.application.interfaces.common.id_provider import IdProvider
 from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
 from app.application.interfaces.skip.skip_gateway import SkipSaver
+from app.domain.entities.showcase import ShowcaseId
 from app.domain.entities.skip import Skip, SkipId
 
 
@@ -21,14 +21,14 @@ class AddSkipInteractor:
         self._transaction_manager = transaction_manager
         self._uuid_generator = uuid_generator
 
-    async def __call__(self, data: NewSkipDTO) -> SkipId:
+    async def __call__(self, showcase_id: ShowcaseId) -> SkipId:
         """Добавляет скип."""
         user_id = self._id_provider()
         skip_id = SkipId(self._uuid_generator())
         skip = Skip(
             id=skip_id,
             user_id=user_id,
-            showcase_id=data.showcase_id,
+            showcase_id=showcase_id,
         )
         await self._skip_gateway.add_skip(skip)
         await self._transaction_manager.commit()
