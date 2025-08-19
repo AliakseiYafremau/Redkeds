@@ -157,8 +157,10 @@ async def register_v2(  # noqa: PLR0913
     name_display: Annotated[
         NameDisplay,
         Form(
-            description=("Выбор отображения между именем (username) и ником (nickname)."
-                         " По умолчанию устанавливается имя.")
+            description=(
+                "Выбор отображения между именем (username) и ником (nickname)."
+                " По умолчанию устанавливается имя."
+            )
         ),
     ] = NameDisplay.USERNAME,
     nickname: Annotated[str | None, Form(description="Никнейм пользователя.")] = None,

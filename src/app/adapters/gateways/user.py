@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -38,7 +38,9 @@ class UserGateway(
             self._session.add(user_tag)
         # Сохраняем связи со специализациями
         for spec_id in user.specialization:
-            user_spec = UserSpecializationModel(user_id=user.id, specialization_id=spec_id)
+            user_spec = UserSpecializationModel(
+                user_id=user.id, specialization_id=spec_id
+            )
             self._session.add(user_spec)
 
     async def get_user_by_id(self, user_id: UserId) -> User:
@@ -96,7 +98,7 @@ class UserGateway(
 
         # Удаляем старые связи с тегами
         await self._session.execute(
-            UserTagModel.__table__.delete().where(UserTagModel.user_id == user.id)
+            delete(UserTagModel).where(UserTagModel.user_id == user.id)
         )
         # Добавляем новые связи с тегами
         for tag_id in user.tags:
@@ -105,15 +107,14 @@ class UserGateway(
 
         # Удаляем старые связи со специализациями
         await self._session.execute(
-            UserSpecializationModel.__table__.delete().where(
+            delete(UserSpecializationModel).where(
                 UserSpecializationModel.user_id == user.id
             )
         )
         # Добавляем новые связи со специализациями
         for spec_id in user.specialization:
             user_spec = UserSpecializationModel(
-                user_id=user.id,
-                specialization_id=spec_id
+                user_id=user.id, specialization_id=spec_id
             )
             self._session.add(user_spec)
 
@@ -128,11 +129,11 @@ class UserGateway(
 
         # Удаляем все связи с тегами
         await self._session.execute(
-            UserTagModel.__table__.delete().where(UserTagModel.user_id == user_id)
+            delete(UserTagModel).where(UserTagModel.user_id == user_id)
         )
         # Удаляем все связи со специализациями
         await self._session.execute(
-            UserSpecializationModel.__table__.delete().where(
+            delete(UserSpecializationModel).where(
                 UserSpecializationModel.user_id == user_id
             )
         )
