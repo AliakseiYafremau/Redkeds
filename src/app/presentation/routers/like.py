@@ -1,10 +1,10 @@
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter
 
-from app.application.dto.like import NewLikeDTO
 from app.application.interactors.like.add_like import AddLikeInteractor
 from app.application.interactors.like.delete_like import DeleteLikeInteractor
 from app.domain.entities.like import LikeId
+from app.domain.entities.showcase import ShowcaseId
 
 like_router = APIRouter(
     prefix="/like",
@@ -19,11 +19,11 @@ like_router = APIRouter(
 )
 @inject
 async def add_like(
-    like_data: NewLikeDTO,
+    showcase_id: ShowcaseId,
     interactor: FromDishka[AddLikeInteractor],
 ) -> LikeId:
     """Добавелние лойка."""
-    return await interactor(like_data)
+    return await interactor(showcase_id)
 
 
 @like_router.delete(
