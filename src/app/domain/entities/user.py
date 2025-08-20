@@ -44,7 +44,6 @@ class User:
     def __setattr__(self, name: Any, value: Any) -> None:
         super().__setattr__(name, value)
         self._check_invariant()
-        
 
     def _check_invariant(self):
         if (

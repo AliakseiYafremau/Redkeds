@@ -9,6 +9,8 @@ services:
       - ".env"
     depends_on:
       - database
+    volumes:
+      - ./media:/media
 
   database:
     image: postgres:15
