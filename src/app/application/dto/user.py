@@ -7,6 +7,7 @@ from app.domain.entities.showcase import ShowcaseId
 from app.domain.entities.specialization import SpecializationId
 from app.domain.entities.tag import TagId
 from app.domain.entities.user import NameDisplay
+from app.domain.entities.user_id import UserId
 
 
 @dataclass
@@ -49,6 +50,7 @@ class PasswordChangeDTO:
 class UserDTO:
     """DTO для чтения пользователя."""
 
+    id: UserId
     email: str
     username: str
     nickname: str | None = None
