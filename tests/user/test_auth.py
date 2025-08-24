@@ -30,7 +30,7 @@ def make_auth_interactor(
     return factory
 
 
-async def test_authenticate_user_with_correct_password(
+async def test_user_authentication_with_correct_password(
     make_auth_interactor: Callable[[User], AuthUserInteractor],
     password_hasher: PasswordHasher,
     faker: Faker,
@@ -55,7 +55,7 @@ async def test_authenticate_user_with_correct_password(
     auth_interactor._user_gateway.get_user_by_email.assert_called_once_with(data.email)
 
 
-async def test_authenticate_user_with_incorrect_password(
+async def test_user_authentication_with_incorrect_password(
     make_auth_interactor: Callable[[User], AuthUserInteractor],
     password_hasher: PasswordHasher,
     faker: Faker,

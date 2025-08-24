@@ -43,7 +43,7 @@ def make_delete_interactor() -> Callable[[Showcase, User], DeleteUserInteractor]
     return factory
 
 
-async def test_delete_user(
+async def test_user_deletion(
     make_delete_interactor: Callable[[Showcase, User], DeleteUserInteractor],
 ) -> None:
     # Arrange
@@ -67,7 +67,7 @@ async def test_delete_user(
     delete_interactor._transaction_manager.commit.assert_called_once()
 
 
-async def test_delete_user_without_photo(
+async def test_deletion_of_a_user_without_a_photo(
     make_delete_interactor: Callable[[Showcase, User], DeleteUserInteractor],
 ) -> None:
     # Arrange
