@@ -35,7 +35,7 @@ def make_update_interactor() -> None:
     return factory
 
 
-async def test_update_user(
+async def test_user_update(
     make_update_interactor: Callable[[User], UpdateUserInteractor], faker: Faker
 ) -> None:
     # Arrange
@@ -71,7 +71,7 @@ async def test_update_user(
     assert new_user.status == new_status
 
 
-async def test_update_photo_of_user_with_photo(
+async def test_update_of_a_user_with_a_photo(
     make_update_interactor: Callable[[User], UpdateUserInteractor], faker: Faker
 ) -> None:
     # Arrange
@@ -98,7 +98,7 @@ async def test_update_photo_of_user_with_photo(
     assert new_user.photo == initial_photo_id
 
 
-async def test_update_photo_of_user_without_photo(
+async def test_update_of_a_user_without_a_photo(
     make_update_interactor: Callable[[User], UpdateUserInteractor],
     faker: Faker,
 ) -> None:

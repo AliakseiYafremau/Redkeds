@@ -50,15 +50,6 @@ class User:
             hasattr(self, "nickname")
             and hasattr(self, "name_display")
             and self.name_display is NameDisplay.NICKNAME
-            and self.nickname is None
+            and (self.nickname is None or self.nickname == "")
         ):
             raise ValueError("Пользователь не может отображать nickname, если его нет.")
-        if (
-            hasattr(self, "photo")
-            and hasattr(self, "default_photo")
-            and self.photo is not None
-            and self.default_photo is not None
-        ):
-            raise ValueError(
-                "Пользователь не может иметь и фото, и фото по умолчанию одновременно."
-            )

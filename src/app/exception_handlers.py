@@ -29,4 +29,7 @@ def setup_exception_handlers(app: FastAPI) -> None:
 async def common_exception_handler(_: Request, exc: Exception) -> JSONResponse:
     """Обработчик ошибок."""
     status = exceptions.get(type(exc), 500)
-    return JSONResponse(status_code=status, content={"detail": exc.args[0]})
+    detail = exc.__class__.__name__
+    if exc.args:
+        detail += f": {exc.args[0]}"
+    return JSONResponse(status_code=status, content={"detail": detail})
