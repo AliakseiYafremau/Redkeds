@@ -4,6 +4,7 @@ from app.application.dto.chat import NewChatMessageDTO
 from app.application.interfaces.chat.chat_gateway import ChatReader
 from app.application.interfaces.chat.chat_message_gateway import ChatMessageSaver
 from app.application.interfaces.common.id_provider import IdProvider
+from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
 from app.application.interfaces.user.user_gateway import UserReader
 from app.domain.entities.chat import ChatMessage, ChatMessageId
@@ -20,12 +21,14 @@ class SendChatMessageInteractor:
         chat_gateway: ChatReader,
         message_gateway: ChatMessageSaver,
         uuid_generator: UUIDGenerator,
+        transaction_manager: TransactionManager,
     ) -> None:
         self._id_provider = id_provider
         self._user_gateway = user_gateway
         self._chat_gateway = chat_gateway
         self._message_gateway = message_gateway
         self._uuid_generator = uuid_generator
+        self._transaction_manager = transaction_manager
 
     async def __call__(
         self,
@@ -35,11 +38,14 @@ class SendChatMessageInteractor:
         user_id = self._id_provider()
         chat = await self._chat_gateway.get_chat_by_id(data.chat_id)
         ensure_can_manage_chat(chat, user_id)
+        message_id = ChatMessageId(self._uuid_generator())
         message = ChatMessage(
-            id=ChatMessageId(self._uuid_generator()),
+            id=message_id,
             sender_id=user_id,
             chat_id=data.chat_id,
             text=data.text,
             timestamp=datetime.now(tz=UTC),
         )
-        return await self._message_gateway.save_chat_message(message)
+        await self._message_gateway.save_chat_message(message)
+        await self._transaction_manager.commit()
+        return message_id

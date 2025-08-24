@@ -19,8 +19,8 @@ skip_router = APIRouter(
 )
 @inject
 async def add_skip(
-        showcase_id: ShowcaseId,
-        interactor: FromDishka[AddSkipInteractor],
+    showcase_id: ShowcaseId,
+    interactor: FromDishka[AddSkipInteractor],
 ) -> SkipId:
     """Добавелние скипа."""
     return await interactor(showcase_id)
