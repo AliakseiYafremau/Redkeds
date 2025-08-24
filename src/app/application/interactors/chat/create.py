@@ -1,7 +1,7 @@
 from app.application.interfaces.chat.chat_gateway import ChatSaver
 from app.application.interfaces.common.id_provider import IdProvider
-from app.application.interfaces.common.uuid_generator import UUIDGenerator
 from app.application.interfaces.common.transaction import TransactionManager
+from app.application.interfaces.common.uuid_generator import UUIDGenerator
 from app.domain.entities.chat import Chat, ChatId
 from app.domain.entities.user_id import UserId
 
@@ -15,7 +15,6 @@ class CreateChatInteractor:
         chat_gateway: ChatSaver,
         uuid_generator: UUIDGenerator,
         transaction_manager: TransactionManager,
-
     ) -> None:
         self._id_provider = id_provider
         self._chat_gateway = chat_gateway

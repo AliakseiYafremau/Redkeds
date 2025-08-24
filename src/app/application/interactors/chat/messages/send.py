@@ -4,10 +4,10 @@ from app.application.dto.chat import NewChatMessageDTO
 from app.application.interfaces.chat.chat_gateway import ChatReader
 from app.application.interfaces.chat.chat_message_gateway import ChatMessageSaver
 from app.application.interfaces.common.id_provider import IdProvider
+from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.common.uuid_generator import UUIDGenerator
 from app.application.interfaces.user.user_gateway import UserReader
 from app.domain.entities.chat import ChatMessage, ChatMessageId
-from app.application.interfaces.common.transaction import TransactionManager
 from app.domain.services.chat_service import ensure_can_manage_chat
 
 
