@@ -5,6 +5,6 @@ from app.domain.exceptions import AccessDeniedError
 
 def ensure_can_manage_skip(skip: Skip, user_id: UserId) -> bool:
     """Проверяет возможность управление скипом."""
-    if skip.user_id != user_id:
+    if str(skip.user_id) != str(user_id):
         raise AccessDeniedError("Нет доступа к скипу.")
     return True

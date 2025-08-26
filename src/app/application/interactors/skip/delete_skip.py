@@ -5,6 +5,9 @@ from app.application.interfaces.common.transaction import TransactionManager
 from app.application.interfaces.skip.skip_gateway import SkipDeleter, SkipReader
 from app.domain.entities.skip import SkipId
 from app.domain.services.skip_service import ensure_can_manage_skip
+from app.logs import get_logger
+
+logger = get_logger(__name__)
 
 
 class SkipGateway(SkipDeleter, SkipReader, Protocol):
@@ -28,6 +31,8 @@ class DeleteSkipInteractor:
         """Удаляет лайк."""
         user_id = self._id_provider()
         skip = await self._skip_gateway.get_skip_by_id(skip_id)
-        await self._skip_gateway.delete_skip(skip_id)
+        logger.info(skip.user_id)
+        logger.info(user_id)
         ensure_can_manage_skip(skip, user_id)
+        await self._skip_gateway.delete_skip(skip_id)
         await self._transaction_manager.commit()
