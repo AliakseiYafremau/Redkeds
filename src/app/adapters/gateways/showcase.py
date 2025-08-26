@@ -89,9 +89,7 @@ class ShowcaseGateway(
         user_result = await self._session.execute(user_statement)
         user_models = user_result.scalars().all()
         showcase_id_to_user = {
-            user.showcase.id: user
-            for user in user_models
-            if user.showcase is not None
+            user.showcase.id: user for user in user_models if user.showcase is not None
         }
 
         def match(user: UserModel | None) -> int:
