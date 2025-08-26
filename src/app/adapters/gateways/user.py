@@ -99,7 +99,6 @@ class UserGateway(
         user_model.status = user.status
         user_model.city_id = user.city
         user_model.communication_method_id = user.communication_method
-        # user_model.showcase_id = user.showcase т.к. showcase_id удалил из модели пользователя
         user_model.name_display = user.name_display
         user_model.default_photo = user.default_photo
 
