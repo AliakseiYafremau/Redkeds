@@ -40,16 +40,16 @@ class ShowcaseGateway(
         user_model = result.scalar_one_or_none()
         if user_model is None:
             raise TargetNotFoundError(f"User with id {user_id} not found")
-        if user_model.showcase_id is None:
+        if user_model.showcase is None:
             raise TargetNotFoundError(f"User with id {user_id} has no showcase")
         showcase_statement = select(ShowcaseModel).where(
-            ShowcaseModel.id == user_model.showcase_id
+            ShowcaseModel.id == user_model.showcase.id
         )
         result = await self._session.execute(showcase_statement)
         showcase_model = result.scalar_one_or_none()
         if showcase_model is None:
             raise TargetNotFoundError(
-                f"Showcase with id {user_model.showcase_id} not found"
+                f"Showcase with id {user_model.showcase.id} not found"
             )
         return Showcase(id=ShowcaseId(showcase_model.id))
 
@@ -86,9 +86,9 @@ class ShowcaseGateway(
         user_result = await self._session.execute(user_statement)
         user_models = user_result.scalars().all()
         showcase_id_to_user = {
-            user.showcase_id: user
+            user.showcase.id: user
             for user in user_models
-            if user.showcase_id is not None
+            if user.showcase.id is not None
         }
 
         def match(user: UserModel | None) -> int:
