@@ -9,6 +9,9 @@ from app.application.interfaces.common.uuid_generator import UUIDGenerator
 from app.application.interfaces.user.user_gateway import UserReader
 from app.domain.entities.chat import ChatMessage, ChatMessageId
 from app.domain.services.chat_service import ensure_can_manage_chat
+from app.logs import get_logger
+
+logger = get_logger(__name__)
 
 
 class SendChatMessageInteractor:
@@ -37,6 +40,8 @@ class SendChatMessageInteractor:
         """Добавляет сообщение в чат."""
         user_id = self._id_provider()
         chat = await self._chat_gateway.get_chat_by_id(data.chat_id)
+        logger.info(chat.user1_id)
+        logger.info(user_id)
         ensure_can_manage_chat(chat, user_id)
         message_id = ChatMessageId(self._uuid_generator())
         message = ChatMessage(
