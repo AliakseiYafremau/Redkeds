@@ -72,9 +72,7 @@ class UserGateway(
             select(UserModel)
             .where(UserModel.email == email)
             .options(
-                selectinload(UserModel.specializations),
-                selectinload(UserModel.tags),
-                selectinload(UserModel.showcase),
+                selectinload(UserModel.specializations), selectinload(UserModel.tags)
             )
         )
         result = await self._session.execute(statement)
