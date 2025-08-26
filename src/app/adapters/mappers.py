@@ -31,7 +31,7 @@ def map_model_to_user(model: UserModel) -> User:
         communication_method=CommunicationMethodId(model.communication_method_id),
         status=model.status,
         showcase=ShowcaseId(model.showcase.id)
-        if model.showcase.id is not None
+        if model.showcase is not None
         else None,
     )
 

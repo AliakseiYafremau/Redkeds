@@ -88,7 +88,7 @@ class ShowcaseGateway(
         showcase_id_to_user = {
             user.showcase.id: user
             for user in user_models
-            if user.showcase.id is not None
+            if user.showcase is not None
         }
 
         def match(user: UserModel | None) -> int:
