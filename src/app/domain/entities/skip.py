@@ -12,6 +12,6 @@ SkipId = NewType("SkipId", UUID)
 class Skip:
     """Сущность скипа (пользователь скипнул витрину)."""
 
-    id: SkipId | None
+    id: SkipId
     user_id: UserId
     showcase_id: ShowcaseId

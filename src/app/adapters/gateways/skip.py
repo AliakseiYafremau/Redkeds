@@ -27,14 +27,14 @@ class SkipGateway(SkipSaver, SkipDeleter):
             showcase_id=ShowcaseId(skip_model.showcase_id),
         )
 
-    async def save_skip(self, skip: Skip) -> SkipId | None:
+    async def save_skip(self, skip: Skip) -> SkipId:
         """Сохраняет скип в базе данных."""
         skip_model = SkipModel(
             id=skip.id,
             user_id=skip.user_id,
             showcase_id=skip.showcase_id,
         )
-        await self._session.add(skip_model)
+        self._session.add(skip_model)
         return skip.id
 
     async def delete_skip(self, skip_id: SkipId) -> None:
