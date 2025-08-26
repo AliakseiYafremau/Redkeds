@@ -34,7 +34,7 @@ class SkipGateway(SkipSaver, SkipDeleter):
             user_id=skip.user_id,
             showcase_id=skip.showcase_id,
         )
-        self._session.add(skip_model)
+        await self._session.add(skip_model)
         return skip.id
 
     async def delete_skip(self, skip_id: SkipId) -> None:
