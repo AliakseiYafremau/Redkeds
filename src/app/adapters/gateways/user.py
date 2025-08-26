@@ -74,7 +74,7 @@ class UserGateway(
             .options(
                 selectinload(UserModel.specializations),
                 selectinload(UserModel.tags),
-                selectinload(UserModel.showcase)
+                selectinload(UserModel.showcase),
             )
         )
         result = await self._session.execute(statement)

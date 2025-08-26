@@ -49,9 +49,7 @@ class ShowcaseModel(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True)
 
     user_id: Mapped[UUID] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
-        unique=True,
-        nullable=False
+        ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False
     )
 
 
@@ -142,7 +140,7 @@ class UserModel(Base):
         backref="user",
         cascade="all, delete-orphan",
         uselist=False,
-        passive_deletes=True
+        passive_deletes=True,
     )
 
 
