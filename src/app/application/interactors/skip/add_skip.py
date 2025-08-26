@@ -30,6 +30,6 @@ class AddSkipInteractor:
             user_id=user_id,
             showcase_id=showcase_id,
         )
-        await self._skip_gateway.add_skip(skip)
+        await self._skip_gateway.save_skip(skip)
         await self._transaction_manager.commit()
         return skip_id

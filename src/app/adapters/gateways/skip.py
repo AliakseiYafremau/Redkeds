@@ -27,7 +27,7 @@ class SkipGateway(SkipSaver, SkipDeleter):
             showcase_id=ShowcaseId(skip_model.showcase_id),
         )
 
-    async def save_skip(self, skip: Skip) -> SkipId | None:
+    async def save_skip(self, skip: Skip) -> SkipId:
         """Сохраняет скип в базе данных."""
         skip_model = SkipModel(
             id=skip.id,

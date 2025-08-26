@@ -6,7 +6,7 @@ from app.domain.entities.skip import Skip, SkipId
 class SkipSaver(Protocol):
     """Интерфейс для добавления скипов."""
 
-    async def add_skip(self, skip: Skip) -> SkipId:
+    async def save_skip(self, skip: Skip) -> SkipId:
         """Добволяет скип витрине от пользователя."""
         ...
 
