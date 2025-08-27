@@ -48,12 +48,6 @@ class ShowcaseModel(Base):
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
 
-    user_id: Mapped[UUID] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
-        unique=True,
-        nullable=False
-    )
-
 
 class WorkModel(Base):
     """Модель работы витрины."""
@@ -125,7 +119,9 @@ class UserModel(Base):
     communication_method_id: Mapped[UUID] = mapped_column(
         ForeignKey("communication_methods.id")
     )
-
+    showcase_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("showcases.id"), nullable=True
+    )
     name_display: Mapped[NameDisplay | None] = mapped_column(
         Enum(NameDisplay), default=NameDisplay.USERNAME, nullable=True
     )
@@ -135,14 +131,6 @@ class UserModel(Base):
     )
     specializations: Mapped[list[SpecializationModel]] = relationship(
         SpecializationModel, secondary=UserSpecializationModel.__table__
-    )
-
-    showcase: Mapped[ShowcaseModel | None] = relationship(
-        "ShowcaseModel",
-        backref="user",
-        cascade="all, delete-orphan",
-        uselist=False,
-        passive_deletes=True
     )
 
 
