@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.adapters.exceptions import TargetNotFoundError
 from app.adapters.mappers import map_model_to_work, map_work_to_model
@@ -82,7 +83,9 @@ class ShowcaseGateway(
         result = await self._session.execute(statement)
         showcase_models = list(result.scalars().all())
 
-        user_statement = select(UserModel)
+        user_statement = select(UserModel).options(
+            selectinload(UserModel.specializations), selectinload(UserModel.tags)
+        )
         user_result = await self._session.execute(user_statement)
         user_models = user_result.scalars().all()
         showcase_id_to_user = {
