@@ -2,14 +2,14 @@ from uuid import uuid4
 
 from faker import Faker
 
-from app.domain.entities.city import CityId
-from app.domain.entities.communication_method import CommunicationMethodId
-from app.domain.entities.file_id import FileId
-from app.domain.entities.showcase import Showcase, ShowcaseId
-from app.domain.entities.specialization import SpecializationId
-from app.domain.entities.tag import TagId
-from app.domain.entities.user import NameDisplay, User
-from app.domain.entities.user_id import UserId
+from redkeds.domain.entities.city import CityId
+from redkeds.domain.entities.communication_method import CommunicationMethodId
+from redkeds.domain.entities.file_id import FileId
+from redkeds.domain.entities.showcase import Showcase, ShowcaseId
+from redkeds.domain.entities.specialization import SpecializationId
+from redkeds.domain.entities.tag import TagId
+from redkeds.domain.entities.user import NameDisplay, User
+from redkeds.domain.entities.user_id import UserId
 
 
 def make_user(

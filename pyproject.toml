@@ -1,7 +1,7 @@
 [project]
-name = "app"
+name = "redkeds"
 version = "0.1.0"
-description = "Add your description here"
+description = "Social designer web site"
 readme = "README.md"
 authors = [
     { name = "Aliaksei Yafremau", email = "aleksey.yafremau@gmail.com" }
@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.scripts]
-run = "app.main:run"
+run = "redkeds.main:run"
 
 [build-system]
 requires = ["hatchling"]
@@ -60,13 +60,13 @@ exclude = [
     # Игнорировать папку "scripts" и все её подпапки
     "^scripts/",
     # Игнорировать папки миграций alembic
-    "src/app/adapters/migrations/versions"
+    "src/redkeds/adapters/migrations/versions"
 ]
 
 [tool.ruff]
 exclude = [
     # Игнорировать папки миграций alembic
-    "src/app/adapters/migrations/versions"
+    "src/redkeds/adapters/migrations/versions"
 ]
 
 [tool.ruff.lint.pylint]
@@ -101,7 +101,7 @@ ignore = [
 "tests/*" = ["D103", "PLR0913", "S311", "SLF001"] 
 
 [tool.alembic]
-script_location = "%(here)s/src/app/adapters/migrations"
+script_location = "%(here)s/src/redkeds/adapters/migrations"
 
 # дополнительные пути для sys.path
 prepend_sys_path = [
@@ -110,7 +110,7 @@ prepend_sys_path = [
 
 # спецификация местоположения версий (по умолчанию: <script_location>/versions)
 version_locations = [
-    "%(here)s/src/app/adapters/migrations/versions"
+    "%(here)s/src/redkeds/adapters/migrations/versions"
 ]
 
 # кодировка вывода, используемая при записи файлов миграций из script.py.mako

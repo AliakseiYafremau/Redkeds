@@ -1,6 +1,6 @@
 import pytest
 
-from app.domain.entities.user import NameDisplay
+from redkeds.domain.entities.user import NameDisplay
 from tests.factories import make_user
 
 

@@ -5,13 +5,13 @@ from uuid import uuid4
 import pytest
 from faker import Faker
 
-from app.adapters.exceptions import InvalidPasswordError
-from app.adapters.password import PasswordHasher
-from app.application.dto.user import LoginUserDTO
-from app.application.interactors.user.auth import AuthUserInteractor
-from app.application.interfaces.user.user_gateway import UserReader
-from app.domain.entities.user import User
-from app.domain.entities.user_id import UserId
+from redkeds.adapters.exceptions import InvalidPasswordError
+from redkeds.adapters.password import PasswordHasher
+from redkeds.application.dto.user import LoginUserDTO
+from redkeds.application.interactors.user.auth import AuthUserInteractor
+from redkeds.application.interfaces.user.user_gateway import UserReader
+from redkeds.domain.entities.user import User
+from redkeds.domain.entities.user_id import UserId
 from tests.factories import make_user
 
 
