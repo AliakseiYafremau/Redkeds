@@ -5,13 +5,16 @@ from uuid import uuid4
 import pytest
 from faker import Faker
 
-from app.application.dto.user import UpdateUserDTO
-from app.application.interactors.user.update import UpdateUserInteractor, UserGateway
-from app.application.interfaces.common.file_gateway import FileManager
-from app.application.interfaces.common.id_provider import IdProvider
-from app.application.interfaces.common.transaction import TransactionManager
-from app.domain.entities.file_id import FileId
-from app.domain.entities.user import User
+from redkeds.application.dto.user import UpdateUserDTO
+from redkeds.application.interactors.user.update import (
+    UpdateUserInteractor,
+    UserGateway,
+)
+from redkeds.application.interfaces.common.file_gateway import FileManager
+from redkeds.application.interfaces.common.id_provider import IdProvider
+from redkeds.application.interfaces.common.transaction import TransactionManager
+from redkeds.domain.entities.file_id import FileId
+from redkeds.domain.entities.user import User
 from tests.factories import make_user
 
 

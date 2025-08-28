@@ -1,6 +1,6 @@
 import pytest
 
-from app.adapters.password import BcryptPasswordHasher, PasswordHasher
+from redkeds.adapters.password import BcryptPasswordHasher, PasswordHasher
 
 
 @pytest.fixture(scope="session")

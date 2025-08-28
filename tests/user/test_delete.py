@@ -4,18 +4,18 @@ from uuid import uuid4
 
 import pytest
 
-from app.application.interactors.user.delete import (
+from redkeds.application.interactors.user.delete import (
     DeleteUserInteractor,
     ShowcaseGateway,
     UserGateway,
 )
-from app.application.interfaces.common.file_gateway import FileManager
-from app.application.interfaces.common.id_provider import IdProvider
-from app.application.interfaces.common.transaction import TransactionManager
-from app.domain.entities.file_id import FileId
-from app.domain.entities.showcase import Showcase
-from app.domain.entities.user import User
-from app.domain.entities.user_id import UserId
+from redkeds.application.interfaces.common.file_gateway import FileManager
+from redkeds.application.interfaces.common.id_provider import IdProvider
+from redkeds.application.interfaces.common.transaction import TransactionManager
+from redkeds.domain.entities.file_id import FileId
+from redkeds.domain.entities.showcase import Showcase
+from redkeds.domain.entities.user import User
+from redkeds.domain.entities.user_id import UserId
 from tests.factories import make_showcase, make_user
 
 
