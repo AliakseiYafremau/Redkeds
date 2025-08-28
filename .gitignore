@@ -23,3 +23,8 @@ wheels/
 # VertualEnv
 .venv/
 **/[Vv]env/
+
+# Cache
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
