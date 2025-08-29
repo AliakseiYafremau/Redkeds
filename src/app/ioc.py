@@ -67,6 +67,7 @@ from app.application.interactors.user.register import RegisterUserInteractor
 from app.application.interactors.user.register import (
     UserGateway as UserGatewayWithReaderAndSaver,
 )
+from app.application.interactors.user.unique_login import UniqueLoginInteractor
 from app.application.interactors.user.update import UpdateUserInteractor
 from app.application.interactors.user.update import (
     UserGateway as UserGatewayWithReaderAndUpdater,
@@ -312,6 +313,10 @@ class AppProvider(Provider):
     )
     delete_user_interactor = provide(
         DeleteUserInteractor,
+        scope=Scope.REQUEST,
+    )
+    unique_email_interactor = provide(
+        UniqueLoginInteractor,
         scope=Scope.REQUEST,
     )
     read_default_photo_interactor = provide(
