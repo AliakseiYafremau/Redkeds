@@ -4,10 +4,12 @@ from typing import Annotated
 from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter, File, Form, HTTPException
 
+from app.adapters.exceptions import TargetNotFoundError
 from app.adapters.id_provider import JWTTokenManager, Token
 from app.application.dto.user import LoginUserDTO, NewUserDTO
 from app.application.interactors.user.auth import AuthUserInteractor
 from app.application.interactors.user.register import RegisterUserInteractor
+from app.application.interactors.user.unique_login import UniqueLoginInteractor
 from app.domain.entities.city import CityId
 from app.domain.entities.communication_method import CommunicationMethodId
 from app.domain.entities.file_id import FileId
@@ -191,3 +193,16 @@ async def register_v2(  # noqa: PLR0913
     )
     user_id = await interactor(user_dto)
     return token_manager.create_token(user_id)
+
+
+@auth_router.post("/verify_login")
+@inject
+async def verify_unique_login(
+    interactor: FromDishka[UniqueLoginInteractor],
+    email: str,
+) -> bool:
+    """Проверка уникальности логина."""
+    try:
+        return await interactor(email)
+    except TargetNotFoundError:
+        return False
