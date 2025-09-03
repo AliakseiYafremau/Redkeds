@@ -23,7 +23,7 @@ def parse_args():
     p.add_argument("--users-table", default="users")
     p.add_argument("--users-photo-column", default="photo")
     p.add_argument("--works-table", default="works")
-    p.add_argument("--works-uuid-column", default="id")
+    p.add_argument("--works-uuid-column", default="file_path")
 
     # Файлы/папки
     p.add_argument("--photo", required=True, help="Путь к исходной фотографии")
