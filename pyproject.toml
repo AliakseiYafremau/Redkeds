@@ -98,7 +98,8 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["D103", "PLR0913", "S311", "SLF001"] 
+"tests/*" = ["D103", "PLR0913", "S311", "SLF001"]
+"scripts/load_media/setup.py" = ["ALL"]
 
 [tool.alembic]
 script_location = "%(here)s/src/app/adapters/migrations"

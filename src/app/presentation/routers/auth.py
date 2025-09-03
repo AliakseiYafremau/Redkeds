@@ -12,7 +12,6 @@ from app.application.interactors.user.register import RegisterUserInteractor
 from app.application.interactors.user.unique_login import UniqueLoginInteractor
 from app.domain.entities.city import CityId
 from app.domain.entities.communication_method import CommunicationMethodId
-from app.domain.entities.file_id import FileId
 from app.domain.entities.specialization import SpecializationId
 from app.domain.entities.tag import TagId
 from app.domain.entities.user import NameDisplay
