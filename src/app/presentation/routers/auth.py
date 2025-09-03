@@ -2,7 +2,7 @@ import json
 from typing import Annotated
 
 from dishka.integrations.fastapi import FromDishka, inject
-from fastapi import APIRouter, File, Form, HTTPException
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 
 from app.adapters.exceptions import TargetNotFoundError
 from app.adapters.id_provider import JWTTokenManager, Token
@@ -170,10 +170,7 @@ async def register_v2(  # noqa: PLR0913
     status: Annotated[
         str | None, Form(description="Текущий статус пользователя.")
     ] = None,
-    photo: Annotated[bytes | None, File(description="Фото пользователя.")] = None,
-    default_photo: Annotated[
-        FileId | None, File(description="ID фото по умолчанию.")
-    ] = None,
+    photo: Annotated[UploadFile | None, File(description="Фото пользователя.")] = None,
 ) -> Token:
     """Регистрация пользователя."""
     user_dto = NewUserDTO(
@@ -186,8 +183,8 @@ async def register_v2(  # noqa: PLR0913
         tags=tags,
         communication_method=communication_method,
         nickname=nickname,
-        photo=photo,
-        default_photo=default_photo,
+        photo=await photo.read(),
+        default_photo=None,
         status=status,
         name_display=name_display,
     )

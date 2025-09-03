@@ -2,7 +2,7 @@ from dataclasses import asdict, dataclass
 from typing import Annotated
 
 from dishka.integrations.fastapi import FromDishka, inject
-from fastapi import APIRouter, File
+from fastapi import APIRouter, File, UploadFile
 
 from app.application.dto.user import UpdateUserDTO, UserDTO
 from app.application.interactors.user.delete import DeleteUserInteractor
@@ -74,10 +74,10 @@ async def update_user(
 )
 @inject
 async def update_user_photo(
-    photo: Annotated[bytes, File()], interactor: FromDishka[UpdateUserInteractor]
+    photo: Annotated[UploadFile, File()], interactor: FromDishka[UpdateUserInteractor]
 ) -> None:
     """Обновление фото пользователя."""
-    user_dto = UpdateUserDTO(photo=photo)
+    user_dto = UpdateUserDTO(photo=await photo.read())
     await interactor(user_dto)
 
 

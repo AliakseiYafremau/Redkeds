@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Annotated
 
 from dishka.integrations.fastapi import FromDishka, inject
-from fastapi import APIRouter, File, Form
+from fastapi import APIRouter, File, Form, UploadFile
 
 from app.application.dto.work import NewWorkDTO, ReadWorkDTO, UpdateWorkDTO
 from app.application.interactors.work.create import CreateWorkInteractor
@@ -63,11 +63,11 @@ async def read_all_works(
 async def create_work(
     title: Annotated[str, Form()],
     description: Annotated[str, Form()],
-    file: Annotated[bytes, File()],
+    file: UploadFile,
     interactor: FromDishka[CreateWorkInteractor],
 ) -> None:
     """Создание новой работы витрины."""
-    work_dto = NewWorkDTO(title=title, description=description, file=file)
+    work_dto = NewWorkDTO(title=title, description=description, file=await file.read())
     await interactor(work_dto)
 
 
@@ -98,13 +98,13 @@ async def update_work(
 @inject
 async def update_work_photo(
     work_id: Annotated[WorkId, Form()],
-    file: Annotated[bytes, File()],
+    file: Annotated[UploadFile, File()],
     interactor: FromDishka[UpdateWorkInteractor],
 ) -> None:
     """Обновление файла работы."""
     work_dto = UpdateWorkDTO(
         work_id=work_id,
-        file=file,
+        file=await file.read(),
     )
     await interactor(work_dto)
 
