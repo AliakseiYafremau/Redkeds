@@ -10,7 +10,7 @@ services:
     depends_on:
       - database
     volumes:
-      - ./media:/media
+      - media:/media
 
   database:
     image: postgres:15
@@ -26,3 +26,4 @@ services:
 
 volumes:
   postgres_data:
+  media:
