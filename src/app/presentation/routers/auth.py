@@ -12,6 +12,7 @@ from app.application.interactors.user.register import RegisterUserInteractor
 from app.application.interactors.user.unique_login import UniqueLoginInteractor
 from app.domain.entities.city import CityId
 from app.domain.entities.communication_method import CommunicationMethodId
+from app.domain.entities.file_id import FileId
 from app.domain.entities.specialization import SpecializationId
 from app.domain.entities.tag import TagId
 from app.domain.entities.user import NameDisplay
@@ -170,8 +171,15 @@ async def register_v2(  # noqa: PLR0913
         str | None, Form(description="Текущий статус пользователя.")
     ] = None,
     photo: Annotated[UploadFile | None, File(description="Фото пользователя.")] = None,
+    default_photo: Annotated[  # noqa: ARG001
+        FileId | None, Form(description="ID фото по умолчанию.")
+    ] = None,
 ) -> Token:
     """Регистрация пользователя."""
+    if photo is not None:
+        photo_bytes = await photo.read()
+    else:
+        photo_bytes = None
     user_dto = NewUserDTO(
         email=email,
         username=username,
@@ -182,7 +190,7 @@ async def register_v2(  # noqa: PLR0913
         tags=tags,
         communication_method=communication_method,
         nickname=nickname,
-        photo=await photo.read(),
+        photo=photo_bytes,
         default_photo=None,
         status=status,
         name_display=name_display,
