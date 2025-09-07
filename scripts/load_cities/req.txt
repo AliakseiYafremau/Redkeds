@@ -1,3 +1,0 @@
-asyncpg==0.30.0
-et_xmlfile==2.0.0
-openpyxl==3.1.5
