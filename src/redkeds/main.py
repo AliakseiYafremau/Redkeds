@@ -7,8 +7,8 @@ from fastapi import Depends, FastAPI
 from fastapi.security import APIKeyHeader
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from redkeds.exception_handlers import setup_exception_handlers
 from redkeds.ioc import AppProvider
+from redkeds.presentation.exception_handlers import setup_exception_handlers
 from redkeds.presentation.routers.admin_panel import connect_admin_panel
 from redkeds.presentation.routers.auth import auth_router
 from redkeds.presentation.routers.chat import chat_router
