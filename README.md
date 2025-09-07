@@ -6,9 +6,8 @@
 
 ## Installation
 
-
 ```bash
-uv sync
+uv sync --all-groups
 ```
 
 Activate virtual environment
@@ -23,7 +22,8 @@ Specify environment variables in `.env` (example in .env.example)
 
 Load environment variables
 ```bash
-source ./scripts/set_environment.sh # for Linux/macOS
+source set_environment.sh # for Linux/macOS
+```
 
 Install development tools
 ```bash
