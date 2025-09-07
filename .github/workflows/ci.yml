@@ -12,72 +12,94 @@ env:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    container: ghcr.io/astral-sh/uv:python${{ env.PYTHON_VERSION }}-alpine
     steps:
       - uses: actions/checkout@v4
 
-      - name: Cache uv + ruff
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Restore uv cache
         uses: actions/cache@v4
         with:
-          path: |
-            .uv-cache
-            .ruff_cache
-            .venv
-          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}-ruff-${{ hashFiles('pyproject.toml') }}
+          path: /tmp/.uv-cache
+          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
           restore-keys: |
-            ${{ runner.os }}-uv-
-            ${{ runner.os }}-
+            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+            uv-${{ runner.os }}
 
-      - name: Install (lint group)
-        shell: sh
-        run: |
-          uv venv
-          . .venv/bin/activate
-          uv sync --frozen --only-group lint
+      - name: Install dependencies (lint group)
+        run: uv sync --frozen --only-group lint
 
-      - name: Ruff check
-        shell: sh
-        run: |
-          . .venv/bin/activate
-          ruff check .
+      - name: Run linter
+        run: uv run ruff check
 
-      - name: Clean uv cache (CI)
-        if: always()
-        shell: sh
+      - name: Minimize uv cache
         run: uv cache prune --ci
+  
 
   type-check:
     runs-on: ubuntu-latest
-    container: ghcr.io/astral-sh/uv:python${{ env.PYTHON_VERSION }}-alpine
     steps:
       - uses: actions/checkout@v4
 
-      - name: Cache uv + mypy
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Restore uv cache
         uses: actions/cache@v4
         with:
-          path: |
-            .uv-cache
-            .mypy_cache
-            .venv
-          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}-mypy-${{ hashFiles('pyproject.toml') }}
+          path: /tmp/.uv-cache
+          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
           restore-keys: |
-            ${{ runner.os }}-uv-
-            ${{ runner.os }}-
+            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+            uv-${{ runner.os }}
 
-      - name: Install (type-check group)
-        shell: sh
-        run: |
-          uv venv
-          . .venv/bin/activate
-          uv sync --frozen --only-group type-check
+      - name: Install dependencies (type-check group)
+        run: uv sync --frozen --only-group type-check
 
-      - name: mypy
-        shell: sh
-        run: |
-          . .venv/bin/activate
-          mypy .
+      - name: Run type-checker
+        run: uv run mypy .
 
-      - name: Clean uv cache (CI)
-        if: always()
-        shell: sh
+      - name: Minimize uv cache
         run: uv cache prune --ci
+
+    tests:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version-file: "pyproject.toml"
+
+        - name: Install uv
+          uses: astral-sh/setup-uv@v6
+
+        - name: Restore uv cache
+          uses: actions/cache@v4
+          with:
+            path: /tmp/.uv-cache
+            key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+            restore-keys: |
+              uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+              uv-${{ runner.os }}
+
+        - name: Install dependencies (type-check group)
+          run: uv sync --frozen --only-group test
+
+        - name: Run type-checker
+          run: uv run pytest
+
+        - name: Minimize uv cache
+          run: uv cache prune --ci
