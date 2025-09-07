@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  PYTHON_VERSION: "3.11"
+  UV_LINK_MODE: copy
+  UV_CACHE_DIR: .uv-cache
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    container: ghcr.io/astral-sh/uv:python${{ env.PYTHON_VERSION }}-alpine
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache uv + ruff
+        uses: actions/cache@v4
+        with:
+          path: |
+            .uv-cache
+            .ruff_cache
+            .venv
+          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}-ruff-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-uv-
+            ${{ runner.os }}-
+
+      - name: Install (lint group)
+        shell: sh
+        run: |
+          uv venv
+          . .venv/bin/activate
+          uv sync --frozen --only-group lint
+
+      - name: Ruff check
+        shell: sh
+        run: |
+          . .venv/bin/activate
+          ruff check .
+
+      - name: Clean uv cache (CI)
+        if: always()
+        shell: sh
+        run: uv cache prune --ci
+
+  type-check:
+    runs-on: ubuntu-latest
+    container: ghcr.io/astral-sh/uv:python${{ env.PYTHON_VERSION }}-alpine
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache uv + mypy
+        uses: actions/cache@v4
+        with:
+          path: |
+            .uv-cache
+            .mypy_cache
+            .venv
+          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}-mypy-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-uv-
+            ${{ runner.os }}-
+
+      - name: Install (type-check group)
+        shell: sh
+        run: |
+          uv venv
+          . .venv/bin/activate
+          uv sync --frozen --only-group type-check
+
+      - name: mypy
+        shell: sh
+        run: |
+          . .venv/bin/activate
+          mypy .
+
+      - name: Clean uv cache (CI)
+        if: always()
+        shell: sh
+        run: uv cache prune --ci
