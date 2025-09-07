@@ -1,58 +1,41 @@
-# Установка и использование
+# Installation and usage
 
-## Требования
-- Python 3.11 или выше
+## Requirements
+- Python 3.11 or later
 - [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
-## Установка
+## Installation
 
-Обновите зависимости проекта
+
 ```bash
-  uv sync
+uv sync
 ```
 
-Активируйте виртуальное окружение
+Activate virtual environment
 ```bash
-  source .venv/bin/activate # для Linux/macOS
+source .venv/bin/activate # for Linux/macOS
 ```
 ```bash
-  .\venv\Scripts\activate # для Windows
+.\venv\Scripts\activate # for Windows
 ```
 
-Укажите переменные окружения в `.env` (пример в .env.example)
+Specify environment variables in `.env` (example in .env.example)
 
-Загрузите переменные окружения
+Load environment variables
 ```bash
-  source ./scripts/set_environment.sh # для Linux/macOS
-```
-```bash
-  .\scripts\set_environment.ps1 # для Windows
-```
+source ./scripts/set_environment.sh # for Linux/macOS
 
-Включите режим разработки
+Install development tools
 ```bash
-  uv pip install -e .
+uv pip install -e .
 ```
 
-## Применение миграций
+## Apply migrations
 ```bash
-  alembic upgrade head
+alembic upgrade head
 ```
 
-## Запуск
-Вы можете протестировать программу, запустив ее с помощью следующей команды
+## Run the app
 ```bash
-  run
-```
-
-## Тестирование
-
-Запустите тестовую базу данных (проверьте корректность `.env`)
-```bash
-  docker compose -f docker-compose.yml up -d --build
-```
-
-Примените миграции к базе данных
-```bash
-  alembic upgrade head
+run
 ```
