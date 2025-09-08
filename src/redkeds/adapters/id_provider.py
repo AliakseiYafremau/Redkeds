@@ -6,8 +6,8 @@ from fastapi import HTTPException, Request
 
 from redkeds.adapters.exceptions import AuthenticationError
 from redkeds.application.interfaces.common.id_provider import IdProvider
-from redkeds.main.config import TokenConfig
 from redkeds.domain.entities.user_id import UserId
+from redkeds.main.config import TokenConfig
 
 
 @dataclass
