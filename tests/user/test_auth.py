@@ -9,7 +9,7 @@ from redkeds.adapters.exceptions import InvalidPasswordError
 from redkeds.adapters.password import PasswordHasher
 from redkeds.application.dto.user import LoginUserDTO
 from redkeds.application.interactors.user.auth import AuthUserInteractor
-from redkeds.application.interfaces.user.user_gateway import UserReader
+from redkeds.application.interfaces.user.user_gateway import UserGateway
 from redkeds.domain.entities.user import User
 from redkeds.domain.entities.user_id import UserId
 from tests.factories import make_user
@@ -20,7 +20,7 @@ def make_auth_interactor(
     password_hasher: PasswordHasher,
 ) -> Callable[[User], AuthUserInteractor]:
     def factory(user: User):
-        mock_user_gateway = create_autospec(spec=UserReader)
+        mock_user_gateway = create_autospec(spec=UserGateway)
         mock_user_gateway.get_user_by_email.return_value = user
         return AuthUserInteractor(
             mock_user_gateway,

@@ -1,18 +1,12 @@
-from typing import Protocol
-
 from redkeds.application.dto.work import UpdateWorkDTO
 from redkeds.application.interfaces.common.file_gateway import FileManager
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.application.interfaces.common.transaction import TransactionManager
-from redkeds.application.interfaces.showcase.showcase_gateway import ShowcaseReader
-from redkeds.application.interfaces.showcase.work_gateway import WorkReader, WorkUpdater
-from redkeds.application.interfaces.user.user_gateway import UserReader
+from redkeds.application.interfaces.showcase.showcase_gateway import ShowcaseGateway
+from redkeds.application.interfaces.showcase.work_gateway import WorkGateway
+from redkeds.application.interfaces.user.user_gateway import UserGateway
 from redkeds.domain.entities.showcase import Work
 from redkeds.domain.services.work_service import ensure_can_manage_work
-
-
-class WorkGateway(WorkUpdater, WorkReader, Protocol):
-    """Протокол, включающий в себя интерфейсы для обновления и чтения работы витрины."""
 
 
 class UpdateWorkInteractor:
@@ -21,8 +15,8 @@ class UpdateWorkInteractor:
     def __init__(
         self,
         work_gateway: WorkGateway,
-        user_gateway: UserReader,
-        showcase_gateway: ShowcaseReader,
+        user_gateway: UserGateway,
+        showcase_gateway: ShowcaseGateway,
         id_provider: IdProvider,
         transaction_manager: TransactionManager,
         file_manager: FileManager,

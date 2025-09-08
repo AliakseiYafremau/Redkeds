@@ -1,32 +1,26 @@
 from collections.abc import AsyncIterable
 from uuid import uuid4
 
-from dishka import AnyOf, Provider, Scope, provide
+from dishka import Provider, Scope, provide
 from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from redkeds.adapters.database import new_async_engine, new_session_maker
 from redkeds.adapters.file_manager import LocalFileManager
-from redkeds.adapters.gateways.chat import ChatGateway, ChatMessageGateway
-from redkeds.adapters.gateways.city import CityGateway
-from redkeds.adapters.gateways.communication_method import CommunicationMethodGateway
-from redkeds.adapters.gateways.like import LikeGateway
-from redkeds.adapters.gateways.showcase import ShowcaseGateway, WorkGateway
-from redkeds.adapters.gateways.skip import SkipGateway
-from redkeds.adapters.gateways.specialization import SpecializationGateway
-from redkeds.adapters.gateways.tag import TagGateway
-from redkeds.adapters.gateways.user import DefaultPhotoGateway, UserGateway
+from redkeds.adapters.gateways.chat import SQLChatGateway, SQLChatMessageGateway
+from redkeds.adapters.gateways.city import SQLCityGateway
+from redkeds.adapters.gateways.communication_method import SQLCommunicationMethodGateway
+from redkeds.adapters.gateways.like import SQLLikeGateway
+from redkeds.adapters.gateways.showcase import SQLShowcaseGateway, SQLWorkGateway
+from redkeds.adapters.gateways.skip import SQLSkipGateway
+from redkeds.adapters.gateways.specialization import SQLSpecializationGateway
+from redkeds.adapters.gateways.tag import SQLTagGateway
+from redkeds.adapters.gateways.user import SQLDefaultPhotoGateway, SQLUserGateway
 from redkeds.adapters.id_provider import JWTTokenManager, TokenIdProvider
 from redkeds.adapters.password import BcryptPasswordHasher
 from redkeds.adapters.transaction import SQLTransactionManager
 from redkeds.application.interactors.chat.create import CreateChatInteractor
-from redkeds.application.interactors.chat.delete import (
-    ChatGateway as ChatGatewayWithReaderAndDeleter,
-)
 from redkeds.application.interactors.chat.delete import DeleteChatInteractor
-from redkeds.application.interactors.chat.messages.delete import (
-    ChatMessageGateway as ChatMessageGatewayWithDeleterAndReader,
-)
 from redkeds.application.interactors.chat.messages.delete import (
     DeleteChatMessageInteractor,
 )
@@ -40,17 +34,11 @@ from redkeds.application.interactors.communication_method.read import (
 from redkeds.application.interactors.file.read import ReadFileInteractor
 from redkeds.application.interactors.like.add_like import AddLikeInteractor
 from redkeds.application.interactors.like.delete_like import DeleteLikeInteractor
-from redkeds.application.interactors.like.delete_like import (
-    LikeGateway as LikeGatewayWithDeleterAndReader,
-)
 from redkeds.application.interactors.recommendation_feed.read import (
     ReadRecommendationFeed,
 )
 from redkeds.application.interactors.skip.add_skip import AddSkipInteractor
 from redkeds.application.interactors.skip.delete_skip import DeleteSkipInteractor
-from redkeds.application.interactors.skip.delete_skip import (
-    SkipGateway as SkipGatewayWithDeleterAndReader,
-)
 from redkeds.application.interactors.specialization.read import (
     ReadSpecializationsInteractor,
 )
@@ -60,72 +48,39 @@ from redkeds.application.interactors.user.default_photo.read import (
     ReadDefaultPhotoInteractor,
 )
 from redkeds.application.interactors.user.delete import DeleteUserInteractor
-from redkeds.application.interactors.user.delete import (
-    ShowcaseGateway as ShowcaseGatewayWithReaderAndDeleter,
-)
-from redkeds.application.interactors.user.delete import (
-    UserGateway as UserGatewayDeleterAndReader,
-)
 from redkeds.application.interactors.user.read import ReadUserInteractor
 from redkeds.application.interactors.user.register import RegisterUserInteractor
-from redkeds.application.interactors.user.register import (
-    UserGateway as UserGatewayWithReaderAndSaver,
-)
 from redkeds.application.interactors.user.update import UpdateUserInteractor
-from redkeds.application.interactors.user.update import (
-    UserGateway as UserGatewayWithReaderAndUpdater,
-)
 from redkeds.application.interactors.work.create import CreateWorkInteractor
 from redkeds.application.interactors.work.delete import DeleteWorkInteractor
-from redkeds.application.interactors.work.delete import (
-    WorkGateway as WorkGatewayWithDeleterAndReader,
-)
 from redkeds.application.interactors.work.read import (
     ReadAllWorksInteractor,
     ReadWorkInteractor,
 )
 from redkeds.application.interactors.work.update import UpdateWorkInteractor
-from redkeds.application.interactors.work.update import (
-    WorkGateway as WorkGatewayWithUpdaterAndReader,
-)
-from redkeds.application.interfaces.chat.chat_gateway import (
-    ChatDeleter,
-    ChatReader,
-    ChatSaver,
-)
-from redkeds.application.interfaces.chat.chat_message_gateway import (
-    ChatMessageDeleter,
-    ChatMessageReader,
-    ChatMessageSaver,
-)
-from redkeds.application.interfaces.city.city_gateway import CityReader
+from redkeds.application.interfaces.chat.chat_gateway import ChatGateway
+from redkeds.application.interfaces.chat.chat_message_gateway import ChatMessageGateway
+from redkeds.application.interfaces.city.city_gateway import CityGateway
 from redkeds.application.interfaces.common.file_gateway import FileManager
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.application.interfaces.common.transaction import TransactionManager
 from redkeds.application.interfaces.common.uuid_generator import UUIDGenerator
 from redkeds.application.interfaces.communication_method.communication_method_gateway import (  # noqa: E501
-    CommunicationMethodReader,
+    CommunicationMethodGateway,
 )
-from redkeds.application.interfaces.like.like_gateway import LikeDeleter, LikeSaver
-from redkeds.application.interfaces.showcase.showcase_gateway import (
-    ShowcaseDeleter,
-    ShowcaseReader,
-    ShowcaseSaver,
-)
-from redkeds.application.interfaces.showcase.work_gateway import WorkReader, WorkSaver
-from redkeds.application.interfaces.skip.skip_gateway import SkipDeleter, SkipSaver
+from redkeds.application.interfaces.like.like_gateway import LikeGateway
+from redkeds.application.interfaces.showcase.showcase_gateway import ShowcaseGateway
+from redkeds.application.interfaces.showcase.work_gateway import WorkGateway
+from redkeds.application.interfaces.skip.skip_gateway import SkipGateway
 from redkeds.application.interfaces.specialization.specialization_gateway import (
-    SpecializationReader,
+    SpecializationGateway,
 )
-from redkeds.application.interfaces.tag.tag_gateway import TagReader
-from redkeds.application.interfaces.user.default_photo_gateway import DefaultPhotoReader
+from redkeds.application.interfaces.tag.tag_gateway import TagGateway
+from redkeds.application.interfaces.user.default_photo_gateway import (
+    DefaultPhotoGateway,
+)
 from redkeds.application.interfaces.user.password_manager import PasswordHasher
-from redkeds.application.interfaces.user.user_gateway import (
-    UserDeleter,
-    UserReader,
-    UserSaver,
-    UserUpdater,
-)
+from redkeds.application.interfaces.user.user_gateway import UserGateway
 from redkeds.main.config import (
     MediaConfig,
     PostgresConfig,
@@ -211,92 +166,53 @@ class AppProvider(Provider):
         )
 
     user_gateway = provide(
-        UserGateway,
+        SQLUserGateway,
         scope=Scope.REQUEST,
-        provides=AnyOf[
-            UserSaver,
-            UserReader,
-            UserDeleter,
-            UserUpdater,
-            UserGatewayWithReaderAndUpdater,
-            UserGatewayDeleterAndReader,
-            UserGatewayWithReaderAndSaver,
-        ],
+        provides=UserGateway,
     )
     tag_gateway = provide(
-        TagGateway,
+        SQLTagGateway,
         scope=Scope.REQUEST,
-        provides=TagReader,
+        provides=TagGateway,
     )
     communication_method_gateway = provide(
-        CommunicationMethodGateway,
+        SQLCommunicationMethodGateway,
         scope=Scope.REQUEST,
-        provides=CommunicationMethodReader,
+        provides=CommunicationMethodGateway,
     )
     specialization_gateway = provide(
-        SpecializationGateway,
+        SQLSpecializationGateway,
         scope=Scope.REQUEST,
-        provides=SpecializationReader,
+        provides=SpecializationGateway,
     )
     city_gateway = provide(
-        CityGateway,
+        SQLCityGateway,
         scope=Scope.REQUEST,
-        provides=CityReader,
+        provides=CityGateway,
     )
     like_gateway = provide(
-        LikeGateway,
+        SQLLikeGateway,
         scope=Scope.REQUEST,
-        provides=AnyOf[
-            LikeSaver,
-            LikeDeleter,
-            LikeGatewayWithDeleterAndReader,
-        ],
+        provides=LikeGateway,
     )
     skip_gateway = provide(
-        SkipGateway,
+        SQLSkipGateway,
         scope=Scope.REQUEST,
-        provides=AnyOf[
-            SkipSaver,
-            SkipDeleter,
-            SkipGatewayWithDeleterAndReader,
-        ],
+        provides=SkipGateway,
     )
     showcase_gateway = provide(
-        ShowcaseGateway,
+        SQLShowcaseGateway,
         scope=Scope.REQUEST,
-        provides=AnyOf[
-            ShowcaseSaver,
-            ShowcaseDeleter,
-            ShowcaseReader,
-            ShowcaseGatewayWithReaderAndDeleter,
-        ],
+        provides=ShowcaseGateway,
     )
     work_gateway = provide(
-        WorkGateway,
+        SQLWorkGateway,
         scope=Scope.REQUEST,
-        provides=AnyOf[
-            WorkReader,
-            WorkSaver,
-            WorkGatewayWithUpdaterAndReader,
-            WorkGatewayWithDeleterAndReader,
-        ],
+        provides=WorkGateway,
     )
-    chat_gateway = provide(
-        ChatGateway,
-        scope=Scope.REQUEST,
-        provides=AnyOf[
-            ChatSaver, ChatDeleter, ChatReader, ChatGatewayWithReaderAndDeleter
-        ],
-    )
+    chat_gateway = provide(SQLChatGateway, scope=Scope.REQUEST, provides=ChatGateway)
     chat_message_gateway = provide(
-        ChatMessageGateway,
-        scope=Scope.REQUEST,
-        provides=AnyOf[
-            ChatMessageSaver,
-            ChatMessageDeleter,
-            ChatMessageReader,
-            ChatMessageGatewayWithDeleterAndReader,
-        ],
+        SQLChatMessageGateway, scope=Scope.REQUEST, provides=ChatMessageGateway
     )
     register_user_interactor = provide(
         RegisterUserInteractor,
@@ -417,7 +333,7 @@ class AppProvider(Provider):
         scope=Scope.REQUEST,
     )
     default_photo_provider = provide(
-        DefaultPhotoGateway,
+        SQLDefaultPhotoGateway,
         scope=Scope.REQUEST,
-        provides=DefaultPhotoReader,
+        provides=DefaultPhotoGateway,
     )

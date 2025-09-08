@@ -1,14 +1,8 @@
-from typing import Protocol
-
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.application.interfaces.common.transaction import TransactionManager
-from redkeds.application.interfaces.like.like_gateway import LikeDeleter, LikeReader
+from redkeds.application.interfaces.like.like_gateway import LikeGateway
 from redkeds.domain.entities.like import LikeId
 from redkeds.domain.services.like_service import ensure_can_manage_like
-
-
-class LikeGateway(LikeDeleter, LikeReader, Protocol):
-    """Интерфейс для удаления лайка."""
 
 
 class DeleteLikeInteractor:

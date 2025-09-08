@@ -3,11 +3,11 @@ from redkeds.application.interfaces.common.file_gateway import FileManager
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.application.interfaces.common.transaction import TransactionManager
 from redkeds.application.interfaces.common.uuid_generator import UUIDGenerator
-from redkeds.application.interfaces.showcase.showcase_gateway import ShowcaseReader
+from redkeds.application.interfaces.showcase.showcase_gateway import ShowcaseGateway
 from redkeds.application.interfaces.showcase.work_gateway import (
-    WorkSaver,
+    WorkGateway,
 )
-from redkeds.application.interfaces.user.user_gateway import UserReader
+from redkeds.application.interfaces.user.user_gateway import UserGateway
 from redkeds.domain.entities.showcase import Work, WorkId
 
 
@@ -16,10 +16,10 @@ class CreateWorkInteractor:
 
     def __init__(
         self,
-        work_gateway: WorkSaver,
-        user_gateway: UserReader,
+        work_gateway: WorkGateway,
+        user_gateway: UserGateway,
         id_provider: IdProvider,
-        showcase_gateway: ShowcaseReader,
+        showcase_gateway: ShowcaseGateway,
         uuid_generator: UUIDGenerator,
         transaction_manager: TransactionManager,
         file_manager: FileManager,

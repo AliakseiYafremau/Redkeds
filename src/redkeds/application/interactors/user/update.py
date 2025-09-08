@@ -1,15 +1,9 @@
-from typing import Protocol
-
 from redkeds.application.dto.user import UpdateUserDTO
 from redkeds.application.interfaces.common.file_gateway import FileManager
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.application.interfaces.common.transaction import TransactionManager
-from redkeds.application.interfaces.user.user_gateway import UserReader, UserUpdater
+from redkeds.application.interfaces.user.user_gateway import UserGateway
 from redkeds.domain.entities.user import User
-
-
-class UserGateway(UserReader, UserUpdater, Protocol):
-    """Протокол, включающий в себя интерфейсы обновления и чтения пользователя."""
 
 
 class UpdateUserInteractor:

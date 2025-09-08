@@ -1,8 +1,8 @@
 from redkeds.application.dto.chat import ReadChatDTO, ReadChatMessageDTO
-from redkeds.application.interfaces.chat.chat_gateway import ChatReader
-from redkeds.application.interfaces.chat.chat_message_gateway import ChatMessageReader
+from redkeds.application.interfaces.chat.chat_gateway import ChatGateway
+from redkeds.application.interfaces.chat.chat_message_gateway import ChatMessageGateway
 from redkeds.application.interfaces.common.id_provider import IdProvider
-from redkeds.application.interfaces.user.user_gateway import UserReader
+from redkeds.application.interfaces.user.user_gateway import UserGateway
 from redkeds.domain.entities.chat import ChatId
 from redkeds.domain.services.chat_service import ensure_can_manage_chat
 
@@ -13,9 +13,9 @@ class ReadMessageInteractor:
     def __init__(
         self,
         id_provider: IdProvider,
-        user_gateway: UserReader,
-        chat_gateway: ChatReader,
-        message_gateway: ChatMessageReader,
+        user_gateway: UserGateway,
+        chat_gateway: ChatGateway,
+        message_gateway: ChatMessageGateway,
     ) -> None:
         self._id_provider = id_provider
         self._user_gateway = user_gateway

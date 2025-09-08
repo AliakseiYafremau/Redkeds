@@ -1,6 +1,6 @@
 from redkeds.application.dto.user import UserDTO
 from redkeds.application.interfaces.common.id_provider import IdProvider
-from redkeds.application.interfaces.user.user_gateway import UserReader
+from redkeds.application.interfaces.user.user_gateway import UserGateway
 
 
 class ReadUserInteractor:
@@ -8,7 +8,7 @@ class ReadUserInteractor:
 
     def __init__(
         self,
-        user_gateway: UserReader,
+        user_gateway: UserGateway,
         id_provider: IdProvider,
     ) -> None:
         self._user_gateway = user_gateway

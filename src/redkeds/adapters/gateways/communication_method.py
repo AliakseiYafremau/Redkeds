@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from redkeds.adapters.models import CommunicationMethodModel
 from redkeds.application.interfaces.communication_method.communication_method_gateway import (  # noqa: E501
-    CommunicationMethodReader,
+    CommunicationMethodGateway,
 )
 from redkeds.domain.entities.communication_method import (
     CommunicationMethod,
@@ -11,8 +11,8 @@ from redkeds.domain.entities.communication_method import (
 )
 
 
-class CommunicationMethodGateway(
-    CommunicationMethodReader,
+class SQLCommunicationMethodGateway(
+    CommunicationMethodGateway,
 ):
     """Gateway для работы со способами общения в базе данных."""
 

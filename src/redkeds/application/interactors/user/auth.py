@@ -1,6 +1,6 @@
 from redkeds.application.dto.user import LoginUserDTO
 from redkeds.application.interfaces.user.password_manager import PasswordHasher
-from redkeds.application.interfaces.user.user_gateway import UserReader
+from redkeds.application.interfaces.user.user_gateway import UserGateway
 from redkeds.domain.entities.user_id import UserId
 
 
@@ -9,7 +9,7 @@ class AuthUserInteractor:
 
     def __init__(
         self,
-        user_gateway: UserReader,
+        user_gateway: UserGateway,
         password_hasher: PasswordHasher,
     ) -> None:
         self._user_gateway = user_gateway

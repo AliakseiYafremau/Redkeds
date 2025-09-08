@@ -2,28 +2,17 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from redkeds.adapters.models import ChatMessageModel, ChatModel
-from redkeds.application.interfaces.chat.chat_gateway import (
-    ChatDeleter,
-    ChatReader,
-    ChatSaver,
-)
-from redkeds.application.interfaces.chat.chat_message_gateway import (
-    ChatMessageDeleter,
-    ChatMessageReader,
-    ChatMessageSaver,
-)
+from redkeds.application.interfaces.chat.chat_gateway import ChatGateway
+from redkeds.application.interfaces.chat.chat_message_gateway import ChatMessageGateway
 from redkeds.domain.entities.chat import Chat, ChatId, ChatMessage, ChatMessageId
 from redkeds.domain.entities.user_id import UserId
 
 
-class ChatGateway(ChatReader, ChatSaver, ChatDeleter):
-    """Gateway для работы с чатами."""
-
+class SQLChatGateway(ChatGateway):
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
     async def get_chat_by_id(self, chat_id: ChatId) -> Chat:
-        """Получает чат по id."""
         statement = select(ChatModel).where(ChatModel.id == chat_id)
         result = await self._session.execute(statement)
         chat_model = result.scalar_one_or_none()
@@ -36,7 +25,6 @@ class ChatGateway(ChatReader, ChatSaver, ChatDeleter):
         )
 
     async def get_user_chats(self, user_id: UserId) -> list[Chat]:
-        """Получает все чаты пользователя по его id."""
         statement = select(ChatModel).where(
             (ChatModel.user1_id == user_id) | (ChatModel.user2_id == user_id)
         )
@@ -52,7 +40,6 @@ class ChatGateway(ChatReader, ChatSaver, ChatDeleter):
         ]
 
     async def save_chat(self, chat: Chat) -> ChatId:
-        """Сохраняет чат в базе данных."""
         chat_model = ChatModel(
             id=chat.id,
             user1_id=chat.user1_id,
@@ -71,14 +58,11 @@ class ChatGateway(ChatReader, ChatSaver, ChatDeleter):
         await self._session.delete(chat_model)
 
 
-class ChatMessageGateway(ChatMessageReader, ChatMessageSaver, ChatMessageDeleter):
-    """Gateway для работы с сообщениями чата."""
-
+class SQLChatMessageGateway(ChatMessageGateway):
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
     async def get_chat_message_by_id(self, message_id: ChatMessageId) -> ChatMessage:
-        """Получает сообщение чата по id."""
         statement = select(ChatMessageModel).where(ChatMessageModel.id == message_id)
         result = await self._session.execute(statement)
         message_model = result.scalar_one_or_none()
@@ -93,7 +77,6 @@ class ChatMessageGateway(ChatMessageReader, ChatMessageSaver, ChatMessageDeleter
         )
 
     async def get_chat_messages_by_chat(self, chat_id: ChatId) -> list[ChatMessage]:
-        """Получает все сообщения чата по id чата."""
         statement = select(ChatMessageModel).where(ChatMessageModel.chat_id == chat_id)
         result = await self._session.execute(statement)
         message_models = result.scalars().all()
@@ -109,7 +92,6 @@ class ChatMessageGateway(ChatMessageReader, ChatMessageSaver, ChatMessageDeleter
         ]
 
     async def save_chat_message(self, message: ChatMessage) -> ChatMessageId:
-        """Сохраняет сообщение чата в базе данных."""
         message_model = ChatMessageModel(
             id=message.id,
             chat_id=message.chat_id,
@@ -121,7 +103,6 @@ class ChatMessageGateway(ChatMessageReader, ChatMessageSaver, ChatMessageDeleter
         return message.id
 
     async def delete_chat_message(self, message_id: ChatMessageId) -> None:
-        """Удаляет сообщение чата по id."""
         statement = select(ChatMessageModel).where(ChatMessageModel.id == message_id)
         result = await self._session.execute(statement)
         message_model = result.scalar_one_or_none()

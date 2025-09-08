@@ -1,7 +1,7 @@
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.application.interfaces.common.transaction import TransactionManager
 from redkeds.application.interfaces.common.uuid_generator import UUIDGenerator
-from redkeds.application.interfaces.like.like_gateway import LikeSaver
+from redkeds.application.interfaces.like.like_gateway import LikeGateway
 from redkeds.domain.entities.like import Like, LikeId
 from redkeds.domain.entities.showcase import ShowcaseId
 
@@ -12,7 +12,7 @@ class AddLikeInteractor:
     def __init__(
         self,
         id_provider: IdProvider,
-        like_gateway: LikeSaver,
+        like_gateway: LikeGateway,
         transaction_manager: TransactionManager,
         uuid_generator: UUIDGenerator,
     ) -> None:

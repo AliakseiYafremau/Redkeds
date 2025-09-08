@@ -1,8 +1,8 @@
 from redkeds.application.dto.showcase import ReadShowcaseDTO
 from redkeds.application.dto.work import ReadWorkDTO
 from redkeds.application.interfaces.common.id_provider import IdProvider
-from redkeds.application.interfaces.showcase.showcase_gateway import ShowcaseReader
-from redkeds.application.interfaces.showcase.work_gateway import WorkReader
+from redkeds.application.interfaces.showcase.showcase_gateway import ShowcaseGateway
+from redkeds.application.interfaces.showcase.work_gateway import WorkGateway
 from redkeds.domain.entities.city import CityId
 from redkeds.domain.entities.communication_method import CommunicationMethodId
 from redkeds.domain.entities.showcase import WorkId
@@ -19,8 +19,8 @@ class ReadRecommendationFeed:
     def __init__(
         self,
         id_provider: IdProvider,
-        showcase_gateway: ShowcaseReader,
-        work_gateway: WorkReader,
+        showcase_gateway: ShowcaseGateway,
+        work_gateway: WorkGateway,
     ) -> None:
         self._id_provider = id_provider
         self._showcase_gateway = showcase_gateway

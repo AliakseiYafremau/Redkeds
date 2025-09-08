@@ -1,6 +1,6 @@
 from redkeds.application.dto.communication_method import CommunicationMethodDTO
 from redkeds.application.interfaces.communication_method.communication_method_gateway import (  # noqa: E501
-    CommunicationMethodReader,
+    CommunicationMethodGateway,
 )
 
 
@@ -9,7 +9,7 @@ class ReadCommunicationMethodsInteractor:
 
     def __init__(
         self,
-        communication_method_gateway: CommunicationMethodReader,
+        communication_method_gateway: CommunicationMethodGateway,
     ) -> None:
         self._communication_method_gateway = communication_method_gateway
 

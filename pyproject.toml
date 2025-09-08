@@ -75,6 +75,7 @@ max-args = 10
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
+    "D",
     "D100", # Не нужно писать docstring для модулей
     "D104", # Не нужно писать docstring для пакетов
     "D107", # Не нужно писать docstring для __init__()

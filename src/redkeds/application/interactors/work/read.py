@@ -1,5 +1,5 @@
 from redkeds.application.dto.work import ReadWorkDTO
-from redkeds.application.interfaces.showcase.work_gateway import WorkReader
+from redkeds.application.interfaces.showcase.work_gateway import WorkGateway
 from redkeds.domain.entities.showcase import ShowcaseId, WorkId
 
 
@@ -8,7 +8,7 @@ class ReadWorkInteractor:
 
     def __init__(
         self,
-        work_gateway: WorkReader,
+        work_gateway: WorkGateway,
     ) -> None:
         self._work_gateway = work_gateway
 
@@ -29,7 +29,7 @@ class ReadAllWorksInteractor:
 
     def __init__(
         self,
-        work_gateway: WorkReader,
+        work_gateway: WorkGateway,
     ) -> None:
         self._work_gateway = work_gateway
 

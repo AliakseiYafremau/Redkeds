@@ -4,17 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from redkeds.adapters.exceptions import TargetNotFoundError
 from redkeds.adapters.mappers import map_model_to_work, map_work_to_model
 from redkeds.adapters.models import ShowcaseModel, UserModel, WorkModel
-from redkeds.application.interfaces.showcase.showcase_gateway import (
-    ShowcaseDeleter,
-    ShowcaseReader,
-    ShowcaseSaver,
-)
-from redkeds.application.interfaces.showcase.work_gateway import (
-    WorkDeleter,
-    WorkReader,
-    WorkSaver,
-    WorkUpdater,
-)
+from redkeds.application.interfaces.showcase.showcase_gateway import ShowcaseGateway
+from redkeds.application.interfaces.showcase.work_gateway import WorkGateway
 from redkeds.domain.entities.city import CityId
 from redkeds.domain.entities.communication_method import CommunicationMethodId
 from redkeds.domain.entities.showcase import Showcase, ShowcaseId, Work, WorkId
@@ -23,18 +14,11 @@ from redkeds.domain.entities.tag import TagId
 from redkeds.domain.entities.user_id import UserId
 
 
-class ShowcaseGateway(
-    ShowcaseReader,
-    ShowcaseSaver,
-    ShowcaseDeleter,
-):
-    """Gateway для работы с витринами."""
-
+class SQLShowcaseGateway(ShowcaseGateway):
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
     async def get_showcase_by_user_id(self, user_id: UserId) -> Showcase:
-        """Получает информацию о витрине по ID пользователя."""
         user_statement = select(UserModel).where(UserModel.id == user_id)
         result = await self._session.execute(user_statement)
         user_model = result.scalar_one_or_none()
@@ -54,7 +38,6 @@ class ShowcaseGateway(
         return Showcase(id=ShowcaseId(showcase_model.id))
 
     async def save_showcase(self, showcase: Showcase) -> ShowcaseId:
-        """Сохраняет витрину в базе данных."""
         showcase_model = ShowcaseModel(id=showcase.id)
         self._session.add(showcase_model)
         return showcase.id
@@ -67,11 +50,11 @@ class ShowcaseGateway(
         tag_ids: list[TagId] | None = None,
         communication_method_ids: list[CommunicationMethodId] | None = None,
     ) -> list[Showcase]:
-        """Получает все витрины, игнорируя exclude_showcase (если задан).
+        """Retrieves all showcases, ignoring exclude_showcase (if specified).
 
-        Сортирует витрины по совпадениям с параметрами specialization_ids,
+        Sorts showcases by matches with the parameters specialization_ids,
         city_ids, tag_ids, communication_method_ids:
-        сначала идут витрины с совпадениями, затем остальные.
+        showcases with matches come first, followed by the rest.
         """
         if exclude_showcase is not None:
             statement = select(ShowcaseModel).where(
@@ -118,7 +101,6 @@ class ShowcaseGateway(
         return [Showcase(id=ShowcaseId(model.id)) for model in showcase_models]
 
     async def update_showcase(self, showcase: Showcase) -> None:
-        """Обновляет данные витрины."""
         statement = select(ShowcaseModel).where(ShowcaseModel.id == showcase.id)
         result = await self._session.execute(statement)
         showcase_model = result.scalar_one_or_none()
@@ -127,7 +109,6 @@ class ShowcaseGateway(
         # Здесь добавьте обновление нужных полей витрины, если они появятся
 
     async def delete_showcase(self, showcase_id: ShowcaseId) -> None:
-        """Удаляет обьект витрины."""
         statement = select(ShowcaseModel).where(ShowcaseModel.id == showcase_id)
         result = await self._session.execute(statement)
         showcase_model = result.scalar_one_or_none()
@@ -136,19 +117,11 @@ class ShowcaseGateway(
         await self._session.delete(showcase_model)
 
 
-class WorkGateway(
-    WorkSaver,
-    WorkReader,
-    WorkUpdater,
-    WorkDeleter,
-):
-    """Gateway для работы с работами витрины."""
-
+class SQLWorkGateway(WorkGateway):
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
     async def get_work_by_id(self, work_id: WorkId) -> Work:
-        """Получает информацию о работе витрины по ID работы."""
         statement = select(WorkModel).where(WorkModel.id == work_id)
         result = await self._session.execute(statement)
         work_model = result.scalar_one_or_none()
@@ -157,20 +130,17 @@ class WorkGateway(
         return map_model_to_work(work_model)
 
     async def get_showcase_works_by_id(self, showcase_id: ShowcaseId) -> list[Work]:
-        """Получает информацию о всех работах витрины по ID."""
         statement = select(WorkModel).where(WorkModel.showcase_id == showcase_id)
         result = await self._session.execute(statement)
         work_models = result.scalars().all()
         return [map_model_to_work(model) for model in work_models]
 
     async def save_work(self, work: Work) -> WorkId:
-        """Сохраняет информацию о работе витрины."""
         work_model = map_work_to_model(work)
         self._session.add(work_model)
         return work.id
 
     async def update_work(self, work: Work) -> None:
-        """Обновляет обьект работы."""
         statement = select(WorkModel).where(WorkModel.id == work.id)
         result = await self._session.execute(statement)
         work_model = result.scalar_one_or_none()
@@ -182,7 +152,6 @@ class WorkGateway(
         work_model.showcase_id = work.showcase_id
 
     async def delete_work(self, work_id: WorkId) -> None:
-        """Удаление работы по ID."""
         statement = select(WorkModel).where(WorkModel.id == work_id)
         result = await self._session.execute(statement)
         work_model = result.scalar_one_or_none()

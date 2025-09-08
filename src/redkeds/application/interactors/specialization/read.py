@@ -1,6 +1,6 @@
 from redkeds.application.dto.specialization import SpecializationDTO
 from redkeds.application.interfaces.specialization.specialization_gateway import (
-    SpecializationReader,
+    SpecializationGateway,
 )
 
 
@@ -9,7 +9,7 @@ class ReadSpecializationsInteractor:
 
     def __init__(
         self,
-        specialization_gateway: SpecializationReader,
+        specialization_gateway: SpecializationGateway,
     ) -> None:
         self._specialization_gateway = specialization_gateway
 

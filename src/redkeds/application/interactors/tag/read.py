@@ -1,5 +1,5 @@
 from redkeds.application.dto.tag import TagDTO
-from redkeds.application.interfaces.tag.tag_gateway import TagReader
+from redkeds.application.interfaces.tag.tag_gateway import TagGateway
 
 
 class ReadTagsInteractor:
@@ -7,7 +7,7 @@ class ReadTagsInteractor:
 
     def __init__(
         self,
-        tag_gateway: TagReader,
+        tag_gateway: TagGateway,
     ) -> None:
         self._tag_gateway = tag_gateway
 

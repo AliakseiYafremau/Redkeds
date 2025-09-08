@@ -4,37 +4,13 @@ from redkeds.domain.entities.user import User
 from redkeds.domain.entities.user_id import UserId
 
 
-class UserSaver(Protocol):
-    """Интерфейс для сохранения пользователя."""
+class UserGateway(Protocol):
+    async def save_user(self, user: User) -> None: ...
 
-    async def save_user(self, user: User) -> None:
-        """Сохраняет обьект пользователя."""
-        ...
+    async def get_user_by_id(self, user_id: UserId) -> User: ...
 
+    async def get_user_by_email(self, email: str) -> User: ...
 
-class UserReader(Protocol):
-    """Интерфейс для чтения пользователя."""
+    async def update_user(self, user: User) -> None: ...
 
-    async def get_user_by_id(self, user_id: UserId) -> User:
-        """Получает пользователя по ID."""
-        ...
-
-    async def get_user_by_email(self, email: str) -> User:
-        """Получает пользователя по почте."""
-        ...
-
-
-class UserUpdater(Protocol):
-    """Интерфейс для обновления пользователя."""
-
-    async def update_user(self, user: User) -> None:
-        """Обновляет обьект пользователя."""
-        ...
-
-
-class UserDeleter(Protocol):
-    """Интерфейс для удаления пользователя."""
-
-    async def delete_user(self, user_id: UserId) -> None:
-        """Удаляет обьект пользователя."""
-        ...
+    async def delete_user(self, user_id: UserId) -> None: ...

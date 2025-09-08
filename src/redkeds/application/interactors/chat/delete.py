@@ -1,13 +1,7 @@
-from typing import Protocol
-
-from redkeds.application.interfaces.chat.chat_gateway import ChatDeleter, ChatReader
+from redkeds.application.interfaces.chat.chat_gateway import ChatGateway
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.domain.entities.chat import ChatId
 from redkeds.domain.services.chat_service import ensure_can_manage_chat
-
-
-class ChatGateway(ChatDeleter, ChatReader, Protocol):
-    """Интерфейс для удаления и чтения чата."""
 
 
 class DeleteChatInteractor:

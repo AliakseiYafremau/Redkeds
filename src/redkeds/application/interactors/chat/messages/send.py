@@ -1,17 +1,14 @@
 from datetime import UTC, datetime
 
 from redkeds.application.dto.chat import NewChatMessageDTO
-from redkeds.application.interfaces.chat.chat_gateway import ChatReader
-from redkeds.application.interfaces.chat.chat_message_gateway import ChatMessageSaver
+from redkeds.application.interfaces.chat.chat_gateway import ChatGateway
+from redkeds.application.interfaces.chat.chat_message_gateway import ChatMessageGateway
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.application.interfaces.common.transaction import TransactionManager
 from redkeds.application.interfaces.common.uuid_generator import UUIDGenerator
-from redkeds.application.interfaces.user.user_gateway import UserReader
+from redkeds.application.interfaces.user.user_gateway import UserGateway
 from redkeds.domain.entities.chat import ChatMessage, ChatMessageId
 from redkeds.domain.services.chat_service import ensure_can_manage_chat
-from redkeds.main.logs import get_logger
-
-logger = get_logger(__name__)
 
 
 class SendChatMessageInteractor:
@@ -20,9 +17,9 @@ class SendChatMessageInteractor:
     def __init__(
         self,
         id_provider: IdProvider,
-        user_gateway: UserReader,
-        chat_gateway: ChatReader,
-        message_gateway: ChatMessageSaver,
+        user_gateway: UserGateway,
+        chat_gateway: ChatGateway,
+        message_gateway: ChatMessageGateway,
         uuid_generator: UUIDGenerator,
         transaction_manager: TransactionManager,
     ) -> None:
@@ -40,8 +37,6 @@ class SendChatMessageInteractor:
         """Добавляет сообщение в чат."""
         user_id = self._id_provider()
         chat = await self._chat_gateway.get_chat_by_id(data.chat_id)
-        logger.info(chat.user1_id)
-        logger.info(user_id)
         ensure_can_manage_chat(chat, user_id)
         message_id = ChatMessageId(self._uuid_generator())
         message = ChatMessage(

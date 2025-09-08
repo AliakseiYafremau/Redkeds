@@ -3,25 +3,9 @@ from typing import Protocol
 from redkeds.domain.entities.skip import Skip, SkipId
 
 
-class SkipSaver(Protocol):
-    """Интерфейс для добавления скипов."""
+class SkipGateway(Protocol):
+    async def save_skip(self, skip: Skip) -> SkipId: ...
 
-    async def save_skip(self, skip: Skip) -> SkipId:
-        """Добволяет скип витрине от пользователя."""
-        ...
+    async def delete_skip(self, skip_id: SkipId) -> None: ...
 
-
-class SkipDeleter(Protocol):
-    """Интерфейс для удаления скипов."""
-
-    async def delete_skip(self, skip_id: SkipId) -> None:
-        """Удаляет скип витрины от пользователя."""
-        ...
-
-
-class SkipReader(Protocol):
-    """Интерфейс для получения скипа."""
-
-    async def get_skip_by_id(self, skip_id: SkipId) -> Skip:
-        """Получает скип по ID."""
-        ...
+    async def get_skip_by_id(self, skip_id: SkipId) -> Skip: ...

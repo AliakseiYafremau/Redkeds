@@ -2,20 +2,17 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from redkeds.adapters.models import SkipModel
-from redkeds.application.interfaces.skip.skip_gateway import SkipDeleter, SkipSaver
+from redkeds.application.interfaces.skip.skip_gateway import SkipGateway
 from redkeds.domain.entities.showcase import ShowcaseId
 from redkeds.domain.entities.skip import Skip, SkipId
 from redkeds.domain.entities.user_id import UserId
 
 
-class SkipGateway(SkipSaver, SkipDeleter):
-    """Gateway для работы со скипами."""
-
+class SQLSkipGateway(SkipGateway):
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
     async def get_skip_by_id(self, skip_id: SkipId) -> Skip:
-        """Получает скип по id."""
         statement = select(SkipModel).where(SkipModel.id == skip_id)
         result = await self._session.execute(statement)
         skip_model = result.scalar_one_or_none()
@@ -28,7 +25,6 @@ class SkipGateway(SkipSaver, SkipDeleter):
         )
 
     async def save_skip(self, skip: Skip) -> SkipId:
-        """Сохраняет скип в базе данных."""
         skip_model = SkipModel(
             id=skip.id,
             user_id=skip.user_id,
@@ -38,7 +34,6 @@ class SkipGateway(SkipSaver, SkipDeleter):
         return skip.id
 
     async def delete_skip(self, skip_id: SkipId) -> None:
-        """Удаляет скип по id."""
         statement = select(SkipModel).where(SkipModel.id == skip_id)
         result = await self._session.execute(statement)
         skip_model = result.scalar_one_or_none()

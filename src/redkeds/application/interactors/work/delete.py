@@ -1,16 +1,12 @@
-from typing import Protocol
-
 from redkeds.application.interfaces.common.file_gateway import FileManager
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.application.interfaces.common.transaction import TransactionManager
-from redkeds.application.interfaces.showcase.showcase_gateway import ShowcaseReader
-from redkeds.application.interfaces.showcase.work_gateway import WorkDeleter, WorkReader
+from redkeds.application.interfaces.showcase.showcase_gateway import ShowcaseGateway
+from redkeds.application.interfaces.showcase.work_gateway import (
+    WorkGateway,
+)
 from redkeds.domain.entities.showcase import WorkId
 from redkeds.domain.services.work_service import ensure_can_manage_work
-
-
-class WorkGateway(WorkReader, WorkDeleter, Protocol):
-    """Протокол, включающий в себя интерфейсы для удаления и чтения работы."""
 
 
 class DeleteWorkInteractor:
@@ -19,7 +15,7 @@ class DeleteWorkInteractor:
     def __init__(
         self,
         work_gateway: WorkGateway,
-        showcase_gateway: ShowcaseReader,
+        showcase_gateway: ShowcaseGateway,
         id_provider: IdProvider,
         transaction_manager: TransactionManager,
         file_manager: FileManager,

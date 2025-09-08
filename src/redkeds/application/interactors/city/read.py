@@ -1,6 +1,6 @@
 from redkeds.application.dto.city import CityDTO
 from redkeds.application.interfaces.city.city_gateway import (
-    CityReader,
+    CityGateway,
 )
 
 
@@ -9,7 +9,7 @@ class ReadCitiesInteractor:
 
     def __init__(
         self,
-        city_gateway: CityReader,
+        city_gateway: CityGateway,
     ) -> None:
         self._city_gateway = city_gateway
 

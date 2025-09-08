@@ -2,20 +2,17 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from redkeds.adapters.models import LikeModel
-from redkeds.application.interfaces.like.like_gateway import LikeDeleter, LikeSaver
+from redkeds.application.interfaces.like.like_gateway import LikeGateway
 from redkeds.domain.entities.like import Like, LikeId
 from redkeds.domain.entities.showcase import ShowcaseId
 from redkeds.domain.entities.user_id import UserId
 
 
-class LikeGateway(LikeSaver, LikeDeleter):
-    """Gateway для работы с лайками."""
-
+class SQLLikeGateway(LikeGateway):
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
     async def get_like_by_id(self, like_id: LikeId) -> Like:
-        """Получает лайк по id."""
         statement = select(LikeModel).where(LikeModel.id == like_id)
         result = await self._session.execute(statement)
         like_model = result.scalar_one_or_none()
@@ -28,7 +25,6 @@ class LikeGateway(LikeSaver, LikeDeleter):
         )
 
     async def save_like(self, like: Like) -> LikeId | None:
-        """Сохраняет лайк в базе данных."""
         like_model = LikeModel(
             id=like.id,
             user_id=like.user_id,
@@ -38,7 +34,6 @@ class LikeGateway(LikeSaver, LikeDeleter):
         return like.id
 
     async def delete_like(self, like_id: LikeId) -> None:
-        """Удаляет лайк по id."""
         statement = select(LikeModel).where(LikeModel.id == like_id)
         result = await self._session.execute(statement)
         like_model = result.scalar_one_or_none()

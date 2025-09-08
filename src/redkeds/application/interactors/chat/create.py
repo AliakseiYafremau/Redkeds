@@ -1,4 +1,4 @@
-from redkeds.application.interfaces.chat.chat_gateway import ChatSaver
+from redkeds.application.interfaces.chat.chat_gateway import ChatGateway
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.application.interfaces.common.transaction import TransactionManager
 from redkeds.application.interfaces.common.uuid_generator import UUIDGenerator
@@ -12,7 +12,7 @@ class CreateChatInteractor:
     def __init__(
         self,
         id_provider: IdProvider,
-        chat_gateway: ChatSaver,
+        chat_gateway: ChatGateway,
         uuid_generator: UUIDGenerator,
         transaction_manager: TransactionManager,
     ) -> None:

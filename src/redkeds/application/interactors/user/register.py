@@ -1,21 +1,17 @@
-from typing import Protocol
-
 from redkeds.application.dto.user import NewUserDTO
 from redkeds.application.interfaces.common.file_gateway import FileManager
 from redkeds.application.interfaces.common.transaction import TransactionManager
 from redkeds.application.interfaces.common.uuid_generator import UUIDGenerator
-from redkeds.application.interfaces.showcase.showcase_gateway import ShowcaseSaver
-from redkeds.application.interfaces.user.default_photo_gateway import DefaultPhotoReader
+from redkeds.application.interfaces.showcase.showcase_gateway import ShowcaseGateway
+from redkeds.application.interfaces.user.default_photo_gateway import (
+    DefaultPhotoGateway,
+)
 from redkeds.application.interfaces.user.password_manager import PasswordHasher
-from redkeds.application.interfaces.user.user_gateway import UserReader, UserSaver
+from redkeds.application.interfaces.user.user_gateway import UserGateway
 from redkeds.domain.entities.showcase import Showcase, ShowcaseId
 from redkeds.domain.entities.user import User
 from redkeds.domain.entities.user_id import UserId
 from redkeds.domain.services.password import validate_password
-
-
-class UserGateway(UserSaver, UserReader, Protocol):
-    """Интерфейс сохранения и чтения пользователя."""
 
 
 class RegisterUserInteractor:
@@ -24,11 +20,11 @@ class RegisterUserInteractor:
     def __init__(
         self,
         user_gateway: UserGateway,
-        showcase_gateway: ShowcaseSaver,
+        showcase_gateway: ShowcaseGateway,
         uuid_generator: UUIDGenerator,
         password_hasher: PasswordHasher,
         file_manager: FileManager,
-        default_photo_reader: DefaultPhotoReader,
+        default_photo_reader: DefaultPhotoGateway,
         transaction_manager: TransactionManager,
     ) -> None:
         self._user_gateway = user_gateway

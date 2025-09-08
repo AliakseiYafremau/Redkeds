@@ -1,5 +1,5 @@
 from redkeds.application.dto.chat import ReadShortChatDTO
-from redkeds.application.interfaces.chat.chat_gateway import ChatReader
+from redkeds.application.interfaces.chat.chat_gateway import ChatGateway
 from redkeds.application.interfaces.common.id_provider import IdProvider
 
 
@@ -8,7 +8,7 @@ class ReadUserChatInteractor:
 
     def __init__(
         self,
-        chat_gateway: ChatReader,
+        chat_gateway: ChatGateway,
         id_provider: IdProvider,
     ) -> None:
         self._chat_gateway = chat_gateway

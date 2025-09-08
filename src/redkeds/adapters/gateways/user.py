@@ -10,24 +10,15 @@ from redkeds.adapters.models import (
     UserSpecializationModel,
     UserTagModel,
 )
-from redkeds.application.interfaces.user.user_gateway import (
-    UserDeleter,
-    UserReader,
-    UserSaver,
-    UserUpdater,
+from redkeds.application.interfaces.user.default_photo_gateway import (
+    DefaultPhotoGateway,
 )
+from redkeds.application.interfaces.user.user_gateway import UserGateway
 from redkeds.domain.entities.file_id import FileId
 from redkeds.domain.entities.user import User, UserId
 
 
-class UserGateway(
-    UserSaver,
-    UserUpdater,
-    UserReader,
-    UserDeleter,
-):
-    """Gateway для работы с данными пользователя."""
-
+class SQLUserGateway(UserGateway):
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
@@ -35,7 +26,6 @@ class UserGateway(
         self,
         user: User,
     ) -> None:
-        """Сохраняет пользователя в базе данных."""
         user_model = map_user_to_model(user)
         self._session.add(user_model)
         # Сохраняем связи с тегами
@@ -50,7 +40,6 @@ class UserGateway(
             self._session.add(user_spec)
 
     async def get_user_by_id(self, user_id: UserId) -> User:
-        """Получает пользователя по id."""
         statement = (
             select(UserModel)
             .where(UserModel.id == user_id)
@@ -67,7 +56,6 @@ class UserGateway(
         return map_model_to_user(user_model)
 
     async def get_user_by_email(self, email: str) -> User:
-        """Получает пользователя по имени."""
         statement = (
             select(UserModel)
             .where(UserModel.email == email)
@@ -84,7 +72,6 @@ class UserGateway(
         return map_model_to_user(user_model)
 
     async def update_user(self, user: User) -> None:
-        """Обновляет данные пользователя."""
         statement = select(UserModel).where(UserModel.id == user.id)
         result = await self._session.execute(statement)
         user_model = result.scalar_one()
@@ -126,7 +113,6 @@ class UserGateway(
             self._session.add(user_spec)
 
     async def delete_user(self, user_id: UserId) -> None:
-        """Удаляет пользователя и все его связи с тегами и специализациями."""
         statement = select(UserModel).where(UserModel.id == user_id)
         result = await self._session.execute(statement)
         user_model = result.scalar_one_or_none()
@@ -147,14 +133,11 @@ class UserGateway(
         await self._session.delete(user_model)
 
 
-class DefaultPhotoGateway:
-    """Gateway для работы с фото по умолчанию."""
-
+class SQLDefaultPhotoGateway(DefaultPhotoGateway):
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
     async def get_default_photos(self) -> list[FileId]:
-        """Получает URL фото по умолчанию."""
         statement = select(DefaultPhotoModel)
         result = await self._session.execute(statement)
         default_photos = result.scalars().all()

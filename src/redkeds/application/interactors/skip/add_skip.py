@@ -1,7 +1,7 @@
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.application.interfaces.common.transaction import TransactionManager
 from redkeds.application.interfaces.common.uuid_generator import UUIDGenerator
-from redkeds.application.interfaces.skip.skip_gateway import SkipSaver
+from redkeds.application.interfaces.skip.skip_gateway import SkipGateway
 from redkeds.domain.entities.showcase import ShowcaseId
 from redkeds.domain.entities.skip import Skip, SkipId
 
@@ -12,7 +12,7 @@ class AddSkipInteractor:
     def __init__(
         self,
         id_provider: IdProvider,
-        skip_gateway: SkipSaver,
+        skip_gateway: SkipGateway,
         transaction_manager: TransactionManager,
         uuid_generator: UUIDGenerator,
     ) -> None:

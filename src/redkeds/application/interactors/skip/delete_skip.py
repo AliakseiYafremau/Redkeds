@@ -1,17 +1,8 @@
-from typing import Protocol
-
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.application.interfaces.common.transaction import TransactionManager
-from redkeds.application.interfaces.skip.skip_gateway import SkipDeleter, SkipReader
+from redkeds.application.interfaces.skip.skip_gateway import SkipGateway
 from redkeds.domain.entities.skip import SkipId
 from redkeds.domain.services.skip_service import ensure_can_manage_skip
-from redkeds.main.logs import get_logger
-
-logger = get_logger(__name__)
-
-
-class SkipGateway(SkipDeleter, SkipReader, Protocol):
-    """Интерфейс для удаления скипа."""
 
 
 class DeleteSkipInteractor:
@@ -31,8 +22,6 @@ class DeleteSkipInteractor:
         """Удаляет лайк."""
         user_id = self._id_provider()
         skip = await self._skip_gateway.get_skip_by_id(skip_id)
-        logger.info(skip.user_id)
-        logger.info(user_id)
         ensure_can_manage_skip(skip, user_id)
         await self._skip_gateway.delete_skip(skip_id)
         await self._transaction_manager.commit()

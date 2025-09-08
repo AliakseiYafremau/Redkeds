@@ -4,8 +4,8 @@ from redkeds.domain.entities.user import UserId
 
 
 class IdProvider(Protocol):
-    """Интерфейс для получения идентификатора."""
+    """Manage ID of users."""
 
     def __call__(self) -> UserId:
-        """Возвращает ID пользователя."""
+        """Return the ID of the current user."""
         ...

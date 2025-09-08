@@ -1,21 +1,10 @@
-from typing import Protocol
-
 from redkeds.application.interfaces.common.file_gateway import FileManager
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.application.interfaces.common.transaction import TransactionManager
 from redkeds.application.interfaces.showcase.showcase_gateway import (
-    ShowcaseDeleter,
-    ShowcaseReader,
+    ShowcaseGateway,
 )
-from redkeds.application.interfaces.user.user_gateway import UserDeleter, UserReader
-
-
-class ShowcaseGateway(ShowcaseReader, ShowcaseDeleter, Protocol):
-    """Интерфейс чтения и удаления витрины."""
-
-
-class UserGateway(UserDeleter, UserReader, Protocol):
-    """Интерфейс чтения и удаления витрины."""
+from redkeds.application.interfaces.user.user_gateway import UserGateway
 
 
 class DeleteUserInteractor:

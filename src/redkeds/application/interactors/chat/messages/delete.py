@@ -1,9 +1,6 @@
-from typing import Protocol
-
-from redkeds.application.interfaces.chat.chat_gateway import ChatReader
+from redkeds.application.interfaces.chat.chat_gateway import ChatGateway
 from redkeds.application.interfaces.chat.chat_message_gateway import (
-    ChatMessageDeleter,
-    ChatMessageReader,
+    ChatMessageGateway,
 )
 from redkeds.application.interfaces.common.id_provider import IdProvider
 from redkeds.domain.entities.chat import ChatMessageId
@@ -13,17 +10,13 @@ from redkeds.domain.services.chat_service import (
 )
 
 
-class ChatMessageGateway(ChatMessageDeleter, ChatMessageReader, Protocol):
-    """Интерфейс удаления и чтения сообщения."""
-
-
 class DeleteChatMessageInteractor:
     """Интерактор для удаления сообщения."""
 
     def __init__(
         self,
         id_provider: IdProvider,
-        chat_gateway: ChatReader,
+        chat_gateway: ChatGateway,
         message_gateway: ChatMessageGateway,
     ) -> None:
         self._id_provider = id_provider
