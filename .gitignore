@@ -9,6 +9,8 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Environment variables
 .env
 
 # Logs
@@ -17,8 +19,11 @@ wheels/
 # Pycharm
 .idea/
 
+# VSCode
+.vscode/
+
 # Media
-/media
+media/
 
 # VertualEnv
 .venv/

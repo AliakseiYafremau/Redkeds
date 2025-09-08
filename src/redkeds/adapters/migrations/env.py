@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from redkeds.adapters.database import build_database_url
 from redkeds.adapters.models import Base
-from redkeds.config import load_postgres_config
+from redkeds.main.config import load_postgres_config
 
 
 def get_database_url() -> str:

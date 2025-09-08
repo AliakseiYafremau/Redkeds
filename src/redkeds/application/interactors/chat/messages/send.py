@@ -9,7 +9,7 @@ from redkeds.application.interfaces.common.uuid_generator import UUIDGenerator
 from redkeds.application.interfaces.user.user_gateway import UserReader
 from redkeds.domain.entities.chat import ChatMessage, ChatMessageId
 from redkeds.domain.services.chat_service import ensure_can_manage_chat
-from redkeds.logs import get_logger
+from redkeds.main.logs import get_logger
 
 logger = get_logger(__name__)
 

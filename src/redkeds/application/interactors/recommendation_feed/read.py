@@ -8,7 +8,7 @@ from redkeds.domain.entities.communication_method import CommunicationMethodId
 from redkeds.domain.entities.showcase import WorkId
 from redkeds.domain.entities.specialization import SpecializationId
 from redkeds.domain.entities.tag import TagId
-from redkeds.logs import get_logger
+from redkeds.main.logs import get_logger
 
 logger = get_logger(__name__)
 

@@ -126,7 +126,7 @@ from redkeds.application.interfaces.user.user_gateway import (
     UserSaver,
     UserUpdater,
 )
-from redkeds.config import (
+from redkeds.main.config import (
     MediaConfig,
     PostgresConfig,
     TokenConfig,

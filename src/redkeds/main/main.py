@@ -7,7 +7,7 @@ from fastapi import Depends, FastAPI
 from fastapi.security import APIKeyHeader
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from redkeds.ioc import AppProvider
+from redkeds.main.ioc import AppProvider
 from redkeds.presentation.exception_handlers import setup_exception_handlers
 from redkeds.presentation.routers.admin_panel import connect_admin_panel
 from redkeds.presentation.routers.auth import auth_router
@@ -69,4 +69,4 @@ def get_app() -> FastAPI:
 
 def run() -> None:
     """Запускает приложение."""
-    uvicorn.run("redkeds.main:get_app", reload=True, factory=True)
+    uvicorn.run("redkeds.main.main:get_app", reload=True, factory=True)

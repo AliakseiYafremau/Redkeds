@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.scripts]
-run = "redkeds.main:run"
+run = "redkeds.main.main:run"
 
 [build-system]
 requires = ["hatchling"]

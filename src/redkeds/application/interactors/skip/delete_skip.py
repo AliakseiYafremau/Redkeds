@@ -5,7 +5,7 @@ from redkeds.application.interfaces.common.transaction import TransactionManager
 from redkeds.application.interfaces.skip.skip_gateway import SkipDeleter, SkipReader
 from redkeds.domain.entities.skip import SkipId
 from redkeds.domain.services.skip_service import ensure_can_manage_skip
-from redkeds.logs import get_logger
+from redkeds.main.logs import get_logger
 
 logger = get_logger(__name__)
 
