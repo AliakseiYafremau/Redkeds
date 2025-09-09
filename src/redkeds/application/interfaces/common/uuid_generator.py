@@ -4,8 +4,8 @@ from uuid import UUID
 
 
 class UUIDGenerator(Protocol):
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def __call__() -> UUID:
         """Generate a new UUID."""
         raise NotImplementedError
