@@ -33,3 +33,6 @@ media/
 .mypy_cache/
 .pytest_cache/
 .ruff_cache/
+
+# Tests
+htmlcov/

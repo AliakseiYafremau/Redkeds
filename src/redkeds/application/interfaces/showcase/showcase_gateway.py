@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import Protocol
 
 from redkeds.domain.entities.city import CityId
@@ -9,8 +10,11 @@ from redkeds.domain.entities.user_id import UserId
 
 
 class ShowcaseGateway(Protocol):
-    async def get_showcase_by_user_id(self, user_id: UserId) -> Showcase: ...
+    @abstractmethod
+    async def get_showcase_by_user_id(self, user_id: UserId) -> Showcase:
+        raise NotImplementedError
 
+    @abstractmethod
     async def get_showcases(
         self,
         exclude_showcase: ShowcaseId | None = None,
@@ -18,8 +22,13 @@ class ShowcaseGateway(Protocol):
         city_ids: list[CityId] | None = None,
         tag_ids: list[TagId] | None = None,
         communication_method_ids: list[CommunicationMethodId] | None = None,
-    ) -> list[Showcase]: ...
+    ) -> list[Showcase]:
+        raise NotImplementedError
 
-    async def save_showcase(self, showcase: Showcase) -> ShowcaseId: ...
+    @abstractmethod
+    async def save_showcase(self, showcase: Showcase) -> ShowcaseId:
+        raise NotImplementedError
 
-    async def delete_showcase(self, showcase_id: ShowcaseId) -> None: ...
+    @abstractmethod
+    async def delete_showcase(self, showcase_id: ShowcaseId) -> None:
+        raise NotImplementedError

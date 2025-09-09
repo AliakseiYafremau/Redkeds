@@ -1,7 +1,10 @@
+from abc import abstractmethod
 from typing import Protocol
 
 from redkeds.domain.entities.communication_method import CommunicationMethod
 
 
 class CommunicationMethodGateway(Protocol):
-    async def get_communication_methods(self) -> list[CommunicationMethod]: ...
+    @abstractmethod
+    async def get_communication_methods(self) -> list[CommunicationMethod]:
+        raise NotImplementedError

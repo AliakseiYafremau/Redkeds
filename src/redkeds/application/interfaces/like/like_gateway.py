@@ -1,11 +1,18 @@
+from abc import abstractmethod
 from typing import Protocol
 
 from redkeds.domain.entities.like import Like, LikeId
 
 
 class LikeGateway(Protocol):
-    async def add_like(self, like: Like) -> LikeId: ...
+    @abstractmethod
+    async def add_like(self, like: Like) -> LikeId:
+        raise NotImplementedError
 
-    async def delete_like(self, like_id: LikeId) -> None: ...
+    @abstractmethod
+    async def delete_like(self, like_id: LikeId) -> None:
+        raise NotImplementedError
 
-    async def get_like_by_id(self, like_id: LikeId) -> Like: ...
+    @abstractmethod
+    async def get_like_by_id(self, like_id: LikeId) -> Like:
+        raise NotImplementedError
