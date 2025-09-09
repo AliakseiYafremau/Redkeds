@@ -2,7 +2,7 @@ import json
 from typing import Annotated
 
 from dishka.integrations.fastapi import FromDishka, inject
-from fastapi import APIRouter, File, Form, HTTPException
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 
 from redkeds.adapters.id_provider import JWTTokenManager, Token
 from redkeds.application.dto.user import LoginUserDTO, NewUserDTO
@@ -168,12 +168,16 @@ async def register_v2(  # noqa: PLR0913
     status: Annotated[
         str | None, Form(description="Текущий статус пользователя.")
     ] = None,
-    photo: Annotated[bytes | None, File(description="Фото пользователя.")] = None,
+    photo: Annotated[UploadFile | None, File(description="Фото пользователя.")] = None,
     default_photo: Annotated[
         FileId | None, File(description="ID фото по умолчанию.")
     ] = None,
 ) -> Token:
     """Регистрация пользователя."""
+    if photo is not None:
+        photo_bytes = await photo.read()
+    else:
+        photo_bytes = None
     user_dto = NewUserDTO(
         email=email,
         username=username,
@@ -184,7 +188,7 @@ async def register_v2(  # noqa: PLR0913
         tags=tags,
         communication_method=communication_method,
         nickname=nickname,
-        photo=photo,
+        photo=photo_bytes,
         default_photo=default_photo,
         status=status,
         name_display=name_display,
