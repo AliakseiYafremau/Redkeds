@@ -7,7 +7,9 @@ from fastapi import Depends, FastAPI
 from fastapi.security import APIKeyHeader
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from redkeds.main.ioc import AppProvider
+from redkeds.main.ioc.config import ConfigProvider
+from redkeds.main.ioc.interactors import InteractorsProvider
+from redkeds.main.ioc.interfaces import InterfacesProvider
 from redkeds.presentation.exception_handlers import setup_exception_handlers
 from redkeds.presentation.routers.admin_panel import connect_admin_panel
 from redkeds.presentation.routers.auth import auth_router
@@ -36,7 +38,9 @@ async def setup_admin_panel(app: FastAPI, container: AsyncContainer) -> None:
 
 def get_app() -> FastAPI:
     """Создает и настраивает приложение FastAPI."""
-    container = make_async_container(AppProvider(), FastapiProvider())
+    container = make_async_container(
+        InteractorsProvider(), InterfacesProvider(), ConfigProvider(), FastapiProvider()
+    )
     app = FastAPI(
         title="Redkeds API",
         version="0.0.1",
