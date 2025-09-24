@@ -1,10 +1,19 @@
-# Installation and usage
+# Redkeds
 
-## Requirements
+Social network for designers to share their works and collaborate.
+
+- 📔 Customizable profile
+- 👍 Likes
+- 🧑‍🤝‍🧑 Connections
+- ✉️ Chat
+
+## Installation and usage
+
+### Requirements
 - Python 3.11 or later
 - [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
-## Installation
+### Installation
 
 ```bash
 uv sync --all-groups
@@ -30,12 +39,12 @@ Install development tools
 uv pip install -e .
 ```
 
-## Apply migrations
+### Apply migrations
 ```bash
 alembic upgrade head
 ```
 
-## Run the app
+### Run the app
 ```bash
 run
 ```
