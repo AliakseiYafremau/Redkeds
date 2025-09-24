@@ -1,4 +1,3 @@
-
 from dishka import Provider, Scope, provide
 
 from redkeds.main.config import (

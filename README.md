@@ -16,7 +16,7 @@ Social network for designers to share their works and collaborate.
 ### Installation
 
 ```bash
-uv sync --all-groups
+uv sync
 ```
 
 Activate virtual environment
@@ -47,4 +47,23 @@ alembic upgrade head
 ### Run the app
 ```bash
 run
+```
+
+### Testing and linting
+
+Additionaly, you can test, lint and format you code. All necessary dependencies should be installed.
+
+```bash
+uv sync --all-groups
+```
+
+To test the project, use `pytest`
+```bash
+pytest
+```
+
+To lint and format the code, use `ruff`
+```bash
+ruff format
+ruff check
 ```
